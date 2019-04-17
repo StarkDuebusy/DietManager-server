@@ -17,8 +17,8 @@ app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(bodyParser.json({limit: "1mb"}));
-app.use(bodyParser.raw({limit: "300mb"}));
-app.use(bodyParser.text({limit: "32kb"}));
+app.use(bodyParser.raw({limit: "100mb"}));
+app.use(bodyParser.text({limit: "18kb"}));
 app.use(bodyParser.urlencoded({ extended: true, limit : "3mb" }));
 
 app.use(cookieParser());
