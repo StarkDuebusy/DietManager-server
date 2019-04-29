@@ -5,9 +5,11 @@ head
   meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
   meta(name='description', content='Responsive Bootstrap 4 Admin & Dashboard Template')
   meta(name='author', content='Bootlab')
+  meta(name='google-signin-client_id' content='secret.apps.googleusercontent.com')
   link(rel='icon', href='/img/favicon.ico')
   title 다이어트 매니저
   link(href='/css/app.css', rel='stylesheet')
+  script(src='https://apis.google.com/js/platform.js' async='' defer='')
   style.
     .text-right{
       text-align:right;
@@ -109,13 +111,44 @@ body
                   span.align-middle 목표 재설정
             .card
               .sidebar-content
-                a.sidebar-item(href='/view/dashboard')
-                  i.align-middle.mr-1.fas.fa-fw.fa-arrow-alt-circle-right
+                button.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess')
                   span.align-middle 로그인
-                a.sidebar-item(href='/view/dashboard')
-                  i.align-middle.mr-1.fas.fa-fw.fa-arrow-alt-circle-right
+                a.sidebar-item(href='/view/dashboard' data-toggle='modal')
                   span.align-middle 로그아웃
         block content
+      #centeredModalSuccess.modal.fade(tabindex='-1' role='dialog' aria-hidden='true')
+        .modal-dialog.modal-dialog-centered(role='document')
+          .modal-content
+            .modal-header
+              button.close(type='button' data-dismiss='modal' aria-label='Close')
+                span(aria-hidden='true') &times;
+            .modal-body.m-3
+              .row
+                .col-12
+                  .g-signin2(data-onsuccess='onSignIn' style="width: 120px;margin: auto;margin-bottom: 20px;")
+              .row
+                .col-4
+                  hr
+                .col-4.text-center or
+                .col-4
+                  hr
+              .m-sm-4
+                form
+                  .form-group
+                    label 이메일
+                    input.form-control.form-control-lg(type='email' name='email' placeholder='이메일을 입력해주세요.')
+                  .form-group
+                    label Password
+                    input.form-control.form-control-lg(type='password' name='password' placeholder='비밀번호를 입력해주세요.')
+                    small
+                      a(href='pages-reset-password.html') 비밀번호 찾기
+                  div
+                    .custom-control.custom-checkbox.align-items-center
+                      input.custom-control-input(type='checkbox' value='remember-me' name='remember-me' checked='')
+                      label.custom-control-label.text-small 자동로그인
+            .modal-footer
+              button.btn.btn-secondary(type='button' data-dismiss='modal') 취소
+              button.btn.btn-primary(type='button') 로그인
   footer.footer
     .container
       hr
