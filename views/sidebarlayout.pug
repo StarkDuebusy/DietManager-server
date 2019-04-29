@@ -79,8 +79,9 @@ body
         else
           img.avatar.img-fluid.rounded-circle.mr-3(src=profileIMG , alt='Linda Miller')
         .media-body
-          h3.mb-1.text-white.font-weight-normal #{ownerName}
-          span.font-weight-normal #{storeName}
+          h3.mb-1.text-white.font-weight-normal #{userName}
+          span.font-weight-normal 목표 : 
+            span.text-danger #{targetWeight}
   main.content
     .container
       .row
@@ -91,6 +92,9 @@ body
           nav#sidebar.collapse.collapse-disabled-md.sidebar.sidebar-sticky
             .card
               .sidebar-content
+                a.sidebar-item(href='/view/dashboard')
+                  i.align-middle.mr-1.fas.fa-fw.fa-home
+                  span.align-middle 대시보드
                 a.sidebar-item(href='/view/dashboard')
                   i.align-middle.mr-1.fas.fa-fw.fa-home
                   span.align-middle 몸무게/식단 기록
@@ -105,6 +109,9 @@ body
                   span.align-middle 목표 재설정
             .card
               .sidebar-content
+                a.sidebar-item(href='/view/dashboard')
+                  i.align-middle.mr-1.fas.fa-fw.fa-arrow-alt-circle-right
+                  span.align-middle 로그인
                 a.sidebar-item(href='/view/dashboard')
                   i.align-middle.mr-1.fas.fa-fw.fa-arrow-alt-circle-right
                   span.align-middle 로그아웃
