@@ -3,11 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
 var bodyParser = require('body-parser');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -24,8 +20,40 @@ app.use(bodyParser.urlencoded({ extended: true, limit : "3mb" }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
+  collectLog(req);
+  
+  if(req.params.hasOwnProperty('protocolType') && req.params.hasOwnProperty('apiName')){
+    var apiName = req.params.apiName;
+    if(req.params.protocolType == 'api'){
+      	switch(apiName){
+					case 'test':
+						next();
+						break;
+					default:
+						next(new Error('ERR001'));
+						break;
+      }
+    } else if(req.params.protocolType == 'view'){
+      switch(apiName){
+				case 'dashboard':
+					next();
+					break;
+				default:
+					next(new Error('ERR001'));
+					break;
+      }
+    }else{
+      	next(new Error('ERR001'));
+    }
+  }else{
+    	next(new Error('ERR001'));
+  }
+});
+
+var indexRouter = require('./routes/index');
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/:countryCode/protocolType/dashboard', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
