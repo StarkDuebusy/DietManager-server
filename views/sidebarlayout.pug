@@ -5,7 +5,7 @@ head
   meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
   meta(name='description', content='Responsive Bootstrap 4 Admin & Dashboard Template')
   meta(name='author', content='Bootlab')
-  meta(name='google-signin-client_id' content='secret.apps.googleusercontent.com')
+  meta(name='google-signin-client_id' content='관리자에게문의하세요.apps.googleusercontent.com')
   link(rel='icon', href='/img/favicon.ico')
   title 다이어트 매니저
   link(href='/css/app.css', rel='stylesheet')
@@ -138,10 +138,15 @@ body
                     label 이메일
                     input.form-control.form-control-lg(type='email' name='email' placeholder='이메일을 입력해주세요.')
                   .form-group
-                    label Password
+                    label 비밀번호
                     input.form-control.form-control-lg(type='password' name='password' placeholder='비밀번호를 입력해주세요.')
-                    small
-                      a(href='pages-reset-password.html') 비밀번호 찾기
+                    .row
+                      .col-6
+                        small
+                          a.text-danger(href='pages-reset-password.html') 비밀번호 찾기
+                      .col-6.text-right
+                        small
+                          a(href='pages-reset-password.html') 이메일로 회원가입
                   div
                     .custom-control.custom-checkbox.align-items-center
                       input.custom-control-input(type='checkbox' value='remember-me' name='remember-me' checked='')
