@@ -51,73 +51,74 @@ block content
                 #validation-step-2
                   .col-12.text-center
                     img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
-                    .btn.btn-primary
+                    input#editProfileIMG.custom-file-input(type='file' accept='image/png, image/jpeg, image/gif' name='input-file-preview' style="display: none;")
+                    label#btnProfileIMG.btn.btn-primary(for='customFileLangHTML' data-browse='Bestand kiezen')
                       i.far.fa-folder-open
                   .form-group
                     label.form-label
                       | 이름
                       span.text-danger *
-                    input.form-control.required(name='wizard-userName' type='text')
+                    input#editUserName.form-control.required(name='wizard-userName' type='text')
                   .form-group
                     label.form-label
                       | 이메일
                       span.text-danger *
-                    input.form-control.required.email(name='wizard-email' type='text')
+                    input#editEmail.form-control.required.email(name='wizard-email' type='text')
                   .form-group.mb-0
                     label.form-label
                       | 비밀번호
-                      span.text-danger *
+                      span#editPassword.text-danger *
                     input.form-control.required(name='wizard-password' type='text')
                 #validation-step-3
                   .form-group
                     label.form-label
                       | 생년월일
                       span.text-danger *
-                    input.form-control(type='text' name='datesingle')
+                    input#editBirth.form-control(type='text' name='datesingle')
                   .form-group
                     label.form-label
                       | 성별
                       span.text-danger *
                     .form-group
-                      .custom-control.custom-radio.custom-control-inline
-                        input#defaultInline1.custom-control-input(type='radio' name='inlineDefaultRadiosExample')
-                        label.custom-control-label(for='defaultInline1') 남자
-                      .custom-control.custom-radio.custom-control-inline
-                        input#defaultInline2.custom-control-input(type='radio' name='inlineDefaultRadiosExample')
-                        label.custom-control-label(for='defaultInline2') 여자
+                      label.custom-control.custom-radio.custom-control-inline
+                        input.custom-control-input(name='editRadioGender' type='radio' value='m' data-txt='남자')
+                        span.custom-control-label 남자
+                      label.custom-control.custom-radio.custom-control-inline
+                        input.custom-control-input(name='editRadioGender' type='radio' value='f'  data-txt='여자')
+                        span.custom-control-label 여자
                   .form-group
                     label.form-label
                       | 몸무게
                       span.text-danger *
-                    input.form-control.required(name='wizard-userWeight' type='text' placeholder="ex) 71.9kg")
+                    input#editWeight.form-control.required(name='wizard-userWeight' type='text' placeholder="ex) 71.9kg")
                   .form-group
                     label.form-label
                       | 키
                       span.text-danger *
-                    input.form-control.required(name='wizard-userHeight' type='text' placeholder="ex) 176.7cm")
+                    input#editHeight.form-control.required(name='wizard-userHeight' type='text' placeholder="ex) 176.7cm")
                 #validation-step-4
                   .col-12.text-center
                     img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
                   .form-group
                     label.form-label
                       | 이름
-                    input.form-control.required(name='wizard-userName' type='text' value="윤중현" disabled)
+                    input#editResUserName.form-control.required(name='wizard-userName' type='text' value="윤중현" disabled)
                   .form-group
                     label.form-label
                       | 이메일
-                    input.form-control.required.email(name='wizard-email' type='text' value="stark@stark.one" disabled)
+                    input#editResEmail.form-control.required.email(name='wizard-email' type='text' value="stark@stark.one" disabled)
                   .form-group
                     label.form-label
                       | 생년월일
-                    input.form-control.required.email(name='wizard-birth' type='text' value="1990.02.24" disabled)
+                    input#editResBirth.form-control.required.email(name='wizard-birth' type='text' value="1990.02.24" disabled)
                   .form-group
                     label.form-label
                       | 몸무게
-                    input.form-control.required.email(name='wizard-weight' type='text' value="71.9" disabled)
+                    input#editResWeight.form-control.required.email(name='wizard-weight' type='text' value="71.9" disabled)
                   .form-group
                     label.form-label
                       | 키
-                    input.form-control.required.email(name='wizard-height' type='text' value="176.7" disabled)
+                    input#editResHeight.form-control.required.email(name='wizard-height' type='text' value="176.7" disabled)
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
                   // Validation
@@ -142,29 +143,42 @@ block content
                   });
 
                   $validationForm.smartWizard({
-                        autoAdjustHeight: false,
-                        backButtonSupport: false,
-                        useURLhash: false,
-                        showStepURLhash: false,
-                        lang: {  // Language variables
-                            next: '다음', 
-                            previous: '이전'
-                        },
-                        toolbarSettings: {
-                        toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">완료</button>')]
-                        }
-                    })
-                    .on('leaveStep', function(e, anchorObject, stepNumber, stepDirection) {
-                      if (stepDirection === 'forward') {
+                      autoAdjustHeight: false,
+                      backButtonSupport: false,
+                      useURLhash: false,
+                      showStepURLhash: false,
+                      lang: {  // Language variables
+                          next: '다음', 
+                          previous: '이전'
+                      },
+                      toolbarSettings: {
+                      toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">완료</button>')]
+                      }
+                  })
+                  .on('leaveStep', function(e, anchorObject, stepNumber, stepDirection) {
+                    if (stepDirection === 'forward') {
                       return $validationForm.valid();
                     }
                     return true;
+                  })
+                  .on('showStep', function(e, anchorObject, stepNumber, stepDirection) {
+                    if(stepNumber == 3){
+                      $('#editResUserName').val($('#editUserName').val());
+                      $('#editResEmail').val($('#editEmail').val());
+                      $('#editResPassword').val($('#editPassword').val());
+                      $('#editResBirth').val($('#editBirth').val());
+                      $('#editResGender').val($(':input:radio[name=editRadioGender]:checked').attr('data-txt'));
+                      $('#editResWeight').val($('#editWeight').val());
+                      $('#editResHeight').val($('#editHeight').val());
+                    }
+                    return true;
                   });
+                  
                   $validationForm.find('.btn-submit').on('click', function() {
                     if (!$validationForm.valid()) {
                       return;
                     }
-                    alert("Great! The form is valid and ready to submit.");
+                    
 
                     return false;
                   });
@@ -179,6 +193,64 @@ block script
     $(document).ready(init);
 
     function init(){
+      $('#btnProfileIMG').on('click', function(){
+        $('#editProfileIMG').trigger('click');
+      });
+    }
 
+    function ajaxRegist(){
+      var fromData = new FormData();
+      formData.append('profileIMG', $('#editProfileIMG')[0].files[0], $('#editEmail').val()+".jpg");
+      formData.append('userName', $('#editUserName').val());
+      formData.append('email', $('#editEmail').val());
+      formData.append('password', $('#editPassword').val());
+      formData.append('birth', $('#editBirth').val());
+      formData.append('gender', $(':input:radio[name=editRadioGender]:checked').val());
+      formData.append('weight', $('#editWeight').val());
+      formData.append('height', $('#editHeight').val());
+
+      var strURL = '';
+      if(window.location.pathname.split('/').length > 1 && window.location.pathname.split('/')[1].length == 2){
+        strURL = '/'+window.location.pathname.split('/')[1]+'/api/regist'; 
+      }else{
+        //TODO url error 예외처리
+        return;
+      }
+
+      $.ajax({ 
+        type: 'POST', 
+        url: strURL,
+        data: formData,
+        dataType : 'json',
+        processData : false,
+        contentType : false,
+        error: function(xhr, status, error){
+          
+        },
+        success : function(resultParams){
+        var message = "회원가입을 완료하였습니다.";
+        var title = "회원가입";
+        var type = "success";
+
+          if(resultParams.isSuccess){
+            showMessage(message, title, type);
+          }else{
+            type = "warning";
+            message = "회원가입을 실패했습니다.";
+            showMessage(message, title, type);
+          }
+        }
+      }); 
+    }
+
+    function showMessage(message, title, type){
+      toastr[type](message, title, {
+              positionClass: "toast-top-right",
+              closeButton: true,
+              progressBar: true,
+              newestOnTop: true,
+              rtl: false,
+              timeOut: 5000
+              });
     }
 
