@@ -3,7 +3,7 @@ var router = express.Router();
 
 
 router.get('/', function(req, res, next) {
-  res.render('index', { userName: '손님', targetWeight: '0kg' });
+  res.render('regist');
 });
 
 module.exports = router;

@@ -21,7 +21,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
-  collectLog(req);
   
   if(req.params.hasOwnProperty('protocolType') && req.params.hasOwnProperty('apiName')){
     var apiName = req.params.apiName;
@@ -36,6 +35,7 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
       }
     } else if(req.params.protocolType == 'view'){
       switch(apiName){
+        case 'regist':
 				case 'dashboard':
 					next();
 					break;
@@ -53,7 +53,10 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
 
 var indexRouter = require('./routes/index');
 app.use('/', indexRouter);
-app.use('/:countryCode/protocolType/dashboard', indexRouter);
+app.use('/:countryCode/:protocolType/dashboard', indexRouter);
+
+var registRouter = require('./routes/regist');
+app.use('/:countryCode/:protocolType/regist', registRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

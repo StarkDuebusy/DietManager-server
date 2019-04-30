@@ -1,0 +1,177 @@
+extends sidebarlayout
+
+block content
+  .col-12.col-md-8.col-lg-9.col-xl-10.pl-lg-4
+    .row
+      .col-12.col-lg-12.d-flex
+        .card.flex-fill.w-100
+          .card-header
+            .row
+              .col-md-12
+                h5.card-title.mb-0.mt-2 몸무게 변화
+          .card-body
+            form#smartwizard-validation.wizard.wizard-primary(action='javascript:void(0)')
+              ul
+                li
+                  a(href='#validation-step-1')
+                    | 1단계
+                    br
+                    small 약관동의
+                li
+                  a(href='#validation-step-2')
+                    | 2단계
+                    br
+                    small ID/PW
+                li
+                  a(href='#validation-step-3')
+                    | 3단계
+                    br
+                    small 정보
+                li
+                  a(href='#validation-step-4')
+                    | 완료
+              div
+                #validation-step-1
+                  h5.card-title 이용약관
+                  p.card-text(style="overflow-y: auto;height: 140px;") 
+                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
+                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
+                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
+                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
+                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
+                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
+                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
+                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
+                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
+                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
+                  .col-12.text-right 
+                    label.custom-control.custom-checkbox
+                      input.custom-control-input(type='checkbox')
+                      span.custom-control-label 약관동의
+                #validation-step-2
+                  .col-12.text-center
+                    img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
+                    .btn.btn-primary
+                      i.far.fa-folder-open
+                  .form-group
+                    label.form-label
+                      | 이름
+                      span.text-danger *
+                    input.form-control.required(name='wizard-userName' type='text')
+                  .form-group
+                    label.form-label
+                      | 이메일
+                      span.text-danger *
+                    input.form-control.required.email(name='wizard-email' type='text')
+                  .form-group.mb-0
+                    label.form-label
+                      | 비밀번호
+                      span.text-danger *
+                    input.form-control.required(name='wizard-password' type='text')
+                #validation-step-3
+                  .form-group
+                    label.form-label
+                      | 생년월일
+                      span.text-danger *
+                    input.form-control(type='text' name='datesingle')
+                  .form-group
+                    label.form-label
+                      | 성별
+                      span.text-danger *
+                    .form-group
+                      .custom-control.custom-radio.custom-control-inline
+                        input#defaultInline1.custom-control-input(type='radio' name='inlineDefaultRadiosExample')
+                        label.custom-control-label(for='defaultInline1') 남자
+                      .custom-control.custom-radio.custom-control-inline
+                        input#defaultInline2.custom-control-input(type='radio' name='inlineDefaultRadiosExample')
+                        label.custom-control-label(for='defaultInline2') 여자
+                  .form-group
+                    label.form-label
+                      | 몸무게
+                      span.text-danger *
+                    input.form-control.required(name='wizard-userWeight' type='text' placeholder="ex) 71.9kg")
+                  .form-group
+                    label.form-label
+                      | 키
+                      span.text-danger *
+                    input.form-control.required(name='wizard-userHeight' type='text' placeholder="ex) 176.7cm")
+                #validation-step-4
+                  .col-12.text-center
+                    img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
+                  .form-group
+                    label.form-label
+                      | 이름
+                    input.form-control.required(name='wizard-userName' type='text' value="윤중현" disabled)
+                  .form-group
+                    label.form-label
+                      | 이메일
+                    input.form-control.required.email(name='wizard-email' type='text' value="stark@stark.one" disabled)
+                  .form-group
+                    label.form-label
+                      | 생년월일
+                    input.form-control.required.email(name='wizard-birth' type='text' value="1990.02.24" disabled)
+                  .form-group
+                    label.form-label
+                      | 몸무게
+                    input.form-control.required.email(name='wizard-weight' type='text' value="71.9" disabled)
+                  .form-group
+                    label.form-label
+                      | 키
+                    input.form-control.required.email(name='wizard-height' type='text' value="176.7" disabled)
+              script.
+                document.addEventListener("DOMContentLoaded", function(event) {
+                  // Validation
+                  var $validationForm = $('#smartwizard-validation');
+                  $validationForm.validate({
+                    errorPlacement: function errorPlacement(error, element) {
+                      $(element).parents('.form-group').append(
+                        error.addClass('invalid-feedback small d-block')
+                      )
+                    },
+                    highlight: function(element) {
+                      $(element).addClass('is-invalid');
+                    },
+                    unhighlight: function(element) {
+                      $(element).removeClass('is-invalid');
+                    },
+                    rules: {
+                      'wizard-confirm': {
+                        equalTo: 'input[name="wizard-password"]'
+                      }
+                    }
+                  });
+
+                  $validationForm.smartWizard({
+                        autoAdjustHeight: false,
+                        backButtonSupport: false,
+                        useURLhash: false,
+                        showStepURLhash: false,
+                        lang: {  // Language variables
+                            next: '다음', 
+                            previous: '이전'
+                        },
+                        toolbarSettings: {
+                        toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">완료</button>')]
+                        }
+                    })
+                    .on('leaveStep', function(e, anchorObject, stepNumber, stepDirection) {
+                      if (stepDirection === 'forward') {
+                      return $validationForm.valid();
+                    }
+                    return true;
+                  });
+                  $validationForm.find('.btn-submit').on('click', function() {
+                    if (!$validationForm.valid()) {
+                      return;
+                    }
+                    alert("Great! The form is valid and ready to submit.");
+
+                    return false;
+                  });
+
+                  $('input[name="datesingle"]').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true
+                  });
+                });
+
