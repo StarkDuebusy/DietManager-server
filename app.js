@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
-  
+  req.countryCode = req.params.countryCode;
   if(req.params.hasOwnProperty('protocolType') && req.params.hasOwnProperty('apiName')){
     var apiName = req.params.apiName;
     if(req.params.protocolType == 'api'){

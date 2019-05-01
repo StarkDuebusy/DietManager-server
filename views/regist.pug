@@ -29,7 +29,7 @@ block content
                     small 정보
                 li
                   a(href='#validation-step-4')
-                    | 완료
+                    | 내용확인
               div
                 #validation-step-1
                   h5.card-title 이용약관
@@ -90,12 +90,12 @@ block content
                     label.form-label
                       | 몸무게
                       span.text-danger *
-                    input#editWeight.form-control.required(name='wizard-userWeight' type='text' placeholder="ex) 71.9kg")
+                    input#editWeight.form-control.required(name='wizard-userWeight' type='text' placeholder="ex) 71.9")
                   .form-group
                     label.form-label
                       | 키
                       span.text-danger *
-                    input#editHeight.form-control.required(name='wizard-userHeight' type='text' placeholder="ex) 176.7cm")
+                    input#editHeight.form-control.required(name='wizard-userHeight' type='text' placeholder="ex) 176.7")
                 #validation-step-4
                   .col-12.text-center
                     img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
@@ -186,7 +186,10 @@ block content
 
                   $('input[name="datesingle"]').daterangepicker({
                     singleDatePicker: true,
-                    showDropdowns: true
+                    showDropdowns: true,
+                    "locale": {
+                      "format": "YYYY-MM-DD"
+                    }
                   });
                 });
 block script
@@ -270,13 +273,15 @@ block script
     function ajaxRegist(){
       var formData = new FormData();
       formData.append('profileIMG', $('#editProfileIMG')[0].files[0], $('#editEmail').val()+".jpg");
-      formData.append('userName', $('#editUserName').val());
+      formData.append('name', $('#editUserName').val());
       formData.append('email', $('#editEmail').val());
       formData.append('password', $('#editPassword').val());
-      formData.append('birth', $('#editBirth').val());
+      formData.append('birthDay', $('#editBirth').val());
       formData.append('gender', $(':input:radio[name=editRadioGender]:checked').val());
       formData.append('weight', $('#editWeight').val());
       formData.append('height', $('#editHeight').val());
+      //TODO sns회원가입시 google- g로 해줘야함
+      formData.append('registType', 'e');
 
       var strURL = getUrl('/api/regist');
       $.ajax({ 
@@ -296,6 +301,7 @@ block script
 
           if(resultParams.isSuccess){
             showMessage(message, title, type);
+            window.location.href=getUrl('/view/dashboard');
           }else{
             type = "warning";
             message = "회원가입을 실패했습니다.";

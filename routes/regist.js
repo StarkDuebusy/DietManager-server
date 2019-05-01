@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var sqlManager = require('../manager/sqlManager');
+var fs = require('fs');
 
 
 router.get('/', function(req, res, next) {
@@ -44,11 +45,55 @@ router.post('/', upload.array('profileIMG',1),function(req, res, next) {
         return;
       }
 
-      var resultParams = {
-        isSuccess : true
-      };
-     
-      res.send(resultParams);
+      result = result[0];
+
+			if(result.isExist == '0'){
+				if(req.files.length != 0) {
+					var profileIMG = req.files[0].buffer;
+					var imageFileName = req.body.email + '.jpg';
+					var dirPath = __dirname + '/../resource/raw/image/profile/' + imageFileName;
+					
+					fs.writeFile(dirPath, profileIMG, function(err) {
+						if(err) {
+							new Error(err.message);
+							return;
+						}
+						
+						regist(imageFileName);
+					});					
+				} else {
+					regist(null);
+				}
+			        
+				function regist(imageFileName) {
+					var insertUserProfileQuery = "INSERT INTO DIET_MANAGER.USER (PROFILE_IMG, USER_NM, EMAIL, PASSWORD, BIRTH_YMD, GENDER, WEIGHT, HEIGHT, COUNTRY_CD, REGIST_TYPE, REGIST_YMD)" +
+							" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE())";
+					var queryParams = [imageFileName, req.body.name, req.body.email, 
+					                   req.body.password, req.body.birthDay, req.body.gender, 
+					                   req.body.weight, req.body.height, req.countryCode, 
+					                   req.body.registType];
+          con.query(insertUserProfileQuery, queryParams, function(err, result) {
+            con.release();
+						if(err) {
+							con.release();
+							next(new Error('ERR006|' + req.countryCode));
+							return;
+            }
+            
+						var resultParams = {
+              'isSuccess' : false
+            };
+            if(result.affectedRows == '1'){
+              resultParams.isSuccess = true;
+            }
+            
+            res.send(resultParams);
+					});
+				}
+			} else {
+        con.release();
+				res.send({'isSuccess' : false});
+			}
     });
   });
 });
