@@ -26,7 +26,8 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
     var apiName = req.params.apiName;
     if(req.params.protocolType == 'api'){
       	switch(apiName){
-					case 'regist':
+          case 'regist':
+          case 'login':
 						next();
 						break;
 					default:

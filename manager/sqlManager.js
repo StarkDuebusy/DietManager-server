@@ -7,7 +7,7 @@ var pool  = mysql.createPool({
   database        : '',
   multipleStatements: true
 });
-s
+
 var getConnection = function(callback) {
     pool.getConnection(function(err, connection) {
         if (err) return callback(err);
