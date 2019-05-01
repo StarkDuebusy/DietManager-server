@@ -36,6 +36,7 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
           case 'regist':
           case 'login':
           case 'dietplan': 
+          case 'dailyreport':
 						next();
 						break;
 					default:
@@ -47,6 +48,7 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
         case 'regist':
         case 'dashboard':
         case 'dietplan':
+        case 'dailyreport':
 					next();
 					break;
 				default:
@@ -73,6 +75,9 @@ app.use('/:countryCode/:protocolType/login', loginRouter);
 
 var dietplanRouter = require('./routes/dietplan');
 app.use('/:countryCode/:protocolType/dietplan', dietplanRouter);
+
+var dailyreportRouter = require('./routes/dailyreport');
+app.use('/:countryCode/:protocolType/dailyreport', dailyreportRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
