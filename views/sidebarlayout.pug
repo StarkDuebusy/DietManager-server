@@ -86,13 +86,15 @@ body
           else
             h3.mb-1.text-white.font-weight-normal #{userName}
           if targetWeight == null
-            #btnSetTargetWeight.btn.btn-primary 목표 몸무게를 설정해주세요.
+            a#btnSetTargetWeight.btn.btn-primary(href='/kr/view/dietplan') 다이어트 목표를 설정해주세요.
             span#areaTargetWeight.font-weight-normal(style="display:none;") 목표 : 
-              span#txtTargetWeight.text-danger #{targetWeight}
+              strong#txtTargetWeight.text-danger #{targetWeight}
+              span  KG
           else
-            #btnSetTargetWeight.btn.btn-primary(style="display:none;") 목표 몸무게를 설정해주세요.
+            a#btnSetTargetWeight.btn.btn-primary(href='/kr/view/dietplan' style="display:none;") 다이어트 목표를 설정해주세요.
             span.font-weight-normal 목표 : 
-                span.text-danger #{targetWeight}
+                strong.text-danger #{targetWeight}
+                span  KG
 
   main.content
     .container
@@ -107,32 +109,36 @@ body
                 a.sidebar-item(href='/kr/view/dashboard')
                   i.align-middle.mr-1.fas.fa-fw.fa-home
                   span.align-middle 대시보드
-                a.sidebar-item(href='/kr/view/dashboard')
+                a.sidebar-item(href='/kr/view/dietreport')
                   i.align-middle.mr-1.fas.fa-fw.fa-home
                   span.align-middle 몸무게/식단 기록
-                a.sidebar-item(href='index.html')
+                a.sidebar-item(href='/kr/view/bodycomposition')
                   i.align-middle.mr-1.fas.fa-fw.fa-chart-pie
                   span.align-middle 체성분 기록
-                a.sidebar-item(href='/view/measureinfo')
+                a.sidebar-item(href='/kr/view/profile')
                   i.align-middle.mr-2.fas.fa-fw.fa-drafting-compass
                   span.align-middle 나의 프로필
-                a.sidebar-item(href='index.html')
+                a.sidebar-item(href='/kr/view/dailyreport')
                   i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
-                  span.align-middle 1일 다이어트일지
-                a.sidebar-item(href='index.html')
+                  span.align-middle 1일 다이어트 일지
+                a.sidebar-item(href='/kr/view/dietplan')
                   i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
-                  span.align-middle 목표 재설정
+                  span.align-middle 다이어트 목표 설정
             .card
               .sidebar-content
                 if userName == null
                   button#btnMenuLogIn.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess')
+                    i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
                     span.align-middle 로그인
                   button#btnMenuLogOut.sidebar-item(type='button' data-toggle='modal' style="display:none;")
+                    i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
                     span.align-middle 로그아웃
                 else
                   button#btnMenuLogIn.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess' style="display:none;")
-                      span.align-middle 로그인
+                    i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
+                    span.align-middle 로그인
                   button#btnMenuLogOut.sidebar-item(type='button' data-toggle='modal')
+                    i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
                     span.align-middle 로그아웃
         block content
       #centeredModalSuccess.modal.fade(tabindex='-1' role='dialog' aria-hidden='true')

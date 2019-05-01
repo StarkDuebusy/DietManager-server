@@ -28,7 +28,8 @@ router.put('/', function(req, res, next){
       if(result.correct == '1'){
         resultParams.userName = result.USER_NM;
         req.session.userName  = result.USER_NM;
-
+        req.session.email = req.body.email;
+        
         var currentDate = (new Date()).valueOf().toString();
         var random = Math.random().toString();
         var session = crypto.createHash('sha1').update(currentDate + random).digest('hex');

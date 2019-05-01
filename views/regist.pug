@@ -8,7 +8,7 @@ block content
           .card-header
             .row
               .col-md-12
-                h5.card-title.mb-0.mt-2 몸무게 변화
+                h5.card-title.mb-0.mt-2 회원가입
           .card-body
             form#smartwizard-validation.wizard.wizard-primary(action='javascript:void(0)')
               ul
@@ -92,12 +92,12 @@ block content
                     label.form-label
                       | 몸무게
                       span.text-danger *
-                    input#editWeight.form-control.required(name='wizard-userWeight' type='text' placeholder="ex) 71.9")
+                    input#editWeight.form-control.required(name='wizard-userWeight' type='number' placeholder="ex) 71.9")
                   .form-group
                     label.form-label
                       | 키
                       span.text-danger *
-                    input#editHeight.form-control.required(name='wizard-userHeight' type='text' placeholder="ex) 176.7")
+                    input#editHeight.form-control.required(name='wizard-userHeight' type='number' placeholder="ex) 176.7")
                 #validation-step-4
                   .col-12.text-center
                     img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
@@ -116,11 +116,11 @@ block content
                   .form-group
                     label.form-label
                       | 몸무게
-                    input#editResWeight.form-control.required.email(name='wizard-weight' type='text' value="71.9" disabled)
+                    input#editResWeight.form-control.required.email(name='wizard-weight' type='number' value="71.9" disabled)
                   .form-group
                     label.form-label
                       | 키
-                    input#editResHeight.form-control.required.email(name='wizard-height' type='text' value="176.7" disabled)
+                    input#editResHeight.form-control.required.email(name='wizard-height' type='number' value="176.7" disabled)
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
                   // Validation
@@ -154,7 +154,7 @@ block content
                           previous: '이전'
                       },
                       toolbarSettings: {
-                      toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">완료</button>')]
+                      toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">가입하기</button>')]
                       }
                   })
                   .on('leaveStep', function(e, anchorObject, stepNumber, stepDirection) {
@@ -184,7 +184,7 @@ block content
                     ajaxRegist();
 
                     return false;
-                  });
+                  }).hide();
 
                   $('input[name="datesingle"]').daterangepicker({
                     singleDatePicker: true,
@@ -297,9 +297,9 @@ block script
           
         },
         success : function(resultParams){
-        var message = "회원가입을 완료하였습니다.";
-        var title = "회원가입";
-        var type = "success";
+          var message = "회원가입을 완료하였습니다.";
+          var title = "회원가입";
+          var type = "success";
 
           if(resultParams.isSuccess){
             showMessage(message, title, type);

@@ -35,6 +35,7 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
       	switch(apiName){
           case 'regist':
           case 'login':
+          case 'dietplan': 
 						next();
 						break;
 					default:
@@ -44,7 +45,8 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
     } else if(req.params.protocolType == 'view'){
       switch(apiName){
         case 'regist':
-				case 'dashboard':
+        case 'dashboard':
+        case 'dietplan':
 					next();
 					break;
 				default:
@@ -68,6 +70,9 @@ app.use('/:countryCode/:protocolType/regist', registRouter);
 
 var loginRouter = require('./routes/login');
 app.use('/:countryCode/:protocolType/login', loginRouter);
+
+var dietplanRouter = require('./routes/dietplan');
+app.use('/:countryCode/:protocolType/dietplan', dietplanRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
