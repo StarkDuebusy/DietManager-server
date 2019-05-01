@@ -77,13 +77,23 @@ body
     .container
       .media.text-white
         if profileIMG == null
-          img.avatar.img-fluid.rounded-circle.mr-3(src='/img/avatar.png', alt='Linda Miller')
+          img#imgProfile.avatar.img-fluid.rounded-circle.mr-3(src='/img/avatar.png', alt='Linda Miller')
         else
-          img.avatar.img-fluid.rounded-circle.mr-3(src=profileIMG , alt='Linda Miller')
+          img#imgProfile.avatar.img-fluid.rounded-circle.mr-3(src=profileIMG , alt='Linda Miller')
         .media-body
-          h3.mb-1.text-white.font-weight-normal #{userName}
-          span.font-weight-normal 목표 : 
-            span.text-danger #{targetWeight}
+          if userName == null
+            h3#txtUserName.mb-1.text-white.font-weight-normal 손님
+          else
+            h3.mb-1.text-white.font-weight-normal #{userName}
+          if targetWeight == null
+            #btnSetTargetWeight.btn.btn-primary 목표 몸무게를 설정해주세요.
+            span#areaTargetWeight.font-weight-normal(style="display:none;") 목표 : 
+              span#txtTargetWeight.text-danger #{targetWeight}
+          else
+            #btnSetTargetWeight.btn.btn-primary(style="display:none;") 목표 몸무게를 설정해주세요.
+            span.font-weight-normal 목표 : 
+                span.text-danger #{targetWeight}
+
   main.content
     .container
       .row
@@ -136,10 +146,10 @@ body
                 form
                   .form-group
                     label 이메일
-                    input.form-control.form-control-lg(type='email' name='email' placeholder='이메일을 입력해주세요.')
+                    input#editLoginEmail.form-control.form-control-lg(type='email' name='email' placeholder='이메일을 입력해주세요.')
                   .form-group
                     label 비밀번호
-                    input.form-control.form-control-lg(type='password' name='password' placeholder='비밀번호를 입력해주세요.')
+                    input#editLoginPassword.form-control.form-control-lg(type='password' name='password' placeholder='비밀번호를 입력해주세요.')
                     .row
                       .col-6
                         small
@@ -152,8 +162,8 @@ body
                       input.custom-control-input(type='checkbox' value='remember-me' name='remember-me' checked='')
                       label.custom-control-label.text-small 자동로그인
             .modal-footer
-              button.btn.btn-secondary(type='button' data-dismiss='modal') 취소
-              button.btn.btn-primary(type='button') 로그인
+              button#btnLoginClose.btn.btn-secondary(type='button' data-dismiss='modal') 취소
+              button#btnLogin.btn.btn-primary(type='button') 로그인
   footer.footer
     .container
       hr
@@ -164,6 +174,80 @@ body
   script(src='/js/app.js')
   block lib
   block script
+  script.
+    $(document).ready(init);
+
+    function init(){
+      $('#btnLogin').on('click', function(){
+        var params = {
+          email : $('#editLoginEmail').val(),
+          password : $('#editLoginPassword').val()
+        };
+
+        var strURL = getUrl('/api/login');
+        $.ajax({ 
+          type: 'PUT', 
+          url: strURL,
+          async: false, 
+          data: params
+        }).done(function(resultParams){
+          if(resultParams.isSuccess){
+            if(resultParams.profileIMG != undefined){
+              $('#imgProfile').attr('src', resultParams.profileIMG);
+            }
+
+            $('#txtUserName').text(resultParams.userName);
+
+            if(resultParams.targetWeight != undefined){
+              $('#btnSetTargetWeight').hide();
+              $('#areaTargetWeight').show();
+              $('#txtTargetWeight').text(resultParams.targetWeight);
+            }else{
+              $('#btnSetTargetWeight').show();
+              $('#areaTargetWeight').hide();
+              $('#txtTargetWeight').text('');
+            }
+            
+            $('#btnLoginClose').trigger('click');
+          } else {
+            var message = "로그인에 실패하였습니다.";
+            var title = "로그인";
+            var type = "warning";
+            toastr[type](message, title, {
+                  positionClass: "toast-top-right",
+                  closeButton: true,
+                  progressBar: true,
+                  newestOnTop: true,
+                  rtl: false,
+                  timeOut: 5000
+                  });
+          }
+        }).fail(function(resultParams){
+          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var title = "서비스점검중";
+          var type = "error";
+          toastr[type](message, title, {
+                positionClass: "toast-top-right",
+                closeButton: true,
+                progressBar: true,
+                newestOnTop: true,
+                rtl: false,
+                timeOut: 5000
+                });
+        });
+      })
+    }
+
+    function getUrl(targetURL){
+      var strURL = '';
+      if(window.location.pathname.split('/').length > 1 && window.location.pathname.split('/')[1].length == 2){
+        strURL = '/'+window.location.pathname.split('/')[1]+targetURL; 
+      }else{
+        strURL = '/kr'+targetURL; 
+      }
+      return strURL;
+    }
+
   svg(width='0', height='0', style='position:absolute')
     defs
       symbol#ion-ios-pulse-strong(viewbox='0 0 512 512')

@@ -5,7 +5,12 @@ var fs = require('fs');
 
 
 router.get('/', function(req, res, next) {
-  res.render('regist', { userName: '손님', targetWeight: '0kg' });
+  var params = {
+    userName : (req.session == undefined)? null:req.session.userName,
+    targetWeight : (req.session == undefined)? null:req.session.targetWeight,
+    profileIMG : (req.session == undefined)? null:req.session.profileIMG
+  };
+  res.render('regist', params);
 });
 
 router.get('/checkEmail', function(req, res, next) {

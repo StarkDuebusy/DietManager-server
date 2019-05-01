@@ -4,12 +4,19 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+app.use(session({
+  secret: '*j!u%s&t*f$e@e#l$$%^',
+  resave: false,
+  saveUninitialized: true
+ }));
 
 app.use(logger('dev'));
 app.use(bodyParser.json({limit: "1mb"}));
@@ -58,6 +65,9 @@ app.use('/:countryCode/:protocolType/dashboard', indexRouter);
 
 var registRouter = require('./routes/regist');
 app.use('/:countryCode/:protocolType/regist', registRouter);
+
+var loginRouter = require('./routes/login');
+app.use('/:countryCode/:protocolType/login', loginRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
