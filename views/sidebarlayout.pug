@@ -71,8 +71,8 @@ body
   nav.navbar.navbar-expand.navbar-dark.bg-dark
     .container
       a.navbar-brand(href='/', style="line-height: 4rem;")
-        |         다이어트 매니저
-        small.d-none.d-sm-inline | v.Beta test
+        |         다이어트 매니저 
+        small.d-none.d-sm-inline  v.BETA
   .header
     .container
       .media.text-white
@@ -118,13 +118,22 @@ body
                   span.align-middle 나의 프로필
                 a.sidebar-item(href='index.html')
                   i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
+                  span.align-middle 1일 다이어트일지
+                a.sidebar-item(href='index.html')
+                  i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
                   span.align-middle 목표 재설정
             .card
               .sidebar-content
-                button.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess')
-                  span.align-middle 로그인
-                a.sidebar-item(href='/view/dashboard' data-toggle='modal')
-                  span.align-middle 로그아웃
+                if userName == null
+                  button#btnMenuLogIn.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess')
+                    span.align-middle 로그인
+                  button#btnMenuLogOut.sidebar-item(type='button' data-toggle='modal' style="display:none;")
+                    span.align-middle 로그아웃
+                else
+                  button#btnMenuLogIn.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess' style="display:none;")
+                      span.align-middle 로그인
+                  button#btnMenuLogOut.sidebar-item(type='button' data-toggle='modal')
+                    span.align-middle 로그아웃
         block content
       #centeredModalSuccess.modal.fade(tabindex='-1' role='dialog' aria-hidden='true')
         .modal-dialog.modal-dialog-centered(role='document')
@@ -162,8 +171,8 @@ body
                       input.custom-control-input(type='checkbox' value='remember-me' name='remember-me' checked='')
                       label.custom-control-label.text-small 자동로그인
             .modal-footer
-              button#btnLoginClose.btn.btn-secondary(type='button' data-dismiss='modal') 취소
-              button#btnLogin.btn.btn-primary(type='button') 로그인
+              button#btnModalLoginClose.btn.btn-secondary(type='button' data-dismiss='modal') 취소
+              button#btnModalLogin.btn.btn-primary(type='button') 로그인
   footer.footer
     .container
       hr
@@ -178,7 +187,7 @@ body
     $(document).ready(init);
 
     function init(){
-      $('#btnLogin').on('click', function(){
+      $('#btnModalLogin').on('click', function(){
         var params = {
           email : $('#editLoginEmail').val(),
           password : $('#editLoginPassword').val()
@@ -207,8 +216,11 @@ body
               $('#areaTargetWeight').hide();
               $('#txtTargetWeight').text('');
             }
+
+            $('#btnMenuLogOut').show();
+            $('#btnMenuLogIn').hide();
             
-            $('#btnLoginClose').trigger('click');
+            $('#btnModalLoginClose').trigger('click');
           } else {
             var message = "로그인에 실패하였습니다.";
             var title = "로그인";
