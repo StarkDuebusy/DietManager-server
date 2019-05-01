@@ -1,10 +1,10 @@
 var mysql = require('mysql');
 var pool  = mysql.createPool({
   connectionLimit : 150,
-  host            : '관리자에게문의하세요',
-  user            : '관리자에게문의하세요',
-  password        : '관리자에게문의하세요',
-  database        : '관리자에게문의하세요',
+  host            : '',
+  user            : '',
+  password        : '',
+  database        : '',
   multipleStatements: true
 });
 

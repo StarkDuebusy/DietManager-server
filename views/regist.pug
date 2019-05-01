@@ -46,7 +46,7 @@ block content
                     | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
                   .col-12.text-right 
                     label.custom-control.custom-checkbox
-                      input.custom-control-input(type='checkbox')
+                      input.custom-control-input.required(type='checkbox' name='wizard-temrs')
                       span.custom-control-label 약관동의
                 #validation-step-2
                   .col-12.text-center
@@ -67,8 +67,8 @@ block content
                   .form-group.mb-0
                     label.form-label
                       | 비밀번호
-                      span#editPassword.text-danger *
-                    input.form-control.required(name='wizard-password' type='text')
+                      span.text-danger *
+                    input#editPassword.form-control.required(name='wizard-password' type='text')
                 #validation-step-3
                   .form-group
                     label.form-label
@@ -81,7 +81,7 @@ block content
                       span.text-danger *
                     .form-group
                       label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioGender' type='radio' value='m' data-txt='남자')
+                        input.custom-control-input(name='editRadioGender' type='radio' value='m' data-txt='남자' checked)
                         span.custom-control-label 남자
                       label.custom-control.custom-radio.custom-control-inline
                         input.custom-control-input(name='editRadioGender' type='radio' value='f'  data-txt='여자')
@@ -179,6 +179,7 @@ block content
                       return;
                     }
                     
+                    ajaxRegist();
 
                     return false;
                   });
@@ -196,10 +197,78 @@ block script
       $('#btnProfileIMG').on('click', function(){
         $('#editProfileIMG').trigger('click');
       });
+
+      $('#editProfileIMG').on('change', function(){
+        var input = this;
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('.rounded-circle').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+      });
+
+      $('#editEmail').on('focusout', function(){
+        if(!isValidEmail($(this).val()))
+          return;
+
+        var params = {
+          email : $(this).val()
+        };
+
+        var strURL = getUrl('/api/regist/checkEmail');
+        $.ajax({ 
+          type: 'GET', 
+          url: strURL,
+          async: false, 
+          data: params
+        }).done(function(resultParams){
+          if(resultParams.isDuplicate){
+            var message = "이미 해당 메일로 가입이 되어있습니다.";
+            var title = "이메일 중복";
+            var type = "warning";
+            toastr[type](message, title, {
+                  positionClass: "toast-top-right",
+                  closeButton: true,
+                  progressBar: true,
+                  newestOnTop: true,
+                  rtl: false,
+                  timeOut: 5000
+                  });
+          }
+        }).fail(function(resultParams){
+          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var title = "서비스점검중";
+          var type = "error";
+          toastr[type](message, title, {
+                positionClass: "toast-top-right",
+                closeButton: true,
+                progressBar: true,
+                newestOnTop: true,
+                rtl: false,
+                timeOut: 5000
+                });
+        });
+      });
     }
 
+    function isValidEmail(email){
+        return /^(?=.{1,64}@.{4,64}$)(?=.{6,100}$).*/.test(email);
+    }
+
+    function getUrl(targetURL){
+      var strURL = '';
+      if(window.location.pathname.split('/').length > 1 && window.location.pathname.split('/')[1].length == 2){
+        strURL = '/'+window.location.pathname.split('/')[1]+targetURL; 
+      }else{
+        strURL = '/kr'+targetURL; 
+      }
+      return strURL;
+    }
+    
     function ajaxRegist(){
-      var fromData = new FormData();
+      var formData = new FormData();
       formData.append('profileIMG', $('#editProfileIMG')[0].files[0], $('#editEmail').val()+".jpg");
       formData.append('userName', $('#editUserName').val());
       formData.append('email', $('#editEmail').val());
@@ -209,14 +278,7 @@ block script
       formData.append('weight', $('#editWeight').val());
       formData.append('height', $('#editHeight').val());
 
-      var strURL = '';
-      if(window.location.pathname.split('/').length > 1 && window.location.pathname.split('/')[1].length == 2){
-        strURL = '/'+window.location.pathname.split('/')[1]+'/api/regist'; 
-      }else{
-        //TODO url error 예외처리
-        return;
-      }
-
+      var strURL = getUrl('/api/regist');
       $.ajax({ 
         type: 'POST', 
         url: strURL,
