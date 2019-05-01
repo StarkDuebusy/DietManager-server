@@ -49,11 +49,13 @@ block content
                       input.custom-control-input.required(type='checkbox' name='wizard-temrs')
                       span.custom-control-label 약관동의
                 #validation-step-2
-                  .col-12.text-center
-                    img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
-                    input#editProfileIMG.custom-file-input(type='file' accept='image/png, image/jpeg, image/gif' name='input-file-preview' style="display: none;")
-                    label#btnProfileIMG.btn.btn-primary(for='customFileLangHTML' data-browse='Bestand kiezen')
-                      i.far.fa-folder-open
+                  .col-12.text-center 
+                    .col-12.text-center              
+                      img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='150' height='150')
+                      input#editProfileIMG.custom-file-input(type='file' accept='image/png, image/jpeg, image/gif' name='input-file-preview' style="display: none;")
+                    .co1-12.text-center(style="position : relative;top: -30px; left: 50px;")
+                      label#btnProfileIMG.btn.btn-pill.btn-primary(for='customFileLangHTML' data-browse='Bestand kiezen' style ="vertical-align:bottom")
+                        i.far.fa-folder-open
                   .form-group
                     label.form-label
                       | 이름
