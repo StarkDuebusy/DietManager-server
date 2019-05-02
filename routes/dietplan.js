@@ -42,6 +42,7 @@ router.post('/', function(req, res, next) {
           req.body.mealFrequency
         ];
         con.query(query, params, function(err, result){
+          con.release();
           if(err){
             con.release();
             next(new Error('ERR006|' + req.countryCode));
@@ -68,6 +69,7 @@ router.post('/', function(req, res, next) {
           req.session.email
         ];
         con.query(query, params, function(err, result){
+          con.release();
           if(err){
             con.release();
             next(new Error('ERR006|' + req.countryCode));
