@@ -33,7 +33,7 @@ block content
                     br
                     small 오늘의 식사량
               div
-                #validation-step-1
+                #validation-step-4
                   .form-group
                     label.form-label
                       | 오늘의 몸무게
@@ -102,7 +102,27 @@ block content
                   .col-12.text-right 
                     span.text-danger *
                     span 본 데이터는 운동량을 늘릴 수 있는지 알기 위한 척도로 사용됩니다.
-                #validation-step-4
+                #validation-step-1
+                  .form-group
+                    label.form-label
+                      | 1식당 권장 단백질 섭취량
+                    .form-row
+                      .form-group.col-4
+                        select.form-control
+                          each protein in proteinList
+                            option= protein
+                      .form-group.col-4
+                        strong 115g
+                  .form-group
+                    label.form-label
+                      | 1식당 권장 탄수화물 섭취량
+                    .form-row
+                      .form-group.col-4
+                        select.form-control
+                          each carbo in carboList
+                            option= carbo
+                      .form-group.col-4
+                        strong 115g
                   .form-group
                     label.form-label
                       | 오늘의 몸무게
