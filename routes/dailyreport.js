@@ -23,7 +23,7 @@ router.post('/', function(req, res, next) {
   }
 
   sqlManager(function(err, con) {
-		var checkQuery = 'SELECT TARGET_WEIGHT, MEAL_FREQUENCY FROM DIET_MANAGER.DIET_SURVEY WHERE USER_ID = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?);';
+		var checkQuery = 'SELECT TARGET_WEIGHT, WORKOUT_FREQUENCY, MEAL_FREQUENCY FROM DIET_MANAGER.DIET_SURVEY WHERE USER_ID = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?);';
 		con.query(checkQuery, req.session.email, function(err, result){
 			if(err){
 				con.release();
@@ -42,6 +42,7 @@ router.post('/', function(req, res, next) {
         res.send(resultParams);
       }else{
         var targetWeight = result[0].TARGET_WEIGHT;
+        var workoutFrequncy = result[0].WORKOUT_FREQUENCY;
         var mealFrequency = result[0].MEAL_FREQUENCY;
 
         sqlManager(function(err, con) {
@@ -54,10 +55,20 @@ router.post('/', function(req, res, next) {
             }
             result = result[0];
 
-            //TODO 빈도에따른 비율산출
-
+            //TODO 최근3일 체중 감소폭이 1kg이상이면 탄수화물 단백질 소폭감소
+            //TODO 몸무게 증량일 경우 최근 3일 체중의 1kg 이상이면 식단 소폭감소, 체중이 감소할경우 소폭 증가
             var proteinRate;
             var caboRate;
+            if(workoutFrequncy == 2){
+              proteinRate = 1.7;
+              caboRate = 1.9;
+            }else if(workoutFrequncy == 1){
+              proteinRate = 1.4;
+              caboRate = 1.6;
+            }else{
+              proteinRate = 2;
+              caboRate = 2.2;
+            }
 
             var params = [
               req.session.email,
