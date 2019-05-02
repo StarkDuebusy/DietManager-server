@@ -108,7 +108,7 @@ block content
                       | 1식당 권장 단백질 섭취량
                     .form-row
                       .form-group.col-4
-                        select#selProteinType.form-control.selNutrition
+                        select#selProtein.form-control.selNutrition
                           each protein in proteinList
                             option= protein
                       .form-group.col-4
@@ -118,7 +118,7 @@ block content
                       | 1식당 권장 탄수화물 섭취량
                     .form-row
                       .form-group.col-4
-                        select#selCarboType.form-control.selNutrition
+                        select#selCarbo.form-control.selNutrition
                           each carbo in carboList
                             option= carbo
                       .form-group.col-4
@@ -215,11 +215,11 @@ block script
 
     function ajaxNutritionGuide(){
       var params = {
-        proteinType : $('#selProteinType').val(),
-        carboType : $('#selCarboType').val()
+        protein : $('#selProtein').val(),
+        carbo : $('#selCarbo').val()
       };
       
-      var strURL = getUrl('/api/nutrition');
+      var strURL = getUrl('/api/dailyreport/nutrition');
       $.ajax({ 
         type: 'GET', 
         url: strURL,
@@ -231,8 +231,12 @@ block script
         var type = "";
 
         if(resultParams.isSuccess){
-          $('#txtProteinGram').text(resultParams.proteinGram);
-          $('#txtCarboGram').text(resultParams.carboGram);
+          var proteinGram = Math.round(resultParams.proteinGram);
+          $('#txtProteinGram').text(proteinGram+'g');
+
+          var carboGram = Math.round(resultParams.carboGram);
+          $('#txtCarboGram').text(carboGram+'g');
+
         }else if(resultParams.needLogin){
           $('.areaTxtGram').text("로그인이 필요한 서비스입니다.");
         }else if(resultParams.needDietPlan){
