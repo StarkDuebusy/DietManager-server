@@ -8,7 +8,7 @@ block content
           .card-header
             .row
               .col-md-12
-                h5.card-title.mb-0.mt-2 다이어트 목표 설정
+                h5.card-title.mb-0.mt-2 1일 다이어트 일지
           .card-body
             form#smartwizard-validation.wizard.wizard-primary(action='javascript:void(0)')
               ul
@@ -16,94 +16,109 @@ block content
                   a(href='#validation-step-1')
                     | 1단계
                     br
-                    small 몸무게
+                    small 식단 수행도
                 li
                   a(href='#validation-step-2')
                     | 2단계
                     br
-                    small 운동빈도
+                    small 운동 수행도
                 li
                   a(href='#validation-step-3')
                     | 3단계
                     br
-                    small 식사빈도
+                    small 오늘의 몸무게
                 li
                   a(href='#validation-step-4')
                     | 내용확인
+                    br
+                    small 오늘의 식사량
               div
                 #validation-step-1
                   .form-group
                     label.form-label
-                      | 현재 몸무게
+                      | 오늘의 몸무게
                       span.text-danger *
-                    input#editCurrnetWeight.form-control.required(name='wizard-currentWeight' type='number' placeholder="ex) 77.15")
                   .form-group
-                    label.form-label
-                      | 목표 몸무게
-                      span.text-danger *
-                    input#editTargetWeight.form-control.required(name='wizard-targetWeight' type='number' placeholder="ex) 70.0")
+                    input#editCurrnetWeight.form-control.required(name='wizard-currentWeight' type='number' placeholder="ex) 71.9")
                   .col-12.text-right 
                     span.text-danger *
-                    span 현재/목표 몸무게의 격차는 
-                    strong.text-danger 20kg 
-                    span 이내를 권장하고 있습니다.
+                    span 기상 직후 대소변을 보고 속옷만 입은 상태에서 몸무게를 측정해서 입력해주세요.
                 #validation-step-2
                   .form-group
                     label.form-label
-                      | 주당 운동일수
+                      | 식단 수행 정도
                       span.text-danger *
-                    .form-group
-                      label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='1' data-txt='3일 이내' checked)
-                        span.custom-control-label 3일 이내
-                      label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='2'  data-txt='3~4일')
-                        span.custom-control-label 3~4일
-                      label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='3'  data-txt='5일 이상')
-                        span.custom-control-label 5일 이상
+                  .form-group
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='1' data-txt='못함')
+                      span.custom-control-label 못함
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='2'  data-txt='거의 못함')
+                      span.custom-control-label 거의 못함
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='3'  data-txt='반절 성공')
+                      span.custom-control-label 반절 성공
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='4'  data-txt='거의 성공')
+                      span.custom-control-label 거의 성공
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='5'  data-txt='성공' checked)
+                      span.custom-control-label 성공
+                  .col-12.text-right 
+                    span.text-danger *
+                    span 전날 식단 수행정도를 알려주세요.
                 #validation-step-3
                   .form-group
                     label.form-label
-                      | 1일 식사빈도
+                      | 전날 운동 진행 여부
                       span.text-danger *
-                    .form-group
-                      label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='3' data-txt='1일 3식')
-                        span.custom-control-label 3식
-                      label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='4'  data-txt='1일 4식')
-                        span.custom-control-label 4식
-                      label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='5'  data-txt='1일 5식' checked)
-                        span.custom-control-label 5식
-                      label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='6'  data-txt='1일 6식')
-                        span.custom-control-label 6식
-                      label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='7'  data-txt='1일 7식')
-                        span.custom-control-label 7식
-                      .col-12.text-right 
-                        span.text-danger *
-                        strong.text-danger 1일 4식 
-                        span 이상을 권장합니다.
+                  .form-group
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioDidWorkout' type='radio' value='1' data-txt='운동함' checked)
+                      span.custom-control-label 운동함
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioDidWorkout' type='radio' value='2'  data-txt='운동 못함')
+                      span.custom-control-label 운동 못함
+                  .form-group.areaWorkoutProcess
+                    label.form-label
+                      | 전날 운동강도
+                      span.text-danger *
+                  .form-group.areaWorkoutProcess
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='1' data-txt='몸 푸는 강도')
+                      span.custom-control-label 몸 푸는 강도
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='2'  data-txt='가벼운 강도')
+                      span.custom-control-label 가벼운 강도
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='3'  data-txt='적당한 강도')
+                      span.custom-control-label 적당한 강도
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='4'  data-txt='강한 강도')
+                      span.custom-control-label 강한 강도
+                    label.custom-control.custom-radio.custom-control-inline
+                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='5'  data-txt='최고 강도' checked)
+                      span.custom-control-label 최고 강도
+                  .col-12.text-right 
+                    span.text-danger *
+                    span 본 데이터는 운동량을 늘릴 수 있는지 알기 위한 척도로 사용됩니다.
                 #validation-step-4
                   .form-group
                     label.form-label
-                      | 현재 몸무게
+                      | 오늘의 몸무게
                     input#editResCurrnetWeight.form-control(name='wizard-currentWeight' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 목표 몸무게
-                    input#editResTargetWeight.form-control(name='wizard-targetWeight' type='text' disabled)
+                      | 식단 수행 정도
+                    input#editResDietProcess.form-control(name='wizard-dietProcess' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 주당 운동일
-                    input#editResWorkoutFrequency.form-control(name='wizard-workoutFrequency' type='text' disabled)
-                  .form-group
+                      | 전날 운동 진행 여부
+                    input#editResDidWorkout.form-control(name='wizard-didWorkout' type='text' disabled)
+                  .form-group.areaWorkoutProcess
                     label.form-label
-                      | 식사 빈도
-                    input#editResMealFrequency.form-control(name='wizard-mealFrequency' type='text' disabled)
+                      | 전날 운동강도
+                    input#editResWorkoutProcess.form-control(name='wizard-workoutProcess' type='text' disabled)
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
                   // Validation
@@ -150,9 +165,9 @@ block content
                     if(stepNumber == 3){
                       $validationForm.find('.btn-submit').show();
                       $('#editResCurrnetWeight').val($('#editCurrnetWeight').val());
-                      $('#editResTargetWeight').val($('#editTargetWeight').val());
-                      $('#editResWorkoutFrequency').val($(':input:radio[name=editRadioWorkoutFrequency]:checked').attr('data-txt'));
-                      $('#editResMealFrequency').val($(':input:radio[name=editRadioMealFrequency]:checked').attr('data-txt'));
+                      $('#editResDietProcess').val($(':input:radio[name=editRadioDietProcess]:checked').attr('data-txt'));
+                      $('#editResDidWorkout').val($(':input:radio[name=editRadioDidWorkout]:checked').attr('data-txt'));
+                      $('#editResWorkoutProcess').val($(':input:radio[name=editRadioWorkoutProcess]:checked').attr('data-txt'));
                     }
                     return true;
                   });
@@ -162,7 +177,7 @@ block content
                       return;
                     }
                     
-                    ajaxRecordDeitPlan();
+                    ajaxRecordDailyReport();
 
                     return false;
                   }).hide();
@@ -180,26 +195,34 @@ block script
     $(document).ready(init);
 
     function init(){
-      
+      $(':input:radio[name=editRadioDidWorkout]').on('change', function(){
+        if (this.value == 1 ) {
+          $('.areaWorkoutProcess').show();
+        } else if (this.value == 2 ) {
+          $('.areaWorkoutProcess').hide();
+        }
+      });
     }
 
-    function ajaxRecordDeitPlan(){
+    function ajaxRecordDailyReport(){
       var params = {
         currentWeight : $('#editCurrnetWeight').val(),
-        targetWeight : $('#editTargetWeight').val(),
-        workoutFrequency : $(':input:radio[name=editRadioWorkoutFrequency]:checked').val(),
-        mealFrequency : $(':input:radio[name=editRadioMealFrequency]:checked').val()
+        dietProcess : $(':input:radio[name=editRadioDietProcess]:checked').val(),
+        didWorkout : $(':input:radio[name=editRadioDidWorkout]:checked').val()
       };
 
-      var strURL = getUrl('/api/dietplan');
+      if($(':input:radio[name=editRadioDidWorkout]:checked').val() == 1)
+        params.workoutProcess = $(':input:radio[name=editRadioWorkoutProcess]:checked').val();
+      
+      var strURL = getUrl('/api/dailyreport');
       $.ajax({ 
         type: 'POST', 
         url: strURL,
         async: false, 
         data: params
       }).done(function(resultParams){
-        var message = "운동 목표가 정상적으로 등록되었습니다.";
-        var title = "운동 목표 설정";
+        var message = "1일 다이어트일지가 정상적으로 등록되었습니다.";
+        var title = "1일 다이어트 일지";
         var type = "success";
 
         if(resultParams.isSuccess){
@@ -212,7 +235,7 @@ block script
           showMessage(message, title, type);
         }else{
           type = "warning";
-          message = "운동 목표 등록을 실패했습니다.";
+          message = "1일 다이어트일지 등록을 실패했습니다.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
