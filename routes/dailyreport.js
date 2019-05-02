@@ -70,18 +70,18 @@ router.post('/', function(req, res, next) {
               caboRate = 2.2;
             }
 
-            var params = [
-              req.session.email,
-              req.body.dietProcess,
-              req.body.didWorkout,
-              req.body.workoutProcess,
-              req.body.currentWeight,
-              targetWeight,
-              mealFrequency,
-              proteinRate,
-              caboRate
-            ];
             if(result.isExist == '0'){
+              var params = [
+                req.session.email,
+                req.body.dietProcess,
+                req.body.didWorkout,
+                req.body.workoutProcess,
+                req.body.currentWeight,
+                targetWeight,
+                mealFrequency,
+                proteinRate,
+                caboRate
+              ];
               var query = 'INSERT INTO `DIET_MANAGER`.`DAILY_SURVEY` (`USER_ID`, `DIET_PROCESS`, `DID_WORKOUT`, `WORKOUT_PROCESS`, `CURRENT_WEIGHT`, `TARGET_WEIGHT`, `MEAL_FREQUENCY`, `PROTEIN_RATE`, `CABO_RATE`, `RECORD_YMD`) VALUES ((SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?), ?, ?, ?, ?, ?, ?, ?, ?, CURDATE());';
               con.query(query, params, function(err, result){
                 if(err){
@@ -100,7 +100,18 @@ router.post('/', function(req, res, next) {
                 res.send(resultParams);
               });
             }else{
-              var query = '';
+              var params = [
+                req.body.dietProcess,
+                req.body.didWorkout,
+                req.body.workoutProcess,
+                req.body.currentWeight,
+                targetWeight,
+                mealFrequency,
+                proteinRate,
+                caboRate,
+                req.session.email
+              ];
+              var query = 'UPDATE `DIET_MANAGER`.`DAILY_SURVEY` SET `DIET_PROCESS` = ?, `DID_WORKOUT` = ?, `WORKOUT_PROCESS` = ?, `CURRENT_WEIGHT` = ?,`TARGET_WEIGHT` = ?, `MEAL_FREQUENCY` = ?, `PROTEIN_RATE` = ?, `CABO_RATE` = ?, `RECORD_YMD` = CURDATE() WHERE (`USER_ID` = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?));';
               con.query(query, params, function(err, result){
                 if(err){
                   con.release();
