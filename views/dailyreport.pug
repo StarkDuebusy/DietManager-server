@@ -233,6 +233,21 @@ block script
           type = "warning";
           message = "로그인이 필요한 서비스입니다.";
           showMessage(message, title, type);
+        }else if(resultParams.needDietPlan){
+          type = "warning";
+          message = "먼저 다이어트 목표를 설정해주세요.";
+          toastr[type](message, title, {
+              positionClass: "toast-top-right",
+              closeButton: true,
+              progressBar: true,
+              newestOnTop: true,
+              rtl: false,
+              timeOut: 5000,
+              onHidden : function(){
+                window.location.href = getUrl('/view/dietplan');
+              }
+              });
+          
         }else{
           type = "warning";
           message = "1일 다이어트일지 등록을 실패했습니다.";
