@@ -4,12 +4,35 @@ var sqlManager = require('../manager/sqlManager');
 
 
 router.get('/', function(req, res, next) {
-  var params = {
-    userName : (req.session == undefined)? null:req.session.userName,
-    targetWeight : (req.session == undefined)? null:req.session.targetWeight,
-    profileIMG : (req.session == undefined)? null:req.session.profileIMG
-  };
-  res.render('dailyreport', params);
+  sqlManager(function(err, con) {
+		var checkQuery = 'SELECT * FROM DIET_MANAGER.NUTRITION;';
+		con.query(checkQuery, null, function(err, result){
+      con.release();
+			if(err){
+				con.release();
+				next(new Error('ERR006|' + req.countryCode));
+				return;
+      }
+      
+      var params = {
+        userName : (req.session == undefined)? null:req.session.userName,
+        targetWeight : (req.session == undefined)? null:req.session.targetWeight,
+        profileIMG : (req.session == undefined)? null:req.session.profileIMG
+      };
+      
+      params.proteinList = [];
+      params.carboList = [];
+      for(var index = 0; index < result.length; index++){
+        if(result[index].TARGET == 'c'){
+          params.carboList.push(result[index].NAME);
+        }else if(result[index].TARGET == 'p'){
+          params.proteinList.push(result[index].NAME);
+        }
+      }
+
+      res.render('dailyreport', params);	
+    });		
+  });
 });
 
 router.post('/', function(req, res, next) {
@@ -84,6 +107,7 @@ router.post('/', function(req, res, next) {
               ];
               var query = 'INSERT INTO `DIET_MANAGER`.`DAILY_SURVEY` (`USER_ID`, `DIET_PROCESS`, `DID_WORKOUT`, `WORKOUT_PROCESS`, `CURRENT_WEIGHT`, `TARGET_WEIGHT`, `MEAL_FREQUENCY`, `PROTEIN_RATE`, `CABO_RATE`, `RECORD_YMD`) VALUES ((SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?), ?, ?, ?, ?, ?, ?, ?, ?, CURDATE());';
               con.query(query, params, function(err, result){
+                con.release();
                 if(err){
                   con.release();
                   next(new Error('ERR006|' + req.countryCode));
@@ -113,11 +137,12 @@ router.post('/', function(req, res, next) {
               ];
               var query = 'UPDATE `DIET_MANAGER`.`DAILY_SURVEY` SET `DIET_PROCESS` = ?, `DID_WORKOUT` = ?, `WORKOUT_PROCESS` = ?, `CURRENT_WEIGHT` = ?,`TARGET_WEIGHT` = ?, `MEAL_FREQUENCY` = ?, `PROTEIN_RATE` = ?, `CABO_RATE` = ?, `RECORD_YMD` = CURDATE() WHERE (`USER_ID` = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?));';
               con.query(query, params, function(err, result){
+                con.release();
                 if(err){
                   con.release();
                   next(new Error('ERR006|' + req.countryCode));
                   return;
-                }
+                }1
       
                 var resultParams = {
                   'isSuccess' : false
@@ -133,6 +158,21 @@ router.post('/', function(req, res, next) {
         });
       }
     });
+  });
+});
+
+router.get('/nutrition', function(req, res, next) {
+  sqlManager(function(err, con) {
+		var checkQuery = 'SELECT * FROM DIET_MANAGER.NUTRITION;';
+		con.query(checkQuery, null, function(err, result){
+      con.release();
+			if(err){
+				con.release();
+				next(new Error('ERR006|' + req.countryCode));
+				return;
+			}
+			
+    });		
   });
 });
 
