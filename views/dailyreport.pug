@@ -33,7 +33,7 @@ block content
                     br
                     small 오늘의 식사량
               div
-                #validation-step-4
+                #validation-step-1
                   .form-group
                     label.form-label
                       | 오늘의 몸무게
@@ -102,27 +102,27 @@ block content
                   .col-12.text-right 
                     span.text-danger *
                     span 본 데이터는 운동량을 늘릴 수 있는지 알기 위한 척도로 사용됩니다.
-                #validation-step-1
+                #validation-step-4
                   .form-group
                     label.form-label
                       | 1식당 권장 단백질 섭취량
                     .form-row
                       .form-group.col-4
-                        select.form-control
+                        select#selProteinType.form-control.selNutrition
                           each protein in proteinList
                             option= protein
                       .form-group.col-4
-                        strong 115g
+                        strong#txtProteinGram.areaTxtGram
                   .form-group
                     label.form-label
                       | 1식당 권장 탄수화물 섭취량
                     .form-row
                       .form-group.col-4
-                        select.form-control
+                        select#selCarboType.form-control.selNutrition
                           each carbo in carboList
                             option= carbo
                       .form-group.col-4
-                        strong 115g
+                        strong#txtCarboGram.areaTxtGram
                   .form-group
                     label.form-label
                       | 오늘의 몸무게
@@ -141,7 +141,6 @@ block content
                     input#editResWorkoutProcess.form-control(name='wizard-workoutProcess' type='text' disabled)
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
-                  // Validation
                   var $validationForm = $('#smartwizard-validation');
                   $validationForm.validate({
                     errorPlacement: function errorPlacement(error, element) {
@@ -167,7 +166,7 @@ block content
                       backButtonSupport: false,
                       useURLhash: false,
                       showStepURLhash: false,
-                      lang: {  // Language variables
+                      lang: {
                           next: '다음', 
                           previous: '이전'
                       },
@@ -188,6 +187,8 @@ block content
                       $('#editResDietProcess').val($(':input:radio[name=editRadioDietProcess]:checked').attr('data-txt'));
                       $('#editResDidWorkout').val($(':input:radio[name=editRadioDidWorkout]:checked').attr('data-txt'));
                       $('#editResWorkoutProcess').val($(':input:radio[name=editRadioWorkoutProcess]:checked').attr('data-txt'));
+                      
+                      ajaxNutritionGuide();
                     }
                     return true;
                   });
@@ -201,26 +202,51 @@ block content
 
                     return false;
                   }).hide();
-
-                  $('input[name="datesingle"]').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    "locale": {
-                      "format": "YYYY-MM-DD"
-                    }
-                  });
                 });
 block script
   script.
     $(document).ready(init);
 
     function init(){
-      $(':input:radio[name=editRadioDidWorkout]').on('change', function(){
-        if (this.value == 1 ) {
-          $('.areaWorkoutProcess').show();
-        } else if (this.value == 2 ) {
-          $('.areaWorkoutProcess').hide();
+      $('.selNutrition').on('change', function(){
+        ajaxNutritionGuide();
+      });
+    }
+
+    function ajaxNutritionGuide(){
+      var params = {
+        proteinType : $('#selProteinType').val(),
+        carboType : $('#selCarboType').val()
+      };
+      
+      var strURL = getUrl('/api/nutrition');
+      $.ajax({ 
+        type: 'GET', 
+        url: strURL,
+        async: false, 
+        data: params
+      }).done(function(resultParams){
+        var message = "";
+        var title = "1일 권장 섭취량";
+        var type = "";
+
+        if(resultParams.isSuccess){
+          $('#txtProteinGram').text(resultParams.proteinGram);
+          $('#txtCarboGram').text(resultParams.carboGram);
+        }else if(resultParams.needLogin){
+          $('.areaTxtGram').text("로그인이 필요한 서비스입니다.");
+        }else if(resultParams.needDietPlan){
+          $('.areaTxtGram').text("먼저 다이어트 목표를 설정해주세요.");
+        }else{
+          type = "warning";
+          message = "1일 권장 섭취량을 가져오는데 실패했습니다.";
+          showMessage(message, title, type);
         }
+      }).fail(function(resultParams){
+        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var title = "서비스점검중";
+        var type = "error";
+        showMessage(message, title, type);
       });
     }
 
