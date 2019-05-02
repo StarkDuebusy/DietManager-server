@@ -128,17 +128,17 @@ body
               .sidebar-content
                 if userName == null
                   button#btnMenuLogIn.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess')
-                    i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
+                    i.align-middle.mr-2.fas.fa-fw.fa-lock
                     span.align-middle 로그인
                   button#btnMenuLogOut.sidebar-item(type='button' data-toggle='modal' style="display:none;")
-                    i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
+                    i.align-middle.mr-2.fas.fa-fw.fa-lock-open
                     span.align-middle 로그아웃
                 else
                   button#btnMenuLogIn.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess' style="display:none;")
-                    i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
+                    i.align-middle.mr-2.fas.fa-fw.fa-lock
                     span.align-middle 로그인
                   button#btnMenuLogOut.sidebar-item(type='button' data-toggle='modal')
-                    i.align-middle.mr-2.fas.fa-fw.fa-dollar-sign
+                    i.align-middle.mr-2.fas.fa-fw.fa-lock-open
                     span.align-middle 로그아웃
         block content
       #centeredModalSuccess.modal.fade(tabindex='-1' role='dialog' aria-hidden='true')
