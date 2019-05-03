@@ -106,6 +106,9 @@ block content
                   .form-group
                     label.form-label
                       | 1식당 권장 단백질 섭취량
+                      span.text-info  - 1일 
+                      span.text-info.txtMealFrequency 
+                      span.text-info  일 기준
                     .form-row
                       .form-group.col-4
                         select#selProtein.form-control.selNutrition
@@ -116,6 +119,9 @@ block content
                   .form-group
                     label.form-label
                       | 1식당 권장 탄수화물 섭취량
+                      span.text-info  - 1일 
+                      span.text-info.txtMealFrequency 
+                      span.text-info  일 기준
                     .form-row
                       .form-group.col-4
                         select#selCarbo.form-control.selNutrition
@@ -236,6 +242,8 @@ block script
 
           var carboGram = Math.round(resultParams.carboGram);
           $('#txtCarboGram').text(carboGram+'g');
+
+          $('.txtMealFrequency').text(resultParams.mealFrequency);
 
         }else if(resultParams.needLogin){
           $('.areaTxtGram').text("로그인이 필요한 서비스입니다.");

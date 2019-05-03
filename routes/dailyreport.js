@@ -259,7 +259,8 @@ router.get('/nutrition', function(req, res, next) {
                       var resultParams = {
                         'isSuccess' : true,
                         proteinGram : proteinGram,
-                        carboGram : carboGram
+                        carboGram : carboGram,
+                        mealFrequency : mealFrequency
                       };
                       res.send(resultParams);
                     }
