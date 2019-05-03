@@ -115,15 +115,18 @@ body
                 a.sidebar-item(href='/kr/view/bodycomposition')
                   i.align-middle.mr-1.fas.fa-fw.fa-chart-pie
                   span.align-middle 체성분 기록
-                a.sidebar-item(href='/kr/view/profile')
-                  i.align-middle.mr-2.fas.fa-fw.fa-drafting-compass
-                  span.align-middle 나의 프로필
+            .card
+              .sidebar-content
                 a.sidebar-item(href='/kr/view/dailyreport')
                  i.align-middle.mr-2.fas.fa-fw.fa-file-signature
                  span.align-middle 1일 다이어트 일지
                 a.sidebar-item(href='/kr/view/dietplan')
                  i.align-middle.mr-2.fas.fa-fw.fa-medal
                  span.align-middle 다이어트 목표 설정
+                if userName != null
+                  a.sidebar-item(href='/kr/view/profile')
+                    i.align-middle.mr-2.fas.fa-fw.fa-drafting-compass
+                    span.align-middle 나의 프로필
             .card
               .sidebar-content
                 if userName == null
@@ -228,7 +231,7 @@ body
             
             $('#btnModalLoginClose').trigger('click');
 
-            if(afterLogin != undefined){
+            if(typeof(afterLogin) != "undefined"){
               afterLogin();
             }
           } else {

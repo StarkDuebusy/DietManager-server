@@ -8,7 +8,7 @@ block content
           .card-header
             .row
               .col-md-12
-                h5.card-title.mb-0.mt-2 회원가입
+                h5.card-title.mb-0.mt-2 나의 프로필
           .card-body
             form#smartwizard-validation.wizard.wizard-primary(action='javascript:void(0)')
               ul
@@ -16,39 +16,17 @@ block content
                   a(href='#validation-step-1')
                     | 1단계
                     br
-                    small 약관동의
+                    small ID/PW
                 li
                   a(href='#validation-step-2')
                     | 2단계
                     br
-                    small ID/PW
-                li
-                  a(href='#validation-step-3')
-                    | 3단계
-                    br
                     small 정보
                 li
-                  a(href='#validation-step-4')
+                  a(href='#validation-step-3')
                     | 내용확인
               div
                 #validation-step-1
-                  h5.card-title 이용약관
-                  p.card-text(style="overflow-y: auto;height: 140px;") 
-                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
-                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
-                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
-                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
-                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
-                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
-                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
-                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
-                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
-                    | 이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.이용약관 내용입니다.
-                  .col-12.text-right 
-                    label.custom-control.custom-checkbox
-                      input.custom-control-input.required(type='checkbox' name='wizard-temrs')
-                      span.custom-control-label 약관동의
-                #validation-step-2
                   .col-12.text-center 
                     .col-12.text-center              
                       img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='150' height='150')
@@ -71,7 +49,7 @@ block content
                       | 비밀번호
                       span.text-danger *
                     input#editPassword.form-control.required(name='wizard-password' type='text')
-                #validation-step-3
+                #validation-step-2
                   .form-group
                     label.form-label
                       | 생년월일
@@ -98,7 +76,7 @@ block content
                       | 키
                       span.text-danger *
                     input#editHeight.form-control.required(name='wizard-userHeight' type='number' placeholder="ex) 176.7")
-                #validation-step-4
+                #validation-step-3
                   .col-12.text-center
                     img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
                   .form-group
@@ -154,7 +132,7 @@ block content
                           previous: '이전'
                       },
                       toolbarSettings: {
-                      toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">가입하기</button>')]
+                      toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">수정하기</button>')]
                       }
                   })
                   .on('leaveStep', function(e, anchorObject, stepNumber, stepDirection) {
@@ -164,7 +142,7 @@ block content
                     return true;
                   })
                   .on('showStep', function(e, anchorObject, stepNumber, stepDirection) {
-                    if(stepNumber == 3){
+                    if(stepNumber == 2){
                       $('#editResUserName').val($('#editUserName').val());
                       $('#editResEmail').val($('#editEmail').val());
                       $('#editResPassword').val($('#editPassword').val());
@@ -181,7 +159,7 @@ block content
                       return;
                     }
                     
-                    ajaxRegist();
+                    ajaxUpdateProfile();
 
                     return false;
                   }).hide();
@@ -213,49 +191,6 @@ block script
             reader.readAsDataURL(input.files[0]);
         }
       });
-
-      $('#editEmail').on('focusout', function(){
-        if(!isValidEmail($(this).val()))
-          return;
-
-        var params = {
-          email : $(this).val()
-        };
-
-        var strURL = getUrl('/api/regist/checkEmail');
-        $.ajax({ 
-          type: 'GET', 
-          url: strURL,
-          async: false, 
-          data: params
-        }).done(function(resultParams){
-          if(resultParams.isDuplicate){
-            var message = "이미 해당 메일로 가입이 되어있습니다.";
-            var title = "이메일 중복";
-            var type = "warning";
-            toastr[type](message, title, {
-                  positionClass: "toast-top-right",
-                  closeButton: true,
-                  progressBar: true,
-                  newestOnTop: true,
-                  rtl: false,
-                  timeOut: 5000
-                  });
-          }
-        }).fail(function(resultParams){
-          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-          var title = "서비스점검중";
-          var type = "error";
-          toastr[type](message, title, {
-                positionClass: "toast-top-right",
-                closeButton: true,
-                progressBar: true,
-                newestOnTop: true,
-                rtl: false,
-                timeOut: 5000
-                });
-        });
-      });
     }
 
     function isValidEmail(email){
@@ -272,22 +207,19 @@ block script
       return strURL;
     }
     
-    function ajaxRegist(){
+    function ajaxUpdateProfile(){
       var formData = new FormData();
       formData.append('profileIMG', $('#editProfileIMG')[0].files[0], $('#editEmail').val()+".jpg");
       formData.append('name', $('#editUserName').val());
-      formData.append('email', $('#editEmail').val());
       formData.append('password', $('#editPassword').val());
       formData.append('birthDay', $('#editBirth').val());
       formData.append('gender', $(':input:radio[name=editRadioGender]:checked').val());
       formData.append('weight', $('#editWeight').val());
       formData.append('height', $('#editHeight').val());
-      //TODO sns회원가입시 google- g로 해줘야함
-      formData.append('registType', 'e');
 
-      var strURL = getUrl('/api/regist');
+      var strURL = getUrl('/api/profile');
       $.ajax({ 
-        type: 'POST', 
+        type: 'PUT', 
         url: strURL,
         data: formData,
         dataType : 'json',
@@ -307,8 +239,8 @@ block script
                 });
         },
         success : function(resultParams){
-          var message = "회원가입을 완료하였습니다.";
-          var title = "회원가입";
+          var message = "회원정보가 수정되었습니다.";
+          var title = "나의 프로필 수정";
           var type = "success";
 
           if(resultParams.isSuccess){
@@ -316,7 +248,7 @@ block script
             window.location.href=getUrl('/view/dashboard');
           }else{
             type = "warning";
-            message = "회원가입을 실패했습니다.";
+            message = "회원정보를 수정하지 못했습니다.";
             showMessage(message, title, type);
           }
         }

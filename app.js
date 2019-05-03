@@ -39,6 +39,7 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
           case 'dailyreport':
           case 'bodyrecord':
           case 'bodycomposition':
+          case 'profile':
 						next();
 						break;
 					default:
@@ -53,6 +54,7 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
         case 'dailyreport':
         case 'bodyrecord':
         case 'bodycomposition':
+        case 'profile':
 					next();
 					break;
 				default:
@@ -88,6 +90,9 @@ app.use('/:countryCode/:protocolType/bodyrecord', bodyrecordRouter);
 
 var bodycompositionRouter = require('./routes/bodycomposition');
 app.use('/:countryCode/:protocolType/bodycomposition', bodycompositionRouter);
+
+var profileRouter = require('./routes/profile');
+app.use('/:countryCode/:protocolType/profile', profileRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
