@@ -256,4 +256,14 @@ block content
               }
             });
           });
-    
+block script
+  script.
+    $(document).ready(init);
+
+    function init(){
+
+    }
+
+    function afterLogin(){
+      window.location.href = getUrl('/view/dashboard/');
+    }
