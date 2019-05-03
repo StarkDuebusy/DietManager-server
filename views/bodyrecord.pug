@@ -8,7 +8,44 @@ block content
           .card-header
             .row
               .col-md-12
-                h5.card-title.mb-0.mt-2 몸무게/식단 기록
+                strong.card-title.mb-0.mt-2 몸무게/식단 기록 
+                #btnModalDietGuide.btn.btn-pill.btn-primary(data-toggle="modal" data-target="#modalDietGuide") 대체식단
+                #modalDietGuide.modal.fade(tabindex='-1' role='dialog' aria-hidden='true')
+                  .modal-dialog.modal-dialog-centered(role='document')
+                    .modal-content
+                      .modal-header
+                        h5.modal-title 대체 식단
+                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                          span(aria-hidden='true') &times;
+                      .modal-body.m-3
+                        .form-group
+                          label.form-label
+                            | 1식당 권장 단백질 섭취량
+                            span.text-info.areaTxtMealFrequency  - 1일 
+                            span.text-info.areaTxtMealFrequency.txtMealFrequency 
+                            span.text-info.areaTxtMealFrequency 식 기준
+                          .form-row
+                            .form-group.col-4
+                              select#selProtein.form-control.selNutrition
+                                each protein in proteinList
+                                  option= protein
+                            .form-group.col-4
+                              strong#txtProteinGram.areaTxtGram
+                        .form-group
+                          label.form-label
+                            | 1식당 권장 탄수화물 섭취량
+                            span.text-info.areaTxtMealFrequency  - 1일 
+                            span.text-info.areaTxtMealFrequency.txtMealFrequency 
+                            span.text-info.areaTxtMealFrequency 식 기준
+                          .form-row
+                            .form-group.col-4
+                              select#selCarbo.form-control.selNutrition
+                                each carbo in carboList
+                                  option= carbo
+                            .form-group.col-4
+                              strong#txtCarboGram.areaTxtGram
+                      .modal-footer
+                        button.btn.btn-primary(type='button'  data-dismiss='modal') 알겠어요.
           .card-body
             table#datatables-buttons.table.table-striped(style='width:100%')
               thead
@@ -77,11 +114,59 @@ block script
     $(document).ready(init);
 
     function init(){
-      
+      ajaxNutritionGuide();
     }
 
     function afterLogin(){
       window.location.href = getUrl('/view/bodyrecord/');
+      
+      ajaxNutritionGuide();
+    }
+
+    function ajaxNutritionGuide(){
+      var params = {
+        protein : $('#selProtein').val(),
+        carbo : $('#selCarbo').val()
+      };
+      
+      var strURL = getUrl('/api/dailyreport/nutrition');
+      $.ajax({ 
+        type: 'GET', 
+        url: strURL,
+        async: false, 
+        data: params
+      }).done(function(resultParams){
+        var message = "";
+        var title = "1일 권장 섭취량";
+        var type = "";
+
+        if(resultParams.isSuccess){
+          var proteinGram = Math.round(resultParams.proteinGram);
+          $('#txtProteinGram').text(proteinGram+'g');
+
+          var carboGram = Math.round(resultParams.carboGram);
+          $('#txtCarboGram').text(carboGram+'g');
+
+          $('.txtMealFrequency').text(resultParams.mealFrequency);
+
+          $('.areaTxtMealFrequency').show();
+        }else if(resultParams.needLogin){
+          $('.areaTxtMealFrequency').hide();
+          $('.areaTxtGram').text("로그인이 필요한 서비스입니다.");
+        }else if(resultParams.needDietPlan){
+          $('.areaTxtMealFrequency').hide();
+          $('.areaTxtGram').text("먼저 다이어트 목표를 설정해주세요.");
+        }else{
+          type = "warning";
+          message = "1일 권장 섭취량을 가져오는데 실패했습니다.";
+          showMessage(message, title, type);
+        }
+      }).fail(function(resultParams){
+        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var title = "서비스점검중";
+        var type = "error";
+        showMessage(message, title, type);
+      });
     }
 
     function ajaxGetBodyRecord(){
