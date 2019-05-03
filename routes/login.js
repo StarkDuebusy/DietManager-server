@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var sqlManager = require('../manager/sqlManager');
-var redis = require('../manager/redisManager');
 var crypto = require('crypto');
 var ImgParser = require('../util/imgParser');
 
@@ -33,7 +32,6 @@ router.put('/', function(req, res, next){
         var currentDate = (new Date()).valueOf().toString();
         var random = Math.random().toString();
         var session = crypto.createHash('sha1').update(currentDate + random).digest('hex');
-        redis.set(req.body.email, session);
         resultParams.session = session;
         req.session.session = session;
 
