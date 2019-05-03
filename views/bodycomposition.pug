@@ -22,10 +22,130 @@ block content
                         button.close(type='button' data-dismiss='modal' aria-label='Close')
                           span(aria-hidden='true') &times;
                       .modal-body.m-3
-                        
-                      .modal-footer
-                        button.btn.btn-secondary(type='button' data-dismiss='modal') 취소
-                        button#btnRecordBodycomposition.btn.btn-primary(type='button') 등록하기
+                        form#smartwizard-validation.wizard.wizard-primary(action='javascript:void(0)')
+                          ul
+                            li
+                              a(href='#validation-step-1')
+                                | 1단계
+                                br
+                                small 체성분 기록
+                            li
+                              a(href='#validation-step-2')
+                                | 내용확인
+                          div
+                            #validation-step-1
+                              .form-group
+                                label.form-label
+                                  | 측정일
+                                  span.text-danger *
+                                input#editRecordDate.form-control(type='text' name='datesingle')
+                              .form-group
+                                label.form-label
+                                  | 몸무게
+                                  span.text-danger *
+                                input#editWeight.form-control.required(name='wizard-userWeight' type='number' placeholder="ex) 70.1")
+                              .form-group
+                                label.form-label
+                                  | 골격근량
+                                  span.text-danger *
+                                input#editBodyMuscle.form-control.required(name='wizard-userBodyMuscle' type='number' placeholder="ex) 39.2")
+                              .form-group
+                                label.form-label
+                                  | 체지방량
+                                  span.text-danger *
+                                input#editBodyFat.form-control.required(name='wizard-userBodyFat' type='number' placeholder="ex) 6.8")
+                            #validation-step-2
+                              .form-group
+                                label.form-label
+                                  | 측정일
+                                  span.text-danger *
+                                input#editResRecordDate.form-control(type='text' name='datesingle' disabled)
+                              .form-group
+                                label.form-label
+                                  | 몸무게
+                                  span.text-danger *
+                                input#editResWeight.form-control.required(name='wizard-userWeight' type='number' placeholder="ex) 70.1" disabled)
+                              .form-group
+                                label.form-label
+                                  | 골격근량
+                                  span.text-danger *
+                                input#editResBodyMuscle.form-control.required(name='wizard-userBodyMuscle' type='number' placeholder="ex) 39.2" disabled)
+                              .form-group
+                                label.form-label
+                                  | 체지방량
+                                  span.text-danger *
+                                input#editResBodyFat.form-control.required(name='wizard-userBodyFat' type='number' placeholder="ex) 6.8" disabled)
+                          script.
+                            document.addEventListener("DOMContentLoaded", function(event) {
+                              // Validation
+                              var $validationForm = $('#smartwizard-validation');
+                              $validationForm.validate({
+                                errorPlacement: function errorPlacement(error, element) {
+                                  $(element).parents('.form-group').append(
+                                    error.addClass('invalid-feedback small d-block')
+                                  )
+                                },
+                                highlight: function(element) {
+                                  $(element).addClass('is-invalid');
+                                },
+                                unhighlight: function(element) {
+                                  $(element).removeClass('is-invalid');
+                                },
+                                rules: {
+                                  'wizard-confirm': {
+                                    equalTo: 'input[name="wizard-password"]'
+                                  }
+                                }
+                              });
+
+                              $validationForm.smartWizard({
+                                  autoAdjustHeight: false,
+                                  backButtonSupport: false,
+                                  useURLhash: false,
+                                  showStepURLhash: false,
+                                  lang: {  // Language variables
+                                      next: '다음', 
+                                      previous: '이전'
+                                  },
+                                  toolbarSettings: {
+                                  toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">등록하기</button>')]
+                                  }
+                              })
+                              .on('leaveStep', function(e, anchorObject, stepNumber, stepDirection) {
+                                if (stepDirection === 'forward') {
+                                  return $validationForm.valid();
+                                }
+                                return true;
+                              })
+                              .on('showStep', function(e, anchorObject, stepNumber, stepDirection) {
+                                if(stepNumber == 1){
+                                  $validationForm.find('.btn-submit').show();
+                                  $('#editResRecordDate').val($('#editRecordDate').val());
+                                  $('#editResWeight').val($('#editWeight').val());
+                                  $('#editResBodyMuscle').val($('#editBodyMuscle').val());
+                                  $('#editResBodyFat').val($('#editBodyFat').val());
+                                }
+                                return true;
+                              });
+                              
+                              $validationForm.find('.btn-submit').on('click', function() {
+                                if (!$validationForm.valid()) {
+                                  return;
+                                }
+                                
+                                ajaxRecordBodycomposition();
+
+                                return false;
+                              }).hide();
+
+                              $('input[name="datesingle"]').daterangepicker({
+                                singleDatePicker: true,
+                                showDropdowns: true,
+                                "locale": {
+                                  "format": "YYYY-MM-DD"
+                                }
+                              });
+                            });
           .card-body
             table#datatables-buttons.table.table-striped(style='width:100%')
               thead
@@ -108,10 +228,10 @@ block script
 
     function ajaxRecordBodycomposition(){
       var params = {
-        bodyWeight : '',
-        bodyMuscle : '',
-        bodyFat : '',
-        recordDate : ''
+        bodyWeight : $('#editWeight').val(),
+        bodyMuscle : $('#editBodyMuscle').val(),
+        bodyFat : $('#editBodyFat').val(),
+        recordDate : $('#editRecordDate').val()
       };
       
       var strURL = getUrl('/api/bodycomposition');
