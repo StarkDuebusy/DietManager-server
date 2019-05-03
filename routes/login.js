@@ -34,8 +34,6 @@ router.put('/', function(req, res, next){
         var session = crypto.createHash('sha1').update(currentDate + random).digest('hex');
         resultParams.session = session;
         req.session.session = session;
-
-        req.session.email = req.body.email;
         
         if(result.PROFILE_IMG == null) {
           req.sesssion.profileIMG = null;

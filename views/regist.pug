@@ -115,6 +115,10 @@ block content
                     input#editResBirth.form-control.required.email(name='wizard-birth' type='text' value="1990.02.24" disabled)
                   .form-group
                     label.form-label
+                      | 성별
+                    input#editResGender.form-control.required.email(name='wizard-birth' type='text' disabled)
+                  .form-group
+                    label.form-label
                       | 몸무게
                     input#editResWeight.form-control.required.email(name='wizard-weight' type='number' value="71.9" disabled)
                   .form-group
@@ -149,7 +153,7 @@ block content
                       backButtonSupport: false,
                       useURLhash: false,
                       showStepURLhash: false,
-                      lang: {  // Language variables
+                      lang: {
                           next: '다음', 
                           previous: '이전'
                       },
@@ -166,7 +170,7 @@ block content
                   .on('showStep', function(e, anchorObject, stepNumber, stepDirection) {
                     if(stepNumber == 3){
                       $validationForm.find('.btn-submit').show();
-                      
+
                       $('#editResUserName').val($('#editUserName').val());
                       $('#editResEmail').val($('#editEmail').val());
                       $('#editResPassword').val($('#editPassword').val());
