@@ -8,72 +8,48 @@ block content
           .card-header
             .row
               .col-md-12
-                strong.card-title.mb-0.mt-2 몸무게/식단 기록 
+                strong.card-title.mb-0.mt-2 체성분 기록
                 span  
-                #btnModalDietGuide.btn.btn-pill.btn-primary(data-toggle="modal" data-target="#modalDietGuide") 대체식단
+                if userName == null
+                  #btnFakeNeedLogin.btn.btn-pill.btn-primary 체성분 등록
+                else
+                  .btn.btn-pill.btn-primary(data-toggle="modal" data-target="#modalDietGuide") 체성분 등록
                 #modalDietGuide.modal.fade(tabindex='-1' role='dialog' aria-hidden='true')
                   .modal-dialog.modal-dialog-centered(role='document')
                     .modal-content
                       .modal-header
-                        h5.modal-title 대체 식단
+                        h5.modal-title 체성분 등록
                         button.close(type='button' data-dismiss='modal' aria-label='Close')
                           span(aria-hidden='true') &times;
                       .modal-body.m-3
-                        .form-group
-                          label.form-label
-                            | 1식당 권장 단백질 섭취량
-                            span.text-info.areaTxtMealFrequency  - 1일 
-                            span.text-info.areaTxtMealFrequency.txtMealFrequency 
-                            span.text-info.areaTxtMealFrequency 식 기준
-                          .form-row
-                            .form-group.col-4
-                              select#selProtein.form-control.selNutrition
-                                each protein in proteinList
-                                  option= protein
-                            .form-group.col-4
-                              strong#txtProteinGram.areaTxtGram
-                        .form-group
-                          label.form-label
-                            | 1식당 권장 탄수화물 섭취량
-                            span.text-info.areaTxtMealFrequency  - 1일 
-                            span.text-info.areaTxtMealFrequency.txtMealFrequency 
-                            span.text-info.areaTxtMealFrequency 식 기준
-                          .form-row
-                            .form-group.col-4
-                              select#selCarbo.form-control.selNutrition
-                                each carbo in carboList
-                                  option= carbo
-                            .form-group.col-4
-                              strong#txtCarboGram.areaTxtGram
+                        
                       .modal-footer
-                        button.btn.btn-primary(type='button'  data-dismiss='modal') 알겠어요.
+                        button.btn.btn-secondary(type='button' data-dismiss='modal') 취소
+                        button#btnRecordBodycomposition.btn.btn-primary(type='button') 등록하기
           .card-body
             table#datatables-buttons.table.table-striped(style='width:100%')
               thead
                 tr
-                  th 기록일
-                  th.d-none.d-xl-table-cell 식사빈도
-                  th.d-none.d-xl-table-cell 목표 몸무게
-                  th 몸무게
-                  th 닭가슴살
-                  th 고구마
+                  th 측정일
+                  th 무게
+                  th 골격근량
+                  th.d-none.d-xl-table-cell 체지방량
+                  th 체지방률
               tbody
                 each record in recordList
                   tr
                     td #{record.RECORD_YMD}
-                    td.d-none.d-xl-table-cell #{record.MEAL_FREQUENCY}식
-                    td.d-none.d-xl-table-cell #{record.TARGET_WEIGHT}KG
-                    td #{record.CURRENT_WEIGHT}KG
-                    td #{record.PROTEIN}g
-                    td #{record.CARBO}g
+                    td #{record.BODY_WEIGHT}KG
+                    td #{record.BODY_MUSCLE}KG
+                    td.d-none.d-xl-table-cell #{record.BODY_FAT}KG
+                    td #{record.BODY_FAT_PERCENTAGE}%
               tfoot
                 tr
-                  th 기록일
-                  th.d-none.d-xl-table-cell 식사빈도
-                  th.d-none.d-xl-table-cell 목표 몸무게
+                  th 측정일
                   th 몸무게
-                  th 닭가슴살
-                  th 고구마
+                  th 골격근량
+                  th.d-none.d-xl-table-cell 체지방량
+                  th 체지방률
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
                   var datatablesButtons = $('#datatables-buttons').DataTable({
@@ -100,7 +76,7 @@ block content
                     }],
                     responsive: true,
                     "language": {
-                      "zeroRecords": "몸무게/식단 기록이 없습니다. [1일 다이어트 일지]를 작성해주세요.",
+                      "zeroRecords": "체성분 기록이 없습니다. 체성분을 등록해주세요.",
                       "info": "총 _PAGES_페이지 중 _PAGE_페이지",
                       "paginate":{
                         "next" : "다음",
@@ -115,51 +91,51 @@ block script
     $(document).ready(init);
 
     function init(){
-      ajaxNutritionGuide();
+      $('#btnFakeNeedLogin').on('click', function(){
+        
+        $('#btnMenuLogIn').trigger('click');
+
+        var message = "로그인이 필요한 서비스입니다.";
+        var title = "체성분 등록";
+        var type = "warning";
+        showMessage(message, title, type);
+      });
     }
 
     function afterLogin(){
-      window.location.href = getUrl('/view/bodyrecord/');
-      
-      ajaxNutritionGuide();
+      window.location.href = getUrl('/view/bodycomposition/');
     }
 
-    function ajaxNutritionGuide(){
+    function ajaxRecordBodycomposition(){
       var params = {
-        protein : $('#selProtein').val(),
-        carbo : $('#selCarbo').val()
+        bodyWeight : '',
+        bodyMuscle : '',
+        bodyFat : '',
+        recordDate : ''
       };
       
-      var strURL = getUrl('/api/dailyreport/nutrition');
+      var strURL = getUrl('/api/bodycomposition');
       $.ajax({ 
-        type: 'GET', 
+        type: 'POST', 
         url: strURL,
         async: false, 
         data: params
       }).done(function(resultParams){
-        var message = "";
-        var title = "1일 권장 섭취량";
-        var type = "";
+        var message = "체성분 데이터가 정상적으로 등록되었습니다.";
+        var title = "체성분 등록";
+        var type = "success";
 
         if(resultParams.isSuccess){
-          var proteinGram = Math.round(resultParams.proteinGram);
-          $('#txtProteinGram').text(proteinGram+'g');
-
-          var carboGram = Math.round(resultParams.carboGram);
-          $('#txtCarboGram').text(carboGram+'g');
-
-          $('.txtMealFrequency').text(resultParams.mealFrequency);
-
-          $('.areaTxtMealFrequency').show();
+          showMessage(message, title, type);
+          window.location.href = getUrl('/view/bodycomposition/');
         }else if(resultParams.needLogin){
-          $('.areaTxtMealFrequency').hide();
-          $('.areaTxtGram').text("로그인이 필요한 서비스입니다.");
-        }else if(resultParams.needDietPlan){
-          $('.areaTxtMealFrequency').hide();
-          $('.areaTxtGram').text("먼저 다이어트 목표를 설정해주세요.");
+          $('#btnMenuLogIn').trigger('click');
+          type = "warning";
+          message = "로그인이 필요한 서비스입니다.";
+          showMessage(message, title, type);
         }else{
           type = "warning";
-          message = "1일 권장 섭취량을 가져오는데 실패했습니다.";
+          message = "체성분 데이터를 등록하지 못하였습니다.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
