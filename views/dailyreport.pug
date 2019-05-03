@@ -108,7 +108,7 @@ block content
                       | 1식당 권장 단백질 섭취량
                       span.text-info  - 1일 
                       span.text-info.txtMealFrequency 
-                      span.text-info  일 기준
+                      span.text-info 식 기준
                     .form-row
                       .form-group.col-4
                         select#selProtein.form-control.selNutrition
@@ -121,7 +121,7 @@ block content
                       | 1식당 권장 탄수화물 섭취량
                       span.text-info  - 1일 
                       span.text-info.txtMealFrequency 
-                      span.text-info  일 기준
+                      span.text-info 식 기준
                     .form-row
                       .form-group.col-4
                         select#selCarbo.form-control.selNutrition
@@ -132,8 +132,8 @@ block content
                   .form-group
                     label.form-label
                       | 오늘의 몸무게 
-                      strong#txtWeightGap.areaWeightGap 
-                      strong.areaWeightGap KG
+                      strong#txtWeightGap.areaWeightGap.areaWeightGapNum 
+                      strong.areaWeightGap.areaWeightGapNum  KG
                       span.areaWeightGap  (
                       span#txtBasicRecordDate.areaWeightGap
                       span.areaWeightGap )
@@ -344,16 +344,29 @@ block script
         if(resultParams.isSuccess){
           $('.areaWeightGap').show();
           
-          $('#txtWeightGap').text(resultParams.weightGap);
-          $('#txtBasicRecordDate').text(resultParams.basicRecordDate);
+          var weightGap = resultParams.weightGap.toFixed(2);
+          if(weightGap < 0 ){
+            $('.areaWeightGapNum').addClass('text-danger');
+            $('.areaWeightGapNum').removeClass('text-info');
+            $('#txtWeightGap').text(weightGap);
+          }else{
+            $('.areaWeightGapNum').removeClass('text-danger');
+            $('.areaWeightGapNum').addClass('text-info');
+            $('#txtWeightGap').text("+"+weightGap);
+          }
+
+          var date = new Date(resultParams.basicRecordDate);
+          var curr_date = date.getDate();
+          var curr_month = date.getMonth() + 1;
+          var curr_year = date.getFullYear();
+          $('#txtBasicRecordDate').text("기준일 : "+curr_year + "-" + curr_month + "-" + curr_date);
+
         }else if(resultParams.needLogin){
           $('.areaWeightGap').hide();
-        }else if(resultParams.needDietPlan){
+        }else if(resultParams.emptyRecord){
           $('.areaWeightGap').hide();
         }else{
-          type = "warning";
-          message = "오늘의 몸무게와 이전 몸무게의 변화데이터를 가져오지 못했습니다.";
-          showMessage(message, title, type);
+          $('.areaWeightGap').hide();
         }
       }).fail(function(resultParams){
         var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";

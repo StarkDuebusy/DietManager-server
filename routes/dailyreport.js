@@ -282,5 +282,41 @@ router.get('/nutrition', function(req, res, next) {
   });
 });
 
+router.get('/weightgap', function(req, res, next) {
+  if(req.session.session == undefined){
+    var resultParams = {
+      isSuccess : false,
+      needLogin : true
+    };
+    res.send(resultParams);
+    return;
+  }
+
+  sqlManager(function(err, con) {
+		var checkQuery = 'SELECT CURRENT_WEIGHT, RECORD_YMD FROM DIET_MANAGER.DAILY_SURVEY WHERE USER_ID = (SELECT USER_ID FROM USER WHERE EMAIL = ?) ORDER BY RECORD_YMD DESC limit 1;';
+		con.query(checkQuery, req.session.email, function(err, result){
+      con.release();
+			if(err){
+				con.release();
+				next(new Error('ERR006|' + req.countryCode));
+				return;
+			}
+      
+      var resultParams = {
+        isSuccess : false,
+        emptyRecord : false
+      };
+			if(result.length != 0){
+        resultParams.isSuccess = true;
+        resultParams.weightGap = req.query.currentWeight - result[0].CURRENT_WEIGHT;
+        resultParams.basicRecordDate = result[0].RECORD_YMD;
+      }else{
+        resultParams.emptyRecord = true;
+      }
+      res.send(resultParams);
+    });
+  });
+});
+
 
 module.exports = router;
