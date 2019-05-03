@@ -20,13 +20,14 @@ block content
                   th 닭가슴살
                   th 고구마
               tbody
-                tr
-                  td 2019-05-03
-                  td.d-none.d-xl-table-cell 5식
-                  td.d-none.d-xl-table-cell 70KG
-                  td 71.9KG
-                  td 115g
-                  td 200g
+                each record in recordList
+                  tr
+                    th #{record.RECORD_YMD}
+                    th.d-none.d-xl-table-cell #{record.MEAL_FREQUENCY}식
+                    th.d-none.d-xl-table-cell #{record.TARGET_WEIGHT}KG
+                    th #{record.CURRENT_WEIGHT}KG
+                    th #{record.PROTEIN}g
+                    th #{record.CARBO}g
               tfoot
                 tr
                   th 기록일
@@ -45,23 +46,23 @@ block content
                         text: 'Excel',
                         footer: true,
                         className: 'btn-primary'
-                    },
-                    {
-                            extend: 'print',
-                            text: '인쇄',
-                            className: 'btn btn-primary btn-print ',
-                            exportOptions: {
-                                modifier: {
-                                    page: 'current'
-                                }
-                          },
-                          customize: function (win) {
-                            $(win.document.body).find('h1').css('text-align','center');
-                          }
+                      },
+                      {
+                        extend: 'print',
+                        text: '인쇄',
+                        className: 'btn btn-primary btn-print ',
+                        exportOptions: {
+                            modifier: {
+                                page: 'current'
+                            }
+                      },
+                      customize: function (win) {
+                        $(win.document.body).find('h1').css('text-align','center');
+                      }
                     }],
                     responsive: true,
                     "language": {
-                      "zeroRecords": "몸무게/식단 기록이 없습니다. 1일 다이어트 일지를 작성해주세요.",
+                      "zeroRecords": "몸무게/식단 기록이 없습니다. [1일 다이어트 일지]를 작성해주세요.",
                       "info": "총 _PAGES_페이지 중 _PAGE_페이지",
                       "paginate":{
                         "next" : "다음",
@@ -77,6 +78,10 @@ block script
 
     function init(){
       
+    }
+
+    function afterLogin(){
+      window.location.href = getUrl('/view/bodyrecord/');
     }
 
     function ajaxGetBodyRecord(){

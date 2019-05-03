@@ -227,6 +227,10 @@ body
             $('#btnMenuLogIn').hide();
             
             $('#btnModalLoginClose').trigger('click');
+
+            if(afterLogin != undefined){
+              afterLogin();
+            }
           } else {
             var message = "로그인에 실패하였습니다.";
             var title = "로그인";
