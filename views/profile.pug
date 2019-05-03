@@ -28,8 +28,11 @@ block content
               div
                 #validation-step-1
                   .col-12.text-center 
-                    .col-12.text-center              
-                      img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='150' height='150')
+                    .col-12.text-center
+                      if profileIMG != null
+                        img.rounded-circle.rounded.mr-2.mb-2(src=profileIMG alt='Placeholder' width='150' height='150')
+                      else
+                        img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='150' height='150')
                       input#editProfileIMG.custom-file-input(type='file' accept='image/png, image/jpeg, image/gif' name='input-file-preview' style="display: none;")
                     .co1-12.text-center(style="position : relative;top: -30px; left: 50px;")
                       label#btnProfileIMG.btn.btn-pill.btn-primary(for='customFileLangHTML' data-browse='Bestand kiezen' style ="vertical-align:bottom")
@@ -38,51 +41,57 @@ block content
                     label.form-label
                       | 이름
                       span.text-danger *
-                    input#editUserName.form-control.required(name='wizard-userName' type='text')
+                    input#editUserName.form-control.required(name='wizard-userName' value=userName type='text')
                   .form-group
                     label.form-label
                       | 이메일
                       span.text-danger *
-                    input#editEmail.form-control.required.email(name='wizard-email' type='text')
-                  .form-group.mb-0
-                    label.form-label
-                      | 비밀번호
-                      span.text-danger *
-                    input#editPassword.form-control.required(name='wizard-password' type='text')
+                    input#editEmail.form-control.required.email(name='wizard-email' value=email type='text' disabled)
                 #validation-step-2
                   .form-group
                     label.form-label
                       | 생년월일
                       span.text-danger *
-                    input#editBirth.form-control(type='text' name='datesingle')
+                    input#editBirth.form-control(type='text' name='datesingle' value=birth)
                   .form-group
                     label.form-label
                       | 성별
                       span.text-danger *
                     .form-group
-                      label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioGender' type='radio' value='m' data-txt='남자' checked)
-                        span.custom-control-label 남자
-                      label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioGender' type='radio' value='f'  data-txt='여자')
-                        span.custom-control-label 여자
+                      if gender == 'm'
+                        label.custom-control.custom-radio.custom-control-inline
+                          input.custom-control-input(name='editRadioGender' type='radio' value='m' data-txt='남자' checked)
+                          span.custom-control-label 남자
+                        label.custom-control.custom-radio.custom-control-inline
+                          input.custom-control-input(name='editRadioGender' type='radio' value='f'  data-txt='여자')
+                          span.custom-control-label 여자
+                      else
+                        label.custom-control.custom-radio.custom-control-inline
+                          input.custom-control-input(name='editRadioGender' type='radio' value='m' data-txt='남자' )
+                          span.custom-control-label 남자
+                        label.custom-control.custom-radio.custom-control-inline
+                          input.custom-control-input(name='editRadioGender' type='radio' value='f'  data-txt='여자' checked)
+                          span.custom-control-label 여자
                   .form-group
                     label.form-label
                       | 몸무게
                       span.text-danger *
-                    input#editWeight.form-control.required(name='wizard-userWeight' type='number' placeholder="ex) 71.9")
+                    input#editWeight.form-control.required(name='wizard-userWeight' type='number' placeholder="ex) 71.9" value=weight)
                   .form-group
                     label.form-label
                       | 키
                       span.text-danger *
-                    input#editHeight.form-control.required(name='wizard-userHeight' type='number' placeholder="ex) 176.7")
+                    input#editHeight.form-control.required(name='wizard-userHeight' type='number' placeholder="ex) 176.7" value=height)
                 #validation-step-3
                   .col-12.text-center
-                    img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
+                    if profileIMG != null
+                      img.rounded-circle.rounded.mr-2.mb-2(src=profileIMG alt='Placeholder' width='140' height='140')
+                    else
+                      img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
                   .form-group
                     label.form-label
                       | 이름
-                    input#editResUserName.form-control.required(name='wizard-userName' type='text' value="윤중현" disabled)
+                    input#editResUserName.form-control.required(name='wizard-userName' type='text' value="#{userName}" disabled)
                   .form-group
                     label.form-label
                       | 이메일
@@ -143,9 +152,10 @@ block content
                   })
                   .on('showStep', function(e, anchorObject, stepNumber, stepDirection) {
                     if(stepNumber == 2){
+                      $validationForm.find('.btn-submit').show();
+                      
                       $('#editResUserName').val($('#editUserName').val());
                       $('#editResEmail').val($('#editEmail').val());
-                      $('#editResPassword').val($('#editPassword').val());
                       $('#editResBirth').val($('#editBirth').val());
                       $('#editResGender').val($(':input:radio[name=editRadioGender]:checked').attr('data-txt'));
                       $('#editResWeight').val($('#editWeight').val());
@@ -193,6 +203,10 @@ block script
       });
     }
 
+    function afterLogin(){
+      window.location.href = getUrl('/view/profile/');
+    }
+
     function isValidEmail(email){
         return /^(?=.{1,64}@.{3,64}$)(?=.{5,100}$).*/.test(email);
     }
@@ -211,7 +225,6 @@ block script
       var formData = new FormData();
       formData.append('profileIMG', $('#editProfileIMG')[0].files[0], $('#editEmail').val()+".jpg");
       formData.append('name', $('#editUserName').val());
-      formData.append('password', $('#editPassword').val());
       formData.append('birthDay', $('#editBirth').val());
       formData.append('gender', $(':input:radio[name=editRadioGender]:checked').val());
       formData.append('weight', $('#editWeight').val());
@@ -246,12 +259,17 @@ block script
           if(resultParams.isSuccess){
             showMessage(message, title, type);
             window.location.href=getUrl('/view/dashboard');
-          }else{
+          }else if(resultParams.needLogin){
+            $('#btnMenuLogIn').trigger('click');
             type = "warning";
-            message = "회원정보를 수정하지 못했습니다.";
+            message = "로그인이 필요한 서비스입니다.";
             showMessage(message, title, type);
+          }else{
+              type = "warning";
+              message = "회원정보를 수정하지 못했습니다.";
+              showMessage(message, title, type);
+            }
           }
-        }
       }); 
     }
 

@@ -165,6 +165,8 @@ block content
                   })
                   .on('showStep', function(e, anchorObject, stepNumber, stepDirection) {
                     if(stepNumber == 3){
+                      $validationForm.find('.btn-submit').show();
+                      
                       $('#editResUserName').val($('#editUserName').val());
                       $('#editResEmail').val($('#editEmail').val());
                       $('#editResPassword').val($('#editPassword').val());
