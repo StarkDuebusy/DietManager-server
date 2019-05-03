@@ -38,5 +38,86 @@ router.get('/', function(req, res, next) {
   }
 });
 
+router.post('/', function(req, res, next) {
+  if(req.session.session == undefined){
+    var resultParams = {
+      isSuccess : false,
+      needLogin : true
+    };
+    res.send(resultParams);
+    return;
+  }
+
+	sqlManager(function(err, con) {
+    var checkQuery = 'SELECT count(*) as isExist FROM DIET_MANAGER.BODYCOMPOSITION WHERE USER_ID = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?) AND RECORD_YMD = ?;';
+    var params = [
+      req.session.email,
+      req.body.recordDate
+    ];
+		con.query(checkQuery, params, function(err, result){
+			if(err){
+				con.release();
+				next(new Error('ERR006|' + req.countryCode));
+				return;
+			}
+			result = result[0];
+			
+			if(result.isExist == '0'){
+        var query = 'INSERT INTO `DIET_MANAGER`.`BODYCOMPOSITION` (`USER_ID`, `BODY_MUSCLE`, `BODY_FAT`, `BODY_WEIGHT`, `RECORD_YMD`) VALUES ((SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?), ?, ?, ?, CURDATE());';
+        var params = [
+          req.session.email,
+          req.body.bodyWeight,
+          req.body.bodyMuscle,
+          req.body.bodyFat
+        ];
+        con.query(query, params, function(err, result){
+          con.release();
+          if(err){
+            con.release();
+            next(new Error('ERR006|' + req.countryCode));
+            return;
+          }
+
+          var resultParams = {
+            'isSuccess' : false
+          };
+          if(result.affectedRows == '1'){
+            resultParams.isSuccess = true;
+          }
+          
+          res.send(resultParams);
+        });
+			}else{
+        var query = 'UPDATE `DIET_MANAGER`.`BODYCOMPOSITION` SET `BODY_MUSCLE` = ?, `BODY_FAT` = ?, `BODY_WEIGHT` = ? WHERE `USER_ID` = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?) AND RECORD_YMD = ?;';
+        var params = [
+          req.body.bodyMuscle,
+          req.body.bodyFat,
+          req.body.bodyWeight,
+          req.session.email,
+          req.body.recordDate
+        ];
+        con.query(query, params, function(err, result){
+          con.release();
+          if(err){
+            con.release();
+            next(new Error('ERR006|' + req.countryCode));
+            return;
+          }
+
+          var resultParams = {
+            'isSuccess' : false
+          };
+          if(result.affectedRows == '1'){
+            resultParams.isSuccess = true;
+          }
+          
+          res.send(resultParams);
+        });
+      }
+		});
+	});
+});
+
+
 
 module.exports = router;

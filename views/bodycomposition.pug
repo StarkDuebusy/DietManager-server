@@ -173,6 +173,7 @@ block content
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
                   var datatablesButtons = $('#datatables-buttons').DataTable({
+                    aaSorting: [[0, 'desc']],
                     lengthChange: !1,
                     dom: 'Blrtp',
                     buttons: [{
