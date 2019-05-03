@@ -1,0 +1,129 @@
+extends sidebarlayout
+
+block content
+  .col-12.col-md-8.col-lg-9.col-xl-10.pl-lg-4
+    .row
+      .col-12.col-lg-12.d-flex
+        .card.flex-fill.w-100
+          .card-header
+            .row
+              .col-md-12
+                h5.card-title.mb-0.mt-2 몸무게/식단 기록
+          .card-body
+            table#datatables-buttons.table.table-striped(style='width:100%')
+              thead
+                tr
+                  th 기록일
+                  th.d-none.d-xl-table-cell 식사빈도
+                  th.d-none.d-xl-table-cell 목표 몸무게
+                  th 몸무게
+                  th 닭가슴살
+                  th 고구마
+              tbody
+                tr
+                  td 2019-05-03
+                  td.d-none.d-xl-table-cell 5식
+                  td.d-none.d-xl-table-cell 70KG
+                  td 71.9KG
+                  td 115g
+                  td 200g
+              tfoot
+                tr
+                  th 기록일
+                  th.d-none.d-xl-table-cell 식사빈도
+                  th.d-none.d-xl-table-cell 목표 몸무게
+                  th 몸무게
+                  th 닭가슴살
+                  th 고구마
+              script.
+                document.addEventListener("DOMContentLoaded", function(event) {
+                  var datatablesButtons = $('#datatables-buttons').DataTable({
+                    lengthChange: !1,
+                    dom: 'Blrtp',
+                    buttons: [{
+                        extend: 'csvHtml5',
+                        text: 'Excel',
+                        footer: true,
+                        className: 'btn-primary'
+                    },
+                    {
+                            extend: 'print',
+                            text: '인쇄',
+                            className: 'btn btn-primary btn-print ',
+                            exportOptions: {
+                                modifier: {
+                                    page: 'current'
+                                }
+                          },
+                          customize: function (win) {
+                            $(win.document.body).find('h1').css('text-align','center');
+                          }
+                    }],
+                    responsive: true,
+                    "language": {
+                      "zeroRecords": "몸무게/식단 기록이 없습니다. 1일 다이어트 일지를 작성해주세요.",
+                      "info": "총 _PAGES_페이지 중 _PAGE_페이지",
+                      "paginate":{
+                        "next" : "다음",
+                        "previous" : "이전"
+                      }
+                    }
+                  });
+                  datatablesButtons.buttons().container().appendTo("#datatables-buttons_wrapper .col-md-6:eq(0)")
+                });
+block script
+  script.
+    $(document).ready(init);
+
+    function init(){
+      
+    }
+
+    function ajaxGetBodyRecord(){
+
+      var strURL = getUrl('/api/bodyrecord/');
+      $.ajax({ 
+        type: 'POST', 
+        url: strURL,
+        async: false, 
+        data: null
+      }).done(function(resultParams){
+        var message = "운동 목표가 정상적으로 등록되었습니다.";
+        var title = "운동 목표 설정";
+        var type = "success";
+
+        if(resultParams.isSuccess){
+          //TODO data rendering
+        }else{
+          type = "warning";
+          message = "몸무게/식단 기록을 가져오는데 실패했습니다.";
+          showMessage(message, title, type);
+        }
+      }).fail(function(resultParams){
+        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var title = "서비스점검중";
+        var type = "error";
+        showMessage(message, title, type);
+      });
+    }
+
+    function getUrl(targetURL){
+      var strURL = '';
+      if(window.location.pathname.split('/').length > 1 && window.location.pathname.split('/')[1].length == 2){
+        strURL = '/'+window.location.pathname.split('/')[1]+targetURL; 
+      }else{
+        strURL = '/kr'+targetURL; 
+      }
+      return strURL;
+    }
+
+    function showMessage(message, title, type){
+      toastr[type](message, title, {
+              positionClass: "toast-top-right",
+              closeButton: true,
+              progressBar: true,
+              newestOnTop: true,
+              rtl: false,
+              timeOut: 5000
+              });
+    }
