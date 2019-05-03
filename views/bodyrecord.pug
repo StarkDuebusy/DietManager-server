@@ -116,6 +116,10 @@ block script
 
     function init(){
       ajaxNutritionGuide();
+
+      $('.selNutrition').on('change', function(){
+        ajaxNutritionGuide();
+      });
     }
 
     function afterLogin(){
