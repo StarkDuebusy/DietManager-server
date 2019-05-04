@@ -5,7 +5,7 @@ var crypto = require('crypto');
 var ImgParser = require('../util/imgParser');
 
 
-router.put('/', function(req, res, next){
+router.put('/login', function(req, res, next){
   sqlManager(function(err, con) {
     var loginQuery = 'SELECT count(*) AS correct, PROFILE_IMG, USER_NM, USER_ID FROM DIET_MANAGER.USER where EMAIL = ? and PASSWORD = ?';
     var queryParams = [
@@ -66,6 +66,9 @@ router.put('/', function(req, res, next){
     });
   });
 });
-
+router.put('/logout', function(req, res){
+    req.session.destroy(function(err){
+    });
+});
 
 module.exports = router;
