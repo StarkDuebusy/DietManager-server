@@ -195,10 +195,116 @@ body
       $('#btnModalLogin').on('click', function(){
         var params = {
           email : $('#editLoginEmail').val(),
-          password : $('#editLoginPassword').val()
+          password : $('#editLoginPassword').val(),
+          registType : 'e'
+        };
+        ajaxLogin(params);
+      });
+
+      $('#btnMenuLogOut').on('click', function(){
+        var strURL = getUrl('/api/login/logout');
+        $.ajax({ 
+            type: 'PUT', 
+            url: strURL
+        })
+        location.reload();
+      });
+
+      $('#btnGoogleSignIn').on('click', function(){
+        clickedSignIn = true;
+      })
+    }
+
+    var clickedSignIn = false;
+    function onSignIn(googleUser) {
+      if(!clickedSignIn)
+        return;
+
+      var params = {
+          email : profile.getEmail()
         };
 
+      var strURL = getUrl('/api/regist/checkEmail');
+      $.ajax({ 
+        type: 'GET', 
+        url: strURL,
+        async: false, 
+        data: params
+      }).done(function(resultParams){
+        if(resultParams.isDuplicate){
+          var params = {
+            email : profile.getEmail(),
+            token : profile.getId(),
+            registType : 'g'
+          };
+
+          ajaxLogin(params);
+        }else{
+          var params = {
+            userName : profile.getName(),
+            email : profile.getEmail(),
+            profile : profile.getImageUrl(),
+            token : profile.getId(),
+            registType : 'g'
+          };
+          ajaxGotoRegist(params)
+        }
+      }).fail(function(resultParams){
+        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var title = "서비스점검중";
+        var type = "error";
+        toastr[type](message, title, {
+              positionClass: "toast-top-right",
+              closeButton: true,
+              progressBar: true,
+              newestOnTop: true,
+              rtl: false,
+              timeOut: 5000
+              });
+      });
+    }
+
+    function ajaxGotoRegist(params){
+      var strURL = getUrl('/api/regist');
+      $.ajax({ 
+        type: 'PUT', 
+        url: strURL,
+        async: false, 
+        data: params
+      }).done(function(resultParams){
+        if(resultParams.isSuccess){
+          window.location.href = getUrl('/view/regist');
+        }else{
+          var message = "회원가입 화면으로 이동하지 못했습니다.";
+          var title = "회원가입";
+          var type = "warning";
+          toastr[type](message, title, {
+                positionClass: "toast-top-right",
+                closeButton: true,
+                progressBar: true,
+                newestOnTop: true,
+                rtl: false,
+                timeOut: 5000
+                });
+        }
+      }).fail(function(resultParams){
+        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var title = "서비스점검중";
+        var type = "error";
+        toastr[type](message, title, {
+              positionClass: "toast-top-right",
+              closeButton: true,
+              progressBar: true,
+              newestOnTop: true,
+              rtl: false,
+              timeOut: 5000
+              });
+      });
+    }
+
+    function ajaxLogin(params){
         var strURL = getUrl('/api/login/login');
+
         $.ajax({ 
           type: 'PUT', 
           url: strURL,
@@ -256,70 +362,7 @@ body
                 timeOut: 5000
                 });
         });
-      });
-
-      $('#btnMenuLogOut').on('click', function(){
-        var strURL = getUrl('/api/login/logout');
-        $.ajax({ 
-            type: 'PUT', 
-            url: strURL
-        })
-        location.reload();
-      });
-
-      $('#btnGoogleSignIn').on('click', function(){
-        clickedSignIn = true;
-      })
     }
-
-    var clickedSignIn = false;
-    function onSignIn(googleUser) {
-      if(!clickedSignIn)
-        return;
-
-      // Useful data for your client-side scripts:
-      var profile = googleUser.getBasicProfile();
-      console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-      console.log('Full Name: ' + profile.getName());
-      console.log('Given Name: ' + profile.getGivenName());
-      console.log('Family Name: ' + profile.getFamilyName());
-      console.log("Image URL: " + profile.getImageUrl());
-      console.log("Email: " + profile.getEmail());
-
-      // The ID token you need to pass to your backend:
-      var id_token = googleUser.getAuthResponse().id_token;
-      console.log("ID Token: " + id_token);
-
-      var params = {
-          email : profile.getEmail()
-        };
-
-      var strURL = getUrl('/api/regist/checkEmail');
-      $.ajax({ 
-        type: 'GET', 
-        url: strURL,
-        async: false, 
-        data: params
-      }).done(function(resultParams){
-        if(resultParams.isDuplicate){
-          //TODO login
-        }else{
-          window.location.href = getUrl('/view/regist?userName='+profile.getName()+'&email='+profile.getEmail()+'&profile='+profile.getImageUrl()+"&registType=g");
-        }
-      }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
-        var type = "error";
-        toastr[type](message, title, {
-              positionClass: "toast-top-right",
-              closeButton: true,
-              progressBar: true,
-              newestOnTop: true,
-              rtl: false,
-              timeOut: 5000
-              });
-      });
-    } 
 
     function getUrl(targetURL){
       var strURL = '';

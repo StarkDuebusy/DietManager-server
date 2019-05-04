@@ -7,13 +7,32 @@ var crypto = require('crypto');
 
 router.get('/', function(req, res, next) {
   var params = {
-    registUserName : (req.query.userName == undefined)? null:req.query.userName,
-    targetWeight : (req.session == undefined)? null:req.session.targetWeight,
-		registProfileIMG : (req.query.profile == undefined)? null:req.query.profile,
-		email : (req.query.email == undefined)? null:req.query.email,
-		registType : (req.query.registType == undefined)? null:req.query.registType
+    registUserName : (req.session.userName == undefined)? null:req.session.userName,
+		registProfileIMG : (req.session.profile == undefined)? null:req.session.profile,
+		email : (req.session.email == undefined)? null:req.session.email,
+		token : (req.session.token == undefined)? null:req.session.token,
+		registType : (req.session.registType == undefined)? null:req.session.registType
   };
-  res.render('regist', params);
+	res.render('regist', params);
+	req.session.destroy(function(err){
+	});
+});
+
+router.put('/', function(req, res, next) {
+  var params = {
+		isSuccess : false
+	};
+	
+	if(req.body.email != undefined){
+		params.isSuccess = true;
+		req.session.email = req.body.email;
+		req.session.userName = req.body.userName;
+		req.session.token = req.body.token;
+		req.session.profile = req.body.profile;
+		req.session.registType = req.body.registType;
+	}
+
+  res.send(params);
 });
 
 router.get('/checkEmail', function(req, res, next) {
@@ -85,11 +104,11 @@ router.post('/', upload.array('profileIMG',1),function(req, res, next) {
 				}
 			        
 				function regist(imageFileName) {
-					if(req.body.registType != 'e'){
-						var currentDate = (new Date()).valueOf().toString();
-						var random = Math.random().toString();
-						req.body.password = crypto.createHash('sha1').update(currentDate + random).digest('hex');
-					}
+					// if(req.body.registType != 'e'){
+					// 	var currentDate = (new Date()).valueOf().toString();
+					// 	var random = Math.random().toString();
+					// 	req.body.password = crypto.createHash('sha1').update(currentDate + random).digest('hex');
+					// }
 
 					var insertUserProfileQuery = "INSERT INTO DIET_MANAGER.USER (PROFILE_IMG, USER_NM, EMAIL, PASSWORD, BIRTH_YMD, GENDER, WEIGHT, HEIGHT, COUNTRY_CD, REGIST_TYPE, REGIST_YMD)" +
 							" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE())";
