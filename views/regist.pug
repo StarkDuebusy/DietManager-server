@@ -50,8 +50,11 @@ block content
                       span.custom-control-label 약관동의
                 #validation-step-2
                   .col-12.text-center 
-                    .col-12.text-center              
-                      img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='150' height='150')
+                    .col-12.text-center
+                      if registProfileIMG == null
+                        img#imgRegistProfile.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='150' height='150')
+                      else
+                        img#imgRegistProfile.rounded-circle.rounded.mr-2.mb-2(src=registProfileIMG alt='Placeholder' width='150' height='150')
                       input#editProfileIMG.custom-file-input(type='file' accept='image/png, image/jpeg, image/gif' name='input-file-preview' style="display: none;")
                     .co1-12.text-center(style="position : relative;top: -30px; left: 50px;")
                       label#btnProfileIMG.btn.btn-pill.btn-primary(for='customFileLangHTML' data-browse='Bestand kiezen' style ="vertical-align:bottom")
@@ -60,17 +63,27 @@ block content
                     label.form-label
                       | 이름
                       span.text-danger *
-                    input#editUserName.form-control.required(name='wizard-userName' type='text')
+                    input#editUserName.form-control.required(name='wizard-userName' type='text' value=registUserName)
                   .form-group
                     label.form-label
                       | 이메일
                       span.text-danger *
-                    input#editEmail.form-control.required.email(name='wizard-email' type='text')
-                  .form-group.mb-0
-                    label.form-label
-                      | 비밀번호
-                      span.text-danger *
-                    input#editPassword.form-control.required(name='wizard-password' type='text')
+                    if registType != null
+                      input#editEmail.form-control.required.email(name='wizard-email' type='text' value=email disabled)
+                    else
+                      input#editEmail.form-control.required.email(name='wizard-email' type='text')
+                  if registType != null
+                    .form-group.mb-0(style="display:none;")
+                      label.form-label
+                        | 비밀번호
+                        span.text-danger *
+                      input#editPassword.form-control.required(name='wizard-password' type='text' value=token data-registType=registType)
+                  else
+                    .form-group.mb-0
+                      label.form-label
+                        | 비밀번호
+                        span.text-danger *
+                      input#editPassword.form-control.required(name='wizard-password' type='text' data-registType='e')
                 #validation-step-3
                   .form-group
                     label.form-label
@@ -100,7 +113,10 @@ block content
                     input#editHeight.form-control.required(name='wizard-userHeight' type='number' placeholder="ex) 176.7")
                 #validation-step-4
                   .col-12.text-center
-                    img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
+                    if registProfileIMG == null
+                      img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='150' height='150')
+                    else
+                      img.rounded-circle.rounded.mr-2.mb-2(src=registProfileIMG alt='Placeholder' width='150' height='150')
                   .form-group
                     label.form-label
                       | 이름
@@ -173,7 +189,6 @@ block content
 
                       $('#editResUserName').val($('#editUserName').val());
                       $('#editResEmail').val($('#editEmail').val());
-                      $('#editResPassword').val($('#editPassword').val());
                       $('#editResBirth').val($('#editBirth').val());
                       $('#editResGender').val($(':input:radio[name=editRadioGender]:checked').attr('data-txt'));
                       $('#editResWeight').val($('#editWeight').val());
@@ -277,19 +292,47 @@ block script
       }
       return strURL;
     }
+
+    function convertImgToDataURLviaCanvas(url, callback, outputFormat) {
+      var img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.onload = function() {
+        var canvas = document.createElement('CANVAS');
+        var ctx = canvas.getContext('2d');
+        var dataURL;
+        canvas.height = this.height;
+        canvas.width = this.width;
+        ctx.drawImage(this, 0, 0);
+        dataURL = canvas.toDataURL(outputFormat);
+        callback(dataURL);
+        canvas = null;
+      };
+      img.src = url;
+    }
     
     function ajaxRegist(){
+      
       var formData = new FormData();
-      formData.append('profileIMG', $('#editProfileIMG')[0].files[0], $('#editEmail').val()+".jpg");
+      if($('#imgRegistProfile').attr('src').includes('http')){
+        convertImgToDataURLviaCanvas($('#imgRegistProfile').attr('src'), function(dataURL){
+          $('#imgRegistProfile').attr('src', dataURL);
+          ajaxRegist();
+        });
+        return;
+      }else if($('#imgRegistProfile').attr('src').includes('data:')){
+        formData.append('profileIMGvURL', $('#imgRegistProfile').attr('src'));
+      }else{
+        formData.append('profileIMG', $('#editProfileIMG')[0].files[0], $('#editEmail').val()+".jpg");
+      }
+      
       formData.append('name', $('#editUserName').val());
       formData.append('email', $('#editEmail').val());
       formData.append('password', $('#editPassword').val());
+      formData.append('registType', $('#editPassword').attr('data-registType'));
       formData.append('birthDay', $('#editBirth').val());
       formData.append('gender', $(':input:radio[name=editRadioGender]:checked').val());
       formData.append('weight', $('#editWeight').val());
       formData.append('height', $('#editHeight').val());
-      //TODO sns회원가입시 google- g로 해줘야함
-      formData.append('registType', 'e');
 
       var strURL = getUrl('/api/regist');
       $.ajax({ 
@@ -320,6 +363,10 @@ block script
           if(resultParams.isSuccess){
             showMessage(message, title, type);
             window.location.href=getUrl('/view/dashboard');
+          }else if(resultParams.alreadyRegist){
+            type = "warning";
+            message = "해당 이메일로 이미 가입되어있습니다.";
+            showMessage(message, title, type);
           }else{
             type = "warning";
             message = "회원가입을 실패했습니다.";

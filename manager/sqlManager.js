@@ -1,10 +1,12 @@
 var mysql = require('mysql');
+var config = require('./config.json');
+
 var pool  = mysql.createPool({
   connectionLimit : 150,
-  host            : '',
-  user            : '',
-  password        : '',
-  database        : '',
+  host            : config.DBinfo.host,
+  user            : config.DBinfo.user,
+  password        : config.DBinfo.password,
+  database        : config.DBinfo.database,
   multipleStatements: true
 });
 

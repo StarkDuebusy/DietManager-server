@@ -5,7 +5,7 @@ head
   meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
   meta(name='description', content='Responsive Bootstrap 4 Admin & Dashboard Template')
   meta(name='author', content='Bootlab')
-  meta(name='google-signin-client_id' content='')
+  meta(name='google-signin-client_id' content='157199777865-ub07uli53lf5d1u0tism30qk7u536cni.apps.googleusercontent.com')
   link(rel='icon', href='/img/favicon.ico')
   title 다이어트 매니저
   link(href='/css/app.css', rel='stylesheet')
@@ -149,7 +149,7 @@ body
             .modal-body.m-3
               .row
                 .col-12
-                  .g-signin2(data-onsuccess='onSignIn' style="width: 120px;margin: auto;margin-bottom: 20px;")
+                  #btnGoogleSignIn.g-signin2(data-onsuccess='onSignIn' style="width: 120px;margin: auto;margin-bottom: 20px;")
               .row
                 .col-4
                   hr
@@ -195,10 +195,116 @@ body
       $('#btnModalLogin').on('click', function(){
         var params = {
           email : $('#editLoginEmail').val(),
-          password : $('#editLoginPassword').val()
+          password : $('#editLoginPassword').val(),
+          registType : 'e'
+        };
+        ajaxLogin(params);
+      });
+
+      $('#btnMenuLogOut').on('click', function(){
+        var strURL = getUrl('/api/login/logout');
+        $.ajax({ 
+            type: 'PUT', 
+            url: strURL
+        })
+        location.reload();
+      });
+
+      $('#btnGoogleSignIn').on('click', function(){
+        clickedSignIn = true;
+      })
+    }
+
+    var clickedSignIn = false;
+    function onSignIn(googleUser) {
+      if(!clickedSignIn)
+        return;
+
+      var params = {
+          email : profile.getEmail()
         };
 
+      var strURL = getUrl('/api/regist/checkEmail');
+      $.ajax({ 
+        type: 'GET', 
+        url: strURL,
+        async: false, 
+        data: params
+      }).done(function(resultParams){
+        if(resultParams.isDuplicate){
+          var params = {
+            email : profile.getEmail(),
+            token : profile.getId(),
+            registType : 'g'
+          };
+
+          ajaxLogin(params);
+        }else{
+          var params = {
+            userName : profile.getName(),
+            email : profile.getEmail(),
+            profile : profile.getImageUrl(),
+            token : profile.getId(),
+            registType : 'g'
+          };
+          ajaxGotoRegist(params)
+        }
+      }).fail(function(resultParams){
+        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var title = "서비스점검중";
+        var type = "error";
+        toastr[type](message, title, {
+              positionClass: "toast-top-right",
+              closeButton: true,
+              progressBar: true,
+              newestOnTop: true,
+              rtl: false,
+              timeOut: 5000
+              });
+      });
+    }
+
+    function ajaxGotoRegist(params){
+      var strURL = getUrl('/api/regist');
+      $.ajax({ 
+        type: 'PUT', 
+        url: strURL,
+        async: false, 
+        data: params
+      }).done(function(resultParams){
+        if(resultParams.isSuccess){
+          window.location.href = getUrl('/view/regist');
+        }else{
+          var message = "회원가입 화면으로 이동하지 못했습니다.";
+          var title = "회원가입";
+          var type = "warning";
+          toastr[type](message, title, {
+                positionClass: "toast-top-right",
+                closeButton: true,
+                progressBar: true,
+                newestOnTop: true,
+                rtl: false,
+                timeOut: 5000
+                });
+        }
+      }).fail(function(resultParams){
+        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var title = "서비스점검중";
+        var type = "error";
+        toastr[type](message, title, {
+              positionClass: "toast-top-right",
+              closeButton: true,
+              progressBar: true,
+              newestOnTop: true,
+              rtl: false,
+              timeOut: 5000
+              });
+      });
+    }
+
+    function ajaxLogin(params){
         var strURL = getUrl('/api/login/login');
+
         $.ajax({ 
           type: 'PUT', 
           url: strURL,
@@ -256,16 +362,7 @@ body
                 timeOut: 5000
                 });
         });
-      })
     }
-     $('#btnMenuLogOut').on('click', function(){
-        var strURL = getUrl('/api/login/logout');
-        $.ajax({ 
-            type: 'PUT', 
-            url: strURL
-        })
-        location.reload();
-    });
 
     function getUrl(targetURL){
       var strURL = '';
