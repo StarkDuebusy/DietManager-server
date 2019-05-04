@@ -5,7 +5,7 @@ head
   meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
   meta(name='description', content='Responsive Bootstrap 4 Admin & Dashboard Template')
   meta(name='author', content='Bootlab')
-  meta(name='google-signin-client_id' content='')
+  meta(name='google-signin-client_id' content='157199777865-ub07uli53lf5d1u0tism30qk7u536cni.apps.googleusercontent.com')
   link(rel='icon', href='/img/favicon.ico')
   title 다이어트 매니저
   link(href='/css/app.css', rel='stylesheet')
@@ -149,7 +149,7 @@ body
             .modal-body.m-3
               .row
                 .col-12
-                  .g-signin2(data-onsuccess='onSignIn' style="width: 120px;margin: auto;margin-bottom: 20px;")
+                  #btnGoogleSignIn.g-signin2(data-onsuccess='onSignIn' style="width: 120px;margin: auto;margin-bottom: 20px;")
               .row
                 .col-4
                   hr
@@ -256,16 +256,70 @@ body
                 timeOut: 5000
                 });
         });
-      })
-    }
-     $('#btnMenuLogOut').on('click', function(){
+      });
+
+      $('#btnMenuLogOut').on('click', function(){
         var strURL = getUrl('/api/login/logout');
         $.ajax({ 
             type: 'PUT', 
             url: strURL
         })
         location.reload();
-    });
+      });
+
+      $('#btnGoogleSignIn').on('click', function(){
+        clickedSignIn = true;
+      })
+    }
+
+    var clickedSignIn = false;
+    function onSignIn(googleUser) {
+      if(!clickedSignIn)
+        return;
+
+      // Useful data for your client-side scripts:
+      var profile = googleUser.getBasicProfile();
+      console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+      console.log('Full Name: ' + profile.getName());
+      console.log('Given Name: ' + profile.getGivenName());
+      console.log('Family Name: ' + profile.getFamilyName());
+      console.log("Image URL: " + profile.getImageUrl());
+      console.log("Email: " + profile.getEmail());
+
+      // The ID token you need to pass to your backend:
+      var id_token = googleUser.getAuthResponse().id_token;
+      console.log("ID Token: " + id_token);
+
+      var params = {
+          email : profile.getEmail()
+        };
+
+      var strURL = getUrl('/api/regist/checkEmail');
+      $.ajax({ 
+        type: 'GET', 
+        url: strURL,
+        async: false, 
+        data: params
+      }).done(function(resultParams){
+        if(resultParams.isDuplicate){
+          //TODO login
+        }else{
+          window.location.href = getUrl('/view/regist?userName='+profile.getName()+'&email='+profile.getEmail()+'&profile='+profile.getImageUrl()+"&registType=g");
+        }
+      }).fail(function(resultParams){
+        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var title = "서비스점검중";
+        var type = "error";
+        toastr[type](message, title, {
+              positionClass: "toast-top-right",
+              closeButton: true,
+              progressBar: true,
+              newestOnTop: true,
+              rtl: false,
+              timeOut: 5000
+              });
+      });
+    } 
 
     function getUrl(targetURL){
       var strURL = '';

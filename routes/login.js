@@ -34,16 +34,17 @@ router.put('/login', function(req, res, next){
         var session = crypto.createHash('sha1').update(currentDate + random).digest('hex');
         resultParams.session = session;
         req.session.session = session;
-        
-        if(result.PROFILE_IMG == null) {
-          req.sesssion.profileIMG = null;
-        }else{
+        req.session.profileIMG = null;
+
+        if(result.PROFILE_IMG != null) {
           var imgParser = new ImgParser();
-          req.session.profileIMG = "data:image/jpeg;base64," + imgParser.convertToBuffer(result.PROFILE_IMG);
-          resultParams.profileIMG = req.session.profileIMG;
+          if(imgParser.convertToBuffer(result.PROFILE_IMG) != undefined){
+            req.session.profileIMG = "data:image/jpeg;base64," + imgParser.convertToBuffer(result.PROFILE_IMG);
+            resultParams.profileIMG = req.session.profileIMG;
+          }
         }
         
-        var query = 'SELECT TARGET_WEIGHT FROM DIET_MANAGER.DIET_SURVEY where USER_ID = 1';
+        var query = 'SELECT TARGET_WEIGHT FROM DIET_MANAGER.DIET_SURVEY where USER_ID = ?';
         con.query(query, result.USER_ID, function(err, result) {
           con.release();
           if (err) {

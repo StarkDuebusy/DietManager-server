@@ -2,13 +2,16 @@ var express = require('express');
 var router = express.Router();
 var sqlManager = require('../manager/sqlManager');
 var fs = require('fs');
+var crypto = require('crypto');
 
 
 router.get('/', function(req, res, next) {
   var params = {
-    userName : (req.session == undefined)? null:req.session.userName,
+    registUserName : (req.query.userName == undefined)? null:req.query.userName,
     targetWeight : (req.session == undefined)? null:req.session.targetWeight,
-    profileIMG : (req.session == undefined)? null:req.session.profileIMG
+		registProfileIMG : (req.query.profile == undefined)? null:req.query.profile,
+		email : (req.query.email == undefined)? null:req.query.email,
+		registType : (req.query.registType == undefined)? null:req.query.registType
   };
   res.render('regist', params);
 });
@@ -53,10 +56,11 @@ router.post('/', upload.array('profileIMG',1),function(req, res, next) {
       result = result[0];
 
 			if(result.isExist == '0'){
+				var imageFileName = req.body.email + '.jpg';
+				var dirPath = __dirname + '/../resource/raw/image/profile/' + imageFileName;
+
 				if(req.files.length != 0) {
 					var profileIMG = req.files[0].buffer;
-					var imageFileName = req.body.email + '.jpg';
-					var dirPath = __dirname + '/../resource/raw/image/profile/' + imageFileName;
 					
 					fs.writeFile(dirPath, profileIMG, function(err) {
 						if(err) {
@@ -66,11 +70,27 @@ router.post('/', upload.array('profileIMG',1),function(req, res, next) {
 						
 						regist(imageFileName);
 					});					
+				}else if(req.body.profileIMGvURL != undefined){
+					req.body.profileIMGvURL = req.body.profileIMGvURL.replace(/^data:image\/\w+;base64,/, '');
+					fs.writeFile(dirPath, req.body.profileIMGvURL, 'base64', function(err) {
+						if(err) {
+							new Error(err.message);
+							return;
+						}
+						
+						regist(imageFileName);
+					});
 				} else {
 					regist(null);
 				}
 			        
 				function regist(imageFileName) {
+					if(req.body.registType != 'e'){
+						var currentDate = (new Date()).valueOf().toString();
+						var random = Math.random().toString();
+						req.body.password = crypto.createHash('sha1').update(currentDate + random).digest('hex');
+					}
+
 					var insertUserProfileQuery = "INSERT INTO DIET_MANAGER.USER (PROFILE_IMG, USER_NM, EMAIL, PASSWORD, BIRTH_YMD, GENDER, WEIGHT, HEIGHT, COUNTRY_CD, REGIST_TYPE, REGIST_YMD)" +
 							" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE())";
 					var queryParams = [imageFileName, req.body.name, req.body.email, 
@@ -96,8 +116,12 @@ router.post('/', upload.array('profileIMG',1),function(req, res, next) {
 					});
 				}
 			} else {
-        con.release();
-				res.send({'isSuccess' : false});
+				con.release();
+				var resultParams = {
+					'isSuccess' : false,
+					'alreadyRegist' : true
+				}
+				res.send(resultParams);
 			}
     });
   });

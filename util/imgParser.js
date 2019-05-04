@@ -8,7 +8,7 @@ function ImgParser(){
 				return new Buffer(img).toString('base64');
 		} catch (e) {
 			console.log(e.message);
-			return;
+			return undefined;
 		}
 	}
 }
