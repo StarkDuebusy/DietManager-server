@@ -49,6 +49,15 @@ router.get('/', function(req, res, next) {
 var multer  = require('multer');
 var upload = multer();
 router.put('/', upload.array('profileIMG',1), function(req, res, next){
+  if(req.session.session == undefined){
+    var resultParams = {
+      isSuccess : false,
+      needLogin : true
+    };
+    res.send(resultParams);
+    return;
+  }
+  
   sqlManager(function(err, con) {
     var loginQuery = 'UPDATE `DIET_MANAGER`.`USER` SET `USER_NM` = ?, `BIRTH_YMD` = ?, `GENDER` = ?, `WEIGHT` = ?, `HEIGHT` = ? WHERE (`EMAIL` = ?);';
     var queryParams = [
