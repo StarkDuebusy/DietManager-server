@@ -75,10 +75,25 @@ router.put('/login', function(req, res, next){
     });
   }
 });
+router.put('/logout', function(req, res,next){
+  var resultParams = {
+    isSuccess : true
+  };
 
-router.put('/logout', function(req, res){
+  if(req.session.userName != undefined){
     req.session.destroy(function(err){
+      if(err){
+        console.log(err);
+        next(new Error('ERR006|' + req.countryCode));
+        return;
+      }else{
+        res.send(resultParams);
+      }
     });
+  }else{
+    resultParams.isSuccess =false;
+    res.send(resultParams);
+  }
 });
 
 module.exports = router;
