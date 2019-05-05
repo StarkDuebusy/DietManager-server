@@ -67,4 +67,56 @@ router.get('/weight', function(req, res, next) {
   });
 });
 
+router.get('/bodycomposition', function(req, res, next) {
+  if(req.session.session == undefined){
+    var resultParams = {
+      isSuccess : false,
+      needLogin : true
+    };
+    res.send(resultParams);
+    return;
+  }
+
+  sqlManager(function(err, con) {
+    var queryUser = 'SELECT BODY_MUSCLE, BODY_FAT, BODY_WEIGHT,  RECORD_YMD FROM DIET_MANAGER.BODYCOMPOSITION WHERE USER_ID = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?) AND YEAR(RECORD_YMD) = ? ORDER BY RECORD_YMD ASC;';
+    var params = [
+      req.session.email,
+      req.query.year
+    ];
+    con.query(queryUser, params, function(err, result){
+      con.release();
+      if(err){
+        con.release();
+        next(new Error('ERR006|' + req.countryCode));
+        return;
+      }
+      
+      var resultParams = {
+        isSuccess : true,
+        bodycompositionList : []
+      };
+
+      for(var month = 0; month < 12; month++){
+        resultParams.bodycompositionList[month] = {
+          weight : 0,
+          muscle : 0,
+          fat : 0
+        };
+      }
+
+      for(var index = 0; index < result.length; index++){
+        var month = new Date(result[index].RECORD_YMD).getMonth();
+        resultParams.bodycompositionList[month] = {
+          weight : result[index].BODY_WEIGHT,
+          muscle : result[index].BODY_MUSCLE,
+          fat : result[index].BODY_FAT
+        };
+      }
+
+      res.send(resultParams);
+    });
+  });
+});
+
+
 module.exports = router;

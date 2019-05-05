@@ -15,7 +15,7 @@ block content
                 #btnPrevMonth.page-link
                   i.fas.fa-angle-left
               li.page-item
-                string#txtMonth.page-link 1월
+                strong#txtMonth.page-link 1월
               li.page-item
                 #btnNextMonth.page-link
                   i.fas.fa-angle-right
@@ -103,18 +103,19 @@ block content
           .card-body
             ul.pagination.pagination-lg.justify-content-center
               li.page-item
-                #btnPrevMonth.page-link
+                .btnPrevYear.page-link
                   i.fas.fa-angle-left
               li.page-item
-                string.page-link 2019년
+                strong.txtYear.page-link(data-type='b') 2019년
               li.page-item
-                #btnNextMonth.page-link
+                .btnNextYear.page-link
                   i.fas.fa-angle-right
             .chart.chart-lg.mt-2
               canvas#chartBodycompotision
         script.
+          var chartBodycomposition;
           document.addEventListener("DOMContentLoaded", function(event) {
-            new Chart(document.getElementById("chartBodycompotision"), {
+            chartBodycomposition = new Chart(document.getElementById("chartBodycompotision"), {
               type: 'line',
               data: {
                 labels: ["1월", "2월",  "3월",  "4월", "5월",  "6월",  "7월", "8월",  "9월",  "10월",  "11월",  "12월"],
@@ -123,19 +124,19 @@ block content
                   fill: false,
                   backgroundColor: "rgba(65, 212, 146, 0.5)",
                   borderColor: "#41D492",
-                  data: [6, 7, 8, 11, 9, 11, 8, 14, 12, 16, 9, 10]
+                  data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 }, {
                   label: "골격근량",
                   fill: false,
                   backgroundColor: "rgba(242, 102, 102, 0.5)",
                   borderColor: "#f26666",
-                  data: [14, 15, 9, 12, 16, 17, 22, 18, 24, 32, 31, 36]
+                  data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 }, {
                   label: "체지방량",
                   fill: false,
                   backgroundColor: "rgba(168, 119, 181, 0.5)",
                   borderColor: "#a877b5",
-                  data: [3, 5, 4, 9, 5, 8, 5, 6, 4, 7, 4, 3]
+                  data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 }]
               },
               options: {
@@ -206,12 +207,12 @@ block content
           .card-body
             ul.pagination.pagination-lg.justify-content-center
               li.page-item
-                #btnPrevMonth.page-link
+                .btnPrevYear.page-link
                   i.fas.fa-angle-left
               li.page-item
-                string.page-link 2019년
+                strong.txtYear.page-link(data-type='f') 2019년
               li.page-item
-                #btnNextMonth.page-link
+                .btnNextYear.page-link
                   i.fas.fa-angle-right
             .chart.chart-lg.mt-2
               canvas#chartFFMI
@@ -224,9 +225,9 @@ block content
                 datasets: [{
                   label: "FFMI",
                   fill: false,
-                  backgroundColor: "rgba(65, 212, 146, 0.5)",
-                  borderColor: "#41D492",
-                  data: [6, 7, 8, 11, 9, 11, 8, 14, 12, 16, 9, 10]
+                  backgroundColor: "rgba(242, 181, 29, 0.5)",
+                  borderColor: "#f2b51d",
+                  data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 }]
               },
               options: {
@@ -293,6 +294,10 @@ block script
       $('#txtMonth').text(month+'월');
       ajaxGetWeightList(month);
 
+      var year = d.getFullYear();
+      ajaxGetBodycompositionList(year);
+      //- ajaxGetFFMIList(year);
+
       $('#btnNextMonth').on('click', function(){
         var txtMonth = $(this).parents('ul').find('#txtMonth');
         var month = parseInt(txtMonth.text());
@@ -301,7 +306,9 @@ block script
         }else{
           month++;
         }
+
         txtMonth.text(month+'월');
+
         ajaxGetWeightList(month);
       });
 
@@ -313,8 +320,46 @@ block script
         }else{
           month--;
         }
+
         txtMonth.text(month+'월');
+
         ajaxGetWeightList(month);
+      });
+
+      $('.btnNextYear').on('click', function(){
+        var txtYear = $(this).parents('ul').find('.txtYear');
+        var year = parseInt(txtYear.text());
+        if(year == new Date().getFullYear()){
+          return;
+        }else{
+          year++;
+        }
+
+        txtYear.text(year+'년');
+
+        if(txtYear.attr('data-type') == 'b'){
+          ajaxGetBodycompositionList(year);
+        }else if(txtYear.attr('data-type') == 'f'){
+          ajaxGetFFMIList(year);
+        }
+      });
+
+      $('.btnPrevYear').on('click', function(){
+        var txtYear = $(this).parents('ul').find('.txtYear');
+        var year = parseInt(txtYear.text());
+        if(year == 1900){
+          year = 2019;
+        }else{
+          year--;
+        }
+
+        txtYear.text(year+'년');
+        
+        if(txtYear.attr('data-type') == 'b'){
+          ajaxGetBodycompositionList(year);
+        }else if(txtYear.attr('data-type') == 'f'){
+          ajaxGetFFMIList(year);
+        }
       });
     }
 
@@ -362,6 +407,63 @@ block script
           renderChartWeight(month, resultParams.weightList);
         }else if(resultParams.needLogin){
           renderChartWeight(month);
+        }else{
+          type = "warning";
+          message = "운동 목표 등록을 실패했습니다.";
+          showMessage(message, title, type);
+        }
+      }).fail(function(resultParams){
+        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var title = "서비스점검중";
+        var type = "error";
+        showMessage(message, title, type);
+      });
+    }
+
+    function renderChartBodycomposition(year, bodycompositionList){
+      var date = new Date(), y = date.getFullYear();
+      var lastDay = new Date(y, month, 0);
+      lastDay = lastDay.getDate();
+
+      chartBodycomposition.config.data.datasets[0].data = [];
+      chartBodycomposition.config.data.datasets[1].data = [];
+      chartBodycomposition.config.data.datasets[2].data = [];
+      for(var month = 0; month < 12; month++){
+        if(bodycompositionList != undefined){
+          var info = bodycompositionList[month];
+          chartBodycomposition.config.data.datasets[0].data.push(info.weight);
+          chartBodycomposition.config.data.datasets[1].data.push(info.muscle);
+          chartBodycomposition.config.data.datasets[2].data.push(info.fat);
+        }else{
+          chartBodycomposition.config.data.datasets[0].data.push(0);
+          chartBodycomposition.config.data.datasets[1].data.push(0);
+          chartBodycomposition.config.data.datasets[2].data.push(0);
+        }
+      }
+      
+      chartBodycomposition.update();
+    }
+
+    function ajaxGetBodycompositionList(year){
+      var params = {
+        year : year
+      };
+
+      var strURL = getUrl('/api/dashboard/bodycomposition');
+      $.ajax({ 
+        type: 'GET', 
+        url: strURL,
+        async: false, 
+        data: params
+      }).done(function(resultParams){
+        var message = "운동 목표가 정상적으로 등록되었습니다.";
+        var title = "운동 목표 설정";
+        var type = "success";
+
+        if(resultParams.isSuccess){
+          renderChartBodycomposition(year, resultParams.bodycompositionList);
+        }else if(resultParams.needLogin){
+          renderChartBodycomposition(year);
         }else{
           type = "warning";
           message = "운동 목표 등록을 실패했습니다.";
