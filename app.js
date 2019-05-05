@@ -35,6 +35,7 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
       	switch(apiName){
           case 'regist':
           case 'login':
+          case 'dashboard':
           case 'dietplan': 
           case 'dailyreport':
           case 'bodyrecord':
