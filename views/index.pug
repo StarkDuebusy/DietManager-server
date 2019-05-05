@@ -203,7 +203,7 @@ block content
                 h5.card-title.mb-0.mt-2 FFMI(Fat Free Mas Index)
               .col-md-6.text-right
                 |FFMI : 
-                span.text-primary 평균이상
+                span#txtJudgeFFMI 기록없음
           .card-body
             ul.pagination.pagination-lg.justify-content-center
               li.page-item
@@ -217,8 +217,9 @@ block content
             .chart.chart-lg.mt-2
               canvas#chartFFMI
         script.
+          var chartFFMI;
           document.addEventListener("DOMContentLoaded", function(event) {
-            new Chart(document.getElementById("chartFFMI"), {
+            chartFFMI = new Chart(document.getElementById("chartFFMI"), {
               type: 'line',
               data: {
                 labels: ["1월", "2월",  "3월",  "4월", "5월",  "6월",  "7월", "8월",  "9월",  "10월",  "11월",  "12월"],
@@ -296,7 +297,7 @@ block script
 
       var year = d.getFullYear();
       ajaxGetBodycompositionList(year);
-      //- ajaxGetFFMIList(year);
+      ajaxGetFFMIList(year);
 
       $('#btnNextMonth').on('click', function(){
         var txtMonth = $(this).parents('ul').find('#txtMonth');
@@ -399,8 +400,8 @@ block script
         async: false, 
         data: params
       }).done(function(resultParams){
-        var message = "운동 목표가 정상적으로 등록되었습니다.";
-        var title = "운동 목표 설정";
+        var message = "몸무게 기록을 정상적으로 가져왔습니다.";
+        var title = "월별 몸무게";
         var type = "success";
 
         if(resultParams.isSuccess){
@@ -409,7 +410,7 @@ block script
           renderChartWeight(month);
         }else{
           type = "warning";
-          message = "운동 목표 등록을 실패했습니다.";
+          message = "몸무게 기록을 가져오는데 실패했습니다.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
@@ -456,8 +457,8 @@ block script
         async: false, 
         data: params
       }).done(function(resultParams){
-        var message = "운동 목표가 정상적으로 등록되었습니다.";
-        var title = "운동 목표 설정";
+        var message = "체성분 기록을 정상적으로 가져왔습니다.";
+        var title = "체성분";
         var type = "success";
 
         if(resultParams.isSuccess){
@@ -466,7 +467,84 @@ block script
           renderChartBodycomposition(year);
         }else{
           type = "warning";
-          message = "운동 목표 등록을 실패했습니다.";
+          message = "체성분 기록을 가져오는데 실패했습니다.";
+          showMessage(message, title, type);
+        }
+      }).fail(function(resultParams){
+        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var title = "서비스점검중";
+        var type = "error";
+        showMessage(message, title, type);
+      });
+    }
+
+    function renderChartFFMI(year, ffmiList){
+      var date = new Date(), y = date.getFullYear();
+      var lastDay = new Date(y, month, 0);
+      lastDay = lastDay.getDate();
+
+      chartFFMI.config.data.datasets[0].data = [];
+      for(var month = 0; month < 12; month++){
+        if(ffmiList != undefined){
+          var info = ffmiList[month];
+          chartFFMI.config.data.datasets[0].data.push(info.ffmi);
+          if(info.ffmi > 0)
+            judgeFFMI(info.ffmi);
+        }else{
+          chartFFMI.config.data.datasets[0].data.push(0);
+        }
+      }
+      
+      chartFFMI.update();
+
+      if(ffmiList == undefined){
+        judgeFFMI(0);
+      }
+    }
+
+    function judgeFFMI(ffmi){
+      var txtJudgeFFMI = $('#txtJudgeFFMI').removeClass();
+
+      if(ffmi == 0){
+        txtJudgeFFMI.text('기록없음');
+      }else if(ffmi < 18){
+        txtJudgeFFMI.text('평균이하').addClass('text-warning');
+      }else if(ffmi < 21){
+        txtJudgeFFMI.text('평균').addClass('text-primary ');
+      }else if(ffmi < 23){
+        txtJudgeFFMI.text('일반인 기준 매우 좋은 몸').addClass('text-info');
+      }else if(ffmi < 26){
+        txtJudgeFFMI.text('네추럴의 한계').addClass('text-success');
+      }else if(ffmi < 28){
+        txtJudgeFFMI.text('축복받은 몸이거나 약물사용 가능성 있음').addClass('text-danger');
+      }else if(ffmi >= 28){
+        txtJudgeFFMI.text('약물없이 도달할 수 없는 몸').addClass('text-danger');
+      }
+    }
+
+    function ajaxGetFFMIList(year){
+      var params = {
+        year : year
+      };
+
+      var strURL = getUrl('/api/dashboard/ffmi');
+      $.ajax({ 
+        type: 'GET', 
+        url: strURL,
+        async: false, 
+        data: params
+      }).done(function(resultParams){
+        var message = "FFMI 기록을 정상적으로 가져왔습니다.";
+        var title = "FFMI";
+        var type = "success";
+
+        if(resultParams.isSuccess){
+          renderChartFFMI(year, resultParams.ffmiList);
+        }else if(resultParams.needLogin){
+          renderChartFFMI(year);
+        }else{
+          type = "warning";
+          message = "FFMI 기록을 가져오는데 실패했습니다.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
