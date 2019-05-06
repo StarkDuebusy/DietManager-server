@@ -8,7 +8,59 @@ router.get('/', function(req, res, next) {
     targetWeight : (req.session == undefined)? null:req.session.targetWeight,
     profileIMG : (req.session == undefined)? null:req.session.profileIMG
   };
-  res.render('index', params);
+  
+  if(req.session.session == undefined){
+    res.render('index', params);
+  }else{
+    sqlManager(function(err, con) {
+      var checkQuery = 'SELECT CARBO_RATE, PROTEIN_RATE, CURRENT_WEIGHT, TARGET_WEIGHT, MEAL_FREQUENCY, date_format(RECORD_YMD, "%Y-%m-%d") as RECORD_YMD FROM DIET_MANAGER.DAILY_SURVEY WHERE USER_ID = (SELECT USER_ID FROM USER WHERE EMAIL = ?) ORDER BY RECORD_YMD DESC  LIMIT 2;';
+      con.query(checkQuery, req.session.email, function(err, result){
+        con.release();
+        if(err){
+          con.release();
+          next(new Error('ERR006|' + req.countryCode));
+          return;
+        }
+        
+        if(result.length == 2){
+          for(var recordIndex = 0; recordIndex < result.length; recordIndex++){
+            var targetWeight = result[recordIndex].TARGET_WEIGHT;
+            var proteinRate = result[recordIndex].PROTEIN_RATE;
+            var proteinTotalWeight = targetWeight * proteinRate;
+            var mealFrequency = result[recordIndex].MEAL_FREQUENCY;
+            result[recordIndex].PROTEIN = Math.round((proteinTotalWeight/0.2955)/mealFrequency);
+
+            var carboRate = result[recordIndex].CARBO_RATE;
+            var carboTotalWeight =  targetWeight * carboRate;
+            result[recordIndex].CARBO = Math.round((carboTotalWeight/0.4585)/mealFrequency);
+          }
+
+          params.nutritionInfo = {
+            protein : result[0].PROTEIN,
+            proteinDiff : result[0].PROTEIN - result[1].PROTEIN,
+            carbo : result[0].CARBO,
+            carboDiff : result[0].CARBO - result[1].CARBO,
+            weight : result[0].CURRENT_WEIGHT,
+            weightDiff : result[0].CURRENT_WEIGHT - result[1].CURRENT_WEIGHT
+          };
+          res.render('bodyrecord', params);  
+        }else if(result.length == 1){
+          params.nutritionInfo = {
+            protein : result[0].PROTEIN,
+            proteinDiff : 0,
+            carbo : result[0].CARBO,
+            carboDiff : 0,
+            weight : result[0].CURRENT_WEIGHT,
+            weightDiff : 0
+          };
+          res.render('bodyrecord', params);  
+        }else{
+          params.needDietPlan = true;
+          res.render('bodyrecord', params);  
+        }
+      });
+    });
+  }
 });
 
 router.get('/weight', function(req, res, next) {

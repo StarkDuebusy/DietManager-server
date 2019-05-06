@@ -117,12 +117,12 @@ body
                   span.align-middle 체성분 기록
             .card
               .sidebar-content
+                a.sidebar-item(href='/kr/view/dietplan')
+                  i.align-middle.mr-2.fas.fa-fw.fa-medal
+                  span.align-middle 다이어트 목표 설정
                 a.sidebar-item(href='/kr/view/dailyreport')
                  i.align-middle.mr-2.fas.fa-fw.fa-file-signature
                  span.align-middle 1일 다이어트 일지
-                a.sidebar-item(href='/kr/view/dietplan')
-                 i.align-middle.mr-2.fas.fa-fw.fa-medal
-                 span.align-middle 다이어트 목표 설정
                 if userName != null
                   a.sidebar-item(href='/kr/view/profile')
                     i.align-middle.mr-2.fas.fa-fw.fa-drafting-compass
@@ -131,13 +131,17 @@ body
               .sidebar-content
                 if userName == null
                   button#btnMenuLogIn.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess')
+                    i.align-middle(data-feather='log-in' style="margin-right: 8px;")
                     span.align-middle 로그인
                   button#btnMenuLogOut.sidebar-item(type='button' data-toggle='modal' style="display:none;")
+                    i.align-middle(data-feather='log-out' style="margin-right: 8px;")
                     span.align-middle 로그아웃
                 else
                   button#btnMenuLogIn.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess' style="display:none;")
+                    i.align-middle(data-feather='log-in' style="margin-right: 8px;")
                     span.align-middle 로그인
                   button#btnMenuLogOut.sidebar-item(type='button' data-toggle='modal')
+                    i.align-middle(data-feather='log-out' style="margin-right: 8px;")
                     span.align-middle 로그아웃
         block content
       #centeredModalSuccess.modal.fade(tabindex='-1' role='dialog' aria-hidden='true')

@@ -3,6 +3,53 @@ extends sidebarlayout
 block content
   .col-12.col-md-8.col-lg-9.col-xl-10.pl-lg-4
     .row
+      .col-6.col-xl-3.d-flex
+        .card.flex-fill
+          .card-body.py-3
+            .row
+              .col-12.col-sm-4.align-self-center.text-center.text-sm-left
+                .icon.icon-primary
+                  i.align-middle(data-feather='activity')
+              .col-12.col-sm-8.align-self-center.text-center.text-sm-right
+                p.text-muted.mb-1 최근 몸무게 변화
+                h2
+                  i.text-primary.fas.fa-caret-up
+                  |  71.9
+      .col-6.col-xl-3.d-flex
+        .card.flex-fill
+          .card-body.py-3
+            .row
+              .col-12.col-sm-4.align-self-center.text-center.text-sm-left
+                .icon.icon-danger
+                  i.align-middle(data-feather='award')
+              .col-12.col-sm-8.align-self-center.text-center.text-sm-right
+                p.text-muted.mb-1 예상 몸무게 달성일
+                h2 2019.06.19
+      .col-6.col-xl-3.d-flex
+        .card.flex-fill
+          .card-body.py-3
+            .row
+              .col-12.col-sm-4.align-self-center.text-center.text-sm-left
+                .icon.icon-success
+                  i.align-middle(data-feather='twitter')
+              .col-12.col-sm-8.align-self-center.text-center.text-sm-right
+                p.text-muted.mb-1 1식 당 닭가슴살
+                h2
+                  i.text-primary.fas.fa-caret-up
+                  |  115g
+      .col-6.col-xl-3.d-flex
+        .card.flex-fill
+          .card-body.py-3
+            .row
+              .col-12.col-sm-4.align-self-center.text-center.text-sm-left
+                .icon.icon-warning
+                  i.align-middle(data-feather='heart')
+              .col-12.col-sm-8.align-self-center.text-center.text-sm-right
+                p.text-muted.mb-1 1식 당 고구마
+                h2
+                  i.text-danger.fas.fa-caret-down
+                  |  200g
+    .row
       .col-12.col-lg-12.d-flex
         .card.flex-fill.w-100
           .card-header
@@ -96,10 +143,8 @@ block content
         .card.flex-fill.w-100
           .card-header
             .row
-              .col-md-6
+              .col-md-12
                 h5.card-title.mb-0.mt-2 체성분 변화
-              .col-md-6.text-right
-                button.btn.btn-primary 체성분 기록
           .card-body
             ul.pagination.pagination-lg.justify-content-center
               li.page-item
