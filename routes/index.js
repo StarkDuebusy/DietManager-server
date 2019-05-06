@@ -6,9 +6,18 @@ router.get('/', function(req, res, next) {
   var params = {
     userName : (req.session == undefined)? null:req.session.userName,
     targetWeight : (req.session == undefined)? null:req.session.targetWeight,
-    profileIMG : (req.session == undefined)? null:req.session.profileIMG
+    profileIMG : (req.session == undefined)? null:req.session.profileIMG,
+    needDailyReport : false,
+    nutritionInfo : {
+      protein : 0,
+      proteinDiff : 0,
+      carbo : 0,
+      carboDiff : 0,
+      weight : 0,
+      weightDiff : 0
+    }
   };
-  
+
   if(req.session.session == undefined){
     res.render('index', params);
   }else{
@@ -37,26 +46,23 @@ router.get('/', function(req, res, next) {
 
           params.nutritionInfo = {
             protein : result[0].PROTEIN,
-            proteinDiff : result[0].PROTEIN - result[1].PROTEIN,
+            proteinDiff : Math.round(((result[0].PROTEIN - result[1].PROTEIN)*100))/100,
             carbo : result[0].CARBO,
-            carboDiff : result[0].CARBO - result[1].CARBO,
+            carboDiff : Math.round(((result[0].CARBO - result[1].CARBO)*100))/100,
             weight : result[0].CURRENT_WEIGHT,
-            weightDiff : result[0].CURRENT_WEIGHT - result[1].CURRENT_WEIGHT
+            weightDiff : Math.round(((result[0].CURRENT_WEIGHT - result[1].CURRENT_WEIGHT)*100))/100
           };
-          res.render('bodyrecord', params);  
+          res.render('index', params);  
         }else if(result.length == 1){
           params.nutritionInfo = {
             protein : result[0].PROTEIN,
-            proteinDiff : 0,
             carbo : result[0].CARBO,
-            carboDiff : 0,
-            weight : result[0].CURRENT_WEIGHT,
-            weightDiff : 0
+            weight : result[0].CURRENT_WEIGHT
           };
-          res.render('bodyrecord', params);  
+          res.render('index', params);  
         }else{
-          params.needDietPlan = true;
-          res.render('bodyrecord', params);  
+          params.needDailyReport = true;
+          res.render('index', params);  
         }
       });
     });

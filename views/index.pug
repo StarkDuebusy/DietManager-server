@@ -12,9 +12,27 @@ block content
                   i.align-middle(data-feather='activity')
               .col-12.col-sm-8.align-self-center.text-center.text-sm-right
                 p.text-muted.mb-1 최근 몸무게 변화
-                h2
-                  i.text-primary.fas.fa-caret-up
-                  |  71.9
+                if needDailyReport
+                  .btnGotoDailyReport.btn.btn-primary
+                    span.align-middle 1일 다이어트 일지를 작성해주세요.
+                else
+                  h2
+                    if nutritionInfo.weightDiff < 0
+                      i.text-danger.fas.fa-caret-down
+                      | 
+                    else if nutritionInfo.weightDiff > 0
+                      i.text-primary.fas.fa-caret-up
+                      | 
+                    span #{nutritionInfo.weight}
+                    span KG
+                  p 
+                    if nutritionInfo.weightDiff < 0
+                      strong.text-danger #{nutritionInfo.weightDiff}
+                      strong.text-danger KG
+                    else if nutritionInfo.weightDiff >= 0
+                      strong.text-primary +
+                      strong.text-primary #{nutritionInfo.weightDiff}
+                      strong.text-primary KG
       .col-6.col-xl-3.d-flex
         .card.flex-fill
           .card-body.py-3
@@ -25,6 +43,7 @@ block content
               .col-12.col-sm-8.align-self-center.text-center.text-sm-right
                 p.text-muted.mb-1 예상 몸무게 달성일
                 h2 2019.06.19
+                p.text-muted  서비스 준비중
       .col-6.col-xl-3.d-flex
         .card.flex-fill
           .card-body.py-3
@@ -34,9 +53,27 @@ block content
                   i.align-middle(data-feather='twitter')
               .col-12.col-sm-8.align-self-center.text-center.text-sm-right
                 p.text-muted.mb-1 1식 당 닭가슴살
-                h2
-                  i.text-primary.fas.fa-caret-up
-                  |  115g
+                if needDailyReport
+                  .btnGotoDailyReport.btn.btn-primary
+                    span.align-middle 1일 다이어트 일지를 작성해주세요.
+                else
+                  h2
+                    if nutritionInfo.proteinDiff < 0
+                      i.text-danger.fas.fa-caret-down
+                      | 
+                    else if nutritionInfo.proteinDiff > 0
+                      i.text-primary.fas.fa-caret-up
+                      | 
+                    span #{nutritionInfo.protein}
+                    span g
+                  p 
+                    if nutritionInfo.proteinDiff < 0
+                      strong.text-danger #{nutritionInfo.proteinDiff}
+                      strong.text-danger g
+                    else if nutritionInfo.proteinDiff >= 0
+                      strong.text-primary +
+                      strong.text-primary #{nutritionInfo.proteinDiff}
+                      strong.text-primary g
       .col-6.col-xl-3.d-flex
         .card.flex-fill
           .card-body.py-3
@@ -46,9 +83,27 @@ block content
                   i.align-middle(data-feather='heart')
               .col-12.col-sm-8.align-self-center.text-center.text-sm-right
                 p.text-muted.mb-1 1식 당 고구마
-                h2
-                  i.text-danger.fas.fa-caret-down
-                  |  200g
+                if needDailyReport
+                  .btnGotoDailyReport.btn.btn-primary
+                    span.align-middle 1일 다이어트 일지를 작성해주세요.
+                else
+                  h2
+                    if nutritionInfo.carboDiff < 0
+                      i.text-danger.fas.fa-caret-down
+                      | 
+                    else if nutritionInfo.carboDiff > 0
+                      i.text-primary.fas.fa-caret-up
+                      | 
+                    span #{nutritionInfo.carbo}
+                    span g
+                  p 
+                    if nutritionInfo.carboDiff < 0
+                      strong.text-danger #{nutritionInfo.carboDiff}
+                      strong.text-danger g
+                    else if nutritionInfo.carboDiff >= 0
+                      strong.text-primary +
+                      strong.text-primary #{nutritionInfo.carboDiff}
+                      strong.text-primary g
     .row
       .col-12.col-lg-12.d-flex
         .card.flex-fill.w-100
@@ -407,6 +462,11 @@ block script
           ajaxGetFFMIList(year);
         }
       });
+
+      $('.btnGotoDailyReport').on('click', function(){
+        window.location.href = getUrl('/view/dailyreport');  
+      })
+
     }
 
     function afterLogin(){
