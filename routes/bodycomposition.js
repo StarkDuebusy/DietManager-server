@@ -69,12 +69,13 @@ router.post('/', function(req, res, next) {
 			result = result[0];
 			
 			if(result.isExist == '0'){
-        var query = 'INSERT INTO `DIET_MANAGER`.`BODYCOMPOSITION` (`USER_ID`, `BODY_MUSCLE`, `BODY_FAT`, `BODY_WEIGHT`, `RECORD_YMD`) VALUES ((SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?), ?, ?, ?, CURDATE());';
+        var query = 'INSERT INTO `DIET_MANAGER`.`BODYCOMPOSITION` (`USER_ID`, `BODY_MUSCLE`, `BODY_FAT`, `BODY_WEIGHT`, `RECORD_YMD`) VALUES ((SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?), ?, ?, ?, ?);';
         var params = [
           req.session.email,
-          req.body.bodyWeight,
           req.body.bodyMuscle,
-          req.body.bodyFat
+          req.body.bodyFat,
+          req.body.bodyWeight,
+          req.body.recordDate
         ];
         con.query(query, params, function(err, result){
           con.release();
