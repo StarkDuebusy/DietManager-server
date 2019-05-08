@@ -7,9 +7,36 @@ router.get('/', function(req, res, next) {
   var params = {
     userName : (req.session == undefined)? null:req.session.userName,
     targetWeight : (req.session == undefined)? null:req.session.targetWeight,
-    profileIMG : (req.session == undefined)? null:req.session.profileIMG
+    profileIMG : (req.session == undefined)? null:req.session.profileIMG,
+    planCurrentWeight : '',
+    planTargetWeight : '',
+    planWorkoutFrequency : 0,
+    planMealFrequency : 0
   };
-  res.render('dietplan', params);
+
+  if(req.session.session == undefined){
+    res.render('dietplan', params);
+    return;
+  }
+  sqlManager(function(err, con) {
+		var checkQuery = 'SELECT * FROM DIET_MANAGER.DIET_SURVEY WHERE USER_ID = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?);';
+		con.query(checkQuery, req.session.email, function(err, result){
+			if(err){
+				con.release();
+				next(new Error('ERR006|' + req.countryCode));
+				return;
+      }
+
+      if(result.length != 0){
+        result = result[0];
+        params.planCurrentWeight = result.CURRENT_WEIGHT;
+        params.planTargetWeight = result.TARGET_WEIGHT;
+        params.planWorkoutFrequency = result.WORKOUT_FREQUENCY;
+        params.planMealFrequency = result.MEAL_FREQUENCY;
+      }
+      res.render('dietplan', params);
+    });
+  });
 });
 
 router.post('/', function(req, res, next) {

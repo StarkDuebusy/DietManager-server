@@ -36,12 +36,12 @@ block content
                     label.form-label
                       | 현재 몸무게
                       span.text-danger *
-                    input#editCurrnetWeight.form-control.required(name='wizard-currentWeight' type='number' placeholder="ex) 77.15")
+                    input#editCurrnetWeight.form-control.required(name='wizard-currentWeight' type='number' placeholder="ex) 77.15" value=planCurrentWeight)
                   .form-group
                     label.form-label
                       | 목표 몸무게
                       span.text-danger *
-                    input#editTargetWeight.form-control.required(name='wizard-targetWeight' type='number' placeholder="ex) 70.0")
+                    input#editTargetWeight.form-control.required(name='wizard-targetWeight' type='number' placeholder="ex) 70.0" value=planTargetWeight)
                   .col-12.text-right 
                     span.text-danger *
                     span 현재/목표 몸무게의 격차는 
@@ -180,7 +180,19 @@ block script
     $(document).ready(init);
 
     function init(){
-      
+      $('input:radio[name="editRadioWorkoutFrequency"]').each(function() {
+        var workoutFrequency = !{planWorkoutFrequency}; 
+        if(this.value == workoutFrequency){ 
+          this.checked = true;
+        }
+      });
+
+      $('input:radio[name="editRadioMealFrequency"]').each(function() {
+        var mealFrequency = !{planMealFrequency}; 
+        if(this.value == mealFrequency){ 
+          this.checked = true;
+        }
+      });
     }
 
     function ajaxRecordDeitPlan(){
