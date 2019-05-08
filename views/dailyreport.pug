@@ -36,6 +36,11 @@ block content
                 #validation-step-1
                   .form-group
                     label.form-label
+                      | 측정일
+                      span.text-danger *
+                    input#editRecordDate.form-control(type='text' name='datesingle')
+                  .form-group
+                    label.form-label
                       | 오늘의 몸무게
                       span.text-danger *
                   .form-group
@@ -116,6 +121,8 @@ block content
                             option= protein
                       .form-group.col-4
                         strong#txtProteinGram.areaTxtGram
+                        | 
+                        strong#txtProteinGramDiff
                   .form-group
                     label.form-label
                       | 1식당 권장 탄수화물 섭취량
@@ -129,6 +136,12 @@ block content
                             option= carbo
                       .form-group.col-4
                         strong#txtCarboGram.areaTxtGram
+                        | 
+                        strong#txtCarboGramDiff
+                  .form-group
+                    label.form-label
+                      | 측정일
+                    input#editResRecordDate.form-control(name='wizard-recorddate' type='text' disabled)
                   .form-group
                     label.form-label
                       | 오늘의 몸무게 
@@ -194,6 +207,7 @@ block content
                   .on('showStep', function(e, anchorObject, stepNumber, stepDirection) {
                     if(stepNumber == 3){
                       $validationForm.find('.btn-submit').show();
+                      $('#editResRecordDate').val($('#editRecordDate').val());
                       $('#editResCurrnetWeight').val($('#editCurrnetWeight').val());
                       $('#editResDietProcess').val($(':input:radio[name=editRadioDietProcess]:checked').attr('data-txt'));
                       $('#editResDidWorkout').val($(':input:radio[name=editRadioDidWorkout]:checked').attr('data-txt'));
@@ -214,6 +228,14 @@ block content
 
                     return false;
                   }).hide();
+
+                  $('input[name="datesingle"]').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    "locale": {
+                      "format": "YYYY-MM-DD"
+                    }
+                  });
                 });
 block script
   script.
@@ -222,6 +244,14 @@ block script
     function init(){
       $('.selNutrition').on('change', function(){
         ajaxNutritionGuide();
+      });
+
+      $(':input:radio[name=editRadioDidWorkout]').on('change', function(){
+        if($(':input:radio[name=editRadioDidWorkout]:checked').val() == 1){
+          $('.areaWorkoutProcess').show();
+        }else{
+          $('.areaWorkoutProcess').hide();
+        }
       });
     }
 
@@ -232,7 +262,10 @@ block script
     function ajaxNutritionGuide(){
       var params = {
         protein : $('#selProtein').val(),
-        carbo : $('#selCarbo').val()
+        carbo : $('#selCarbo').val(),
+        recordDate : $('#editRecordDate').val(),
+        currentWeight : $('#editCurrnetWeight').val(),
+        dietProcess : $(':input:radio[name=editRadioDietProcess]:checked').val()
       };
       
       var strURL = getUrl('/api/dailyreport/nutrition');
@@ -246,7 +279,12 @@ block script
         var title = "1일 권장 섭취량";
         var type = "";
 
+        $('#txtCarboGramDiff').hide();
+        $('#txtProteinGramDiff').hide();
+        $('.areaTxtMealFrequency').hide();
+        
         if(resultParams.isSuccess){
+          $('.areaTxtMealFrequency').show();
           var proteinGram = Math.round(resultParams.proteinGram);
           $('#txtProteinGram').text(proteinGram+'g');
 
@@ -256,11 +294,22 @@ block script
           $('.txtMealFrequency').text(resultParams.mealFrequency);
           
           $('.areaTxtMealFrequency').show();
+          color4num($('#txtProteinGramDiff'), resultParams.proteinDiff);
+          color4num($('#txtCarboGramDiff'), resultParams.carboDiff);
+
+          function color4num(em, num){
+            $(em).removeClass();
+            $(em).hide().text('');
+
+            if(num > 0 ){
+              $(em).show().addClass('text-primary').text('+'+num+'g');
+            }else if(num < 0 ){
+              $(em).show().addClass('text-danger').text(num+'g');
+            }
+          }
         }else if(resultParams.needLogin){
-          $('.areaTxtMealFrequency').hide();
           $('.areaTxtGram').text("로그인이 필요한 서비스입니다.");
         }else if(resultParams.needDietPlan){
-          $('.areaTxtMealFrequency').hide();
           $('.areaTxtGram').text("먼저 다이어트 목표를 설정해주세요.");
         }else{
           type = "warning";
@@ -277,13 +326,18 @@ block script
 
     function ajaxRecordDailyReport(){
       var params = {
+        recordDate : $('#editRecordDate').val(),
         currentWeight : $('#editCurrnetWeight').val(),
         dietProcess : $(':input:radio[name=editRadioDietProcess]:checked').val(),
         didWorkout : $(':input:radio[name=editRadioDidWorkout]:checked').val()
       };
 
-      if($(':input:radio[name=editRadioDidWorkout]:checked').val() == 1)
+      if($(':input:radio[name=editRadioDidWorkout]:checked').val() == 1){
         params.workoutProcess = $(':input:radio[name=editRadioWorkoutProcess]:checked').val();
+      }else{
+        params.workoutProcess = 0;
+      }
+        
       
       var strURL = getUrl('/api/dailyreport');
       $.ajax({ 

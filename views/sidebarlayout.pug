@@ -87,14 +87,14 @@ body
             h3.mb-1.text-white.font-weight-normal #{userName}
           if targetWeight == null
             a#btnSetTargetWeight.btn.btn-primary(href='/kr/view/dietplan') 다이어트 목표를 설정해주세요.
-            span#areaTargetWeight.font-weight-normal(style="display:none;") 목표 : 
+            span#areaTargetWeight.font-weight-normal(style="display:none;") 목표 몸무게 : 
               strong#txtTargetWeight.text-danger #{targetWeight}
-              span  KG
+              span.text-danger  KG
           else
             a#btnSetTargetWeight.btn.btn-primary(href='/kr/view/dietplan' style="display:none;") 다이어트 목표를 설정해주세요.
-            span.font-weight-normal 목표 : 
+            span.font-weight-normal 목표 몸무게 : 
                 strong.text-danger #{targetWeight}
-                span  KG
+                span.text-danger  KG
 
   main.content
     .container
