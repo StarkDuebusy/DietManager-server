@@ -29,7 +29,7 @@ block content
                     if nutritionInfo.weightDiff < 0
                       strong.text-danger #{nutritionInfo.weightDiff}
                       strong.text-danger KG
-                    else if nutritionInfo.weightDiff >= 0
+                    else if nutritionInfo.weightDiff > 0
                       strong.text-primary +
                       strong.text-primary #{nutritionInfo.weightDiff}
                       strong.text-primary KG
@@ -70,7 +70,7 @@ block content
                     if nutritionInfo.proteinDiff < 0
                       strong.text-danger #{nutritionInfo.proteinDiff}
                       strong.text-danger g
-                    else if nutritionInfo.proteinDiff >= 0
+                    else if nutritionInfo.proteinDiff > 0
                       strong.text-primary +
                       strong.text-primary #{nutritionInfo.proteinDiff}
                       strong.text-primary g
@@ -100,7 +100,7 @@ block content
                     if nutritionInfo.carboDiff < 0
                       strong.text-danger #{nutritionInfo.carboDiff}
                       strong.text-danger g
-                    else if nutritionInfo.carboDiff >= 0
+                    else if nutritionInfo.carboDiff > 0
                       strong.text-primary +
                       strong.text-primary #{nutritionInfo.carboDiff}
                       strong.text-primary g

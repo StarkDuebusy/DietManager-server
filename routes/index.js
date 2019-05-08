@@ -54,9 +54,20 @@ router.get('/', function(req, res, next) {
           };
           res.render('index', params);  
         }else if(result.length == 1){
+          var targetWeight = result[0].TARGET_WEIGHT;
+          var proteinRate = result[0].PROTEIN_RATE;
+          var proteinTotalWeight = targetWeight * proteinRate;
+          var mealFrequency = result[0].MEAL_FREQUENCY;
+          result[0].PROTEIN = Math.round((proteinTotalWeight/0.2955)/mealFrequency);
+
+          var carboRate = result[0].CARBO_RATE;
+          var carboTotalWeight =  targetWeight * carboRate;
+          result[0].CARBO = Math.round((carboTotalWeight/0.4585)/mealFrequency);
           params.nutritionInfo = {
             protein : result[0].PROTEIN,
+            proteinDiff : 0,
             carbo : result[0].CARBO,
+            weightDiff : 0,
             weight : result[0].CURRENT_WEIGHT
           };
           res.render('index', params);  
