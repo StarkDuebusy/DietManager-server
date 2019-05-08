@@ -44,7 +44,7 @@ block content
                       | 오늘의 몸무게
                       span.text-danger *
                   .form-group
-                    input#editCurrnetWeight.form-control.required(name='wizard-currentWeight' type='number' placeholder="ex) 71.9")
+                    input#editCurrnetWeight.form-control.required(name='wizard-currentWeight' type='number' placeholder="ex) 71.9" value=currentWeight)
                   .col-12.text-right 
                     span.text-danger *
                     span 기상 직후 대소변을 보고 속옷만 입은 상태에서 몸무게를 측정해서 입력해주세요.
@@ -254,6 +254,29 @@ block script
           $('.areaWorkoutProcess').hide();
         }
       });
+
+      $('input:radio[name="editRadioDietProcess"]').each(function() {
+        var dietProcess = !{dietProcess}; 
+        if(this.value == dietProcess){ 
+          this.checked = true;
+        }
+      });
+      
+      var workoutProcess = !{workoutProcess};
+      if(workoutProcess != 0){
+        $('input:radio[name="editRadioWorkoutProcess"]').each(function() {
+          if(this.value == workoutProcess){
+            this.checked = true;
+          }
+        });
+      }else{
+        $('input:radio[name="editRadioDidWorkout"]').each(function() {
+          if(this.value == 2){
+            this.checked = true;
+            $(':input:radio[name=editRadioDidWorkout]').trigger('change');
+          }
+        });
+      }
     }
 
     function afterLogin(){

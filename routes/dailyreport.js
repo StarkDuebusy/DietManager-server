@@ -7,7 +7,6 @@ router.get('/', function(req, res, next) {
   sqlManager(function(err, con) {
 		var checkQuery = 'SELECT * FROM DIET_MANAGER.NUTRITION;';
 		con.query(checkQuery, null, function(err, result){
-      con.release();
 			if(err){
 				con.release();
 				next(new Error('ERR006|' + req.countryCode));
@@ -17,7 +16,10 @@ router.get('/', function(req, res, next) {
       var params = {
         userName : (req.session == undefined)? null:req.session.userName,
         targetWeight : (req.session == undefined)? null:req.session.targetWeight,
-        profileIMG : (req.session == undefined)? null:req.session.profileIMG
+        profileIMG : (req.session == undefined)? null:req.session.profileIMG,
+        currentWeight : '',
+        dietProcess : 0,
+        workoutProcess : 0
       };
       
       params.proteinList = [];
@@ -29,8 +31,31 @@ router.get('/', function(req, res, next) {
           params.proteinList.push(result[index].NAME);
         }
       }
+      
+      if(req.session.session == undefined){
+        con.release();
+        res.render('dailyreport', params);
+        return;
+      }
 
-      res.render('dailyreport', params);	
+      var query = 'SELECT CURRENT_WEIGHT, WORKOUT_PROCESS, DIET_PROCESS FROM DIET_MANAGER.DAILY_SURVEY WHERE USER_ID = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?) ORDER BY RECORD_YMD DESC LIMIT 1;';
+      con.query(query, req.session.email, function(err, result){
+        if(err){
+          con.release();
+          next(new Error('ERR006|' + req.countryCode));
+          return;
+        }
+        con.release();
+
+        if(result.length == 1){
+          result = result[0];
+          params.currentWeight = result.CURRENT_WEIGHT;
+          params.dietProcess = result.DIET_PROCESS;
+          params.workoutProcess = result.WORKOUT_PROCESS;
+        }
+
+        res.render('dailyreport', params);
+      });
     });		
   });
 });
