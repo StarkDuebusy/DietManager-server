@@ -402,9 +402,9 @@ router.get('/nutrition', function(req, res, next) {
                   var resultParams = {
                     isSuccess : true,
                     proteinGram : nutritionInfoList[0].proteinGram,
-                    proteinDiff : (nutritionInfoList.length != 1)?Math.round(((nutritionInfoList[0].proteinGram - nutritionInfoList[1].proteinGram)*100))/100:0,
+                    proteinDiff : (nutritionInfoList.length != 1)?Math.round(((nutritionInfoList[0].proteinGram - nutritionInfoList[1].proteinGram))):0,
                     carboGram : nutritionInfoList[0].carboGram,
-                    carboDiff : (nutritionInfoList.length != 1)?Math.round(((nutritionInfoList[0].carboGram - nutritionInfoList[1].carboGram)*100))/100:0,
+                    carboDiff : (nutritionInfoList.length != 1)?Math.round(((nutritionInfoList[0].carboGram - nutritionInfoList[1].carboGram))):0,
                     mealFrequency : nutritionInfoList[0].mealFrequency
                   }
                   res.send(resultParams);

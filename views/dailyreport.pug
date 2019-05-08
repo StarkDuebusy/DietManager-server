@@ -108,36 +108,37 @@ block content
                     span.text-danger *
                     span 본 데이터는 운동량을 늘릴 수 있는지 알기 위한 척도로 사용됩니다.
                 #validation-step-4
-                  .form-group
-                    label.form-label
-                      | 1식당 권장 단백질 섭취량
-                      span.text-info.areaTxtMealFrequency  - 1일 
-                      span.text-info.areaTxtMealFrequency.txtMealFrequency 
-                      span.text-info.areaTxtMealFrequency 식 기준
-                    .form-row
-                      .form-group.col-4
-                        select#selProtein.form-control.selNutrition
-                          each protein in proteinList
-                            option= protein
-                      .form-group.col-4
-                        strong#txtProteinGram.areaTxtGram
-                        | 
-                        strong#txtProteinGramDiff
-                  .form-group
-                    label.form-label
-                      | 1식당 권장 탄수화물 섭취량
-                      span.text-info.areaTxtMealFrequency  - 1일 
-                      span.text-info.areaTxtMealFrequency.txtMealFrequency 
-                      span.text-info.areaTxtMealFrequency 식 기준
-                    .form-row
-                      .form-group.col-4
-                        select#selCarbo.form-control.selNutrition
-                          each carbo in carboList
-                            option= carbo
-                      .form-group.col-4
-                        strong#txtCarboGram.areaTxtGram
-                        | 
-                        strong#txtCarboGramDiff
+                  .areaNutritionGuide
+                    .form-group
+                      label.form-label
+                        | 1식당 권장 단백질 섭취량
+                        span.text-info.areaTxtMealFrequency  - 1일 
+                        span.text-info.areaTxtMealFrequency.txtMealFrequency 
+                        span.text-info.areaTxtMealFrequency 식 기준
+                      .form-row
+                        .form-group.col-4
+                          select#selProtein.form-control.selNutrition
+                            each protein in proteinList
+                              option= protein
+                        .form-group.col-4
+                          strong#txtProteinGram.areaTxtGram
+                          | 
+                          strong#txtProteinGramDiff
+                    .form-group
+                      label.form-label
+                        | 1식당 권장 탄수화물 섭취량
+                        span.text-info.areaTxtMealFrequency  - 1일 
+                        span.text-info.areaTxtMealFrequency.txtMealFrequency 
+                        span.text-info.areaTxtMealFrequency 식 기준
+                      .form-row
+                        .form-group.col-4
+                          select#selCarbo.form-control.selNutrition
+                            each carbo in carboList
+                              option= carbo
+                        .form-group.col-4
+                          strong#txtCarboGram.areaTxtGram
+                          | 
+                          strong#txtCarboGramDiff
                   .form-group
                     label.form-label
                       | 측정일
@@ -260,6 +261,16 @@ block script
     }
 
     function ajaxNutritionGuide(){
+      var now = new Date();
+      now.setHours(0,0,0,0);
+      var newRecDate = new Date($('#editRecordDate').val());
+      newRecDate.setHours(0,0,0,0);
+      if(now.getTime() == newRecDate.getTime()){
+        $('.areaNutritionGuide').show();
+      } else{
+        $('.areaNutritionGuide').hide();
+      }
+      
       var params = {
         protein : $('#selProtein').val(),
         carbo : $('#selCarbo').val(),
@@ -282,7 +293,7 @@ block script
         $('#txtCarboGramDiff').hide();
         $('#txtProteinGramDiff').hide();
         $('.areaTxtMealFrequency').hide();
-        
+
         if(resultParams.isSuccess){
           $('.areaTxtMealFrequency').show();
           var proteinGram = Math.round(resultParams.proteinGram);
