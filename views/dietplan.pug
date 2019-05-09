@@ -181,7 +181,7 @@ block script
 
     function init(){
       $('input:radio[name="editRadioWorkoutFrequency"]').each(function() {
-        var workoutFrequency = !{planWorkoutFrequency}; 
+        var workoutFrequency = !{planWorkoutFrequency};
         if(this.value == workoutFrequency){ 
           this.checked = true;
         }
@@ -193,6 +193,9 @@ block script
           this.checked = true;
         }
       });
+    }
+    function afterLogin(){
+      window.location.href = getUrl('/view/dietplan/');
     }
 
     function ajaxRecordDeitPlan(){
