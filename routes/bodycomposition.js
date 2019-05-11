@@ -17,12 +17,13 @@ router.get('/', function(req, res, next) {
     sqlManager(function(err, con) {
       var checkQuery = 'SELECT BODY_WEIGHT, BODY_MUSCLE, BODY_FAT, date_format(RECORD_YMD, "%Y-%m-%d") as RECORD_YMD FROM DIET_MANAGER.BODYCOMPOSITION WHERE USER_ID = (SELECT USER_ID FROM USER WHERE EMAIL = ?) ORDER BY RECORD_YMD DESC ;';
       con.query(checkQuery, req.session.email, function(err, result){
-        con.release();
         if(err){
           con.release();
           next(new Error('ERR006|' + req.countryCode));
           return;
         }
+
+        con.release(); 
         
         if(result.length != 0){
           for(var recordIndex = 0; recordIndex < result.length; recordIndex++){
@@ -62,7 +63,7 @@ router.post('/', function(req, res, next) {
     ];
 		con.query(checkQuery, params, function(err, result){
 			if(err){
-				con.release();
+        con.release();
 				next(new Error('ERR006|' + req.countryCode));
 				return;
 			}
@@ -78,12 +79,13 @@ router.post('/', function(req, res, next) {
           req.body.recordDate
         ];
         con.query(query, params, function(err, result){
-          con.release();
           if(err){
             con.release();
             next(new Error('ERR006|' + req.countryCode));
             return;
           }
+
+          con.release(); 
 
           var resultParams = {
             'isSuccess' : false
@@ -104,12 +106,13 @@ router.post('/', function(req, res, next) {
           req.body.recordDate
         ];
         con.query(query, params, function(err, result){
-          con.release();
           if(err){
             con.release();
             next(new Error('ERR006|' + req.countryCode));
             return;
           }
+
+          con.release(); 
 
           var resultParams = {
             'isSuccess' : false
