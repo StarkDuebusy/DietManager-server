@@ -34,15 +34,15 @@ router.get('/', function(req, res, next) {
         con.release();
         res.render('bodyrecord', params);  
       }else{
-        sqlManager(function(err, con) {
           var checkQuery = 'SELECT CARBO_RATE, PROTEIN_RATE, CURRENT_WEIGHT, TARGET_WEIGHT, MEAL_FREQUENCY, date_format(RECORD_YMD, "%Y-%m-%d") as RECORD_YMD FROM DIET_MANAGER.DAILY_SURVEY WHERE USER_ID = (SELECT USER_ID FROM USER WHERE EMAIL = ?);';
           con.query(checkQuery, req.session.email, function(err, result){
-            con.release();
             if(err){
               con.release();
               next(new Error('ERR006|' + req.countryCode));
               return;
             }
+
+            con.release();
             
             if(result.length != 0){
               for(var recordIndex = 0; recordIndex < result.length; recordIndex++){
@@ -61,11 +61,10 @@ router.get('/', function(req, res, next) {
   
             res.render('bodyrecord', params);  
           });
-        });
-      }
-    });		
-  });
-});
+       }
+     });		
+   });
+ });
 
 
 module.exports = router;
