@@ -49,14 +49,14 @@ router.post('/', function(req, res, next) {
     return;
   }
 
-	sqlManager(function(err, con) {
+  sqlManager(function(err, con) {
 		var checkQuery = 'SELECT count(*) as isExist FROM DIET_MANAGER.DIET_SURVEY WHERE USER_ID = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?);';
 		con.query(checkQuery, req.session.email, function(err, result){
 			if(err){
 				con.release();
 				next(new Error('ERR006|' + req.countryCode));
 				return;
-			}
+      }
 			result = result[0];
 			
 			if(result.isExist == '0'){
@@ -69,12 +69,12 @@ router.post('/', function(req, res, next) {
           req.body.mealFrequency
         ];
         con.query(query, params, function(err, result){
-          con.release();
           if(err){
             con.release();
             next(new Error('ERR006|' + req.countryCode));
             return;
           }
+          con.release();
 
           var resultParams = {
             'isSuccess' : false
@@ -96,12 +96,12 @@ router.post('/', function(req, res, next) {
           req.session.email
         ];
         con.query(query, params, function(err, result){
-          con.release();
           if(err){
             con.release();
             next(new Error('ERR006|' + req.countryCode));
             return;
           }
+          con.release();
 
           var resultParams = {
             'isSuccess' : false
