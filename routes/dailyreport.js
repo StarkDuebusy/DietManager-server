@@ -86,8 +86,8 @@ router.post('/', function(req, res, next) {
           needLogin : false,
           needDietPlan : true
         };
-
         res.send(resultParams);
+
       }else{
         var targetWeight = result[0].TARGET_WEIGHT;
         var workoutFrequncy = result[0].WORKOUT_FREQUENCY;
@@ -95,7 +95,6 @@ router.post('/', function(req, res, next) {
         var dietMode = (result[0].CURRENT_WEIGHT-targetWeight >= 0)? true : false;
         var updated = result[0].updated;
 
-        sqlManager(function(err, con) {
           var checkQuery = 'SELECT CURRENT_WEIGHT, PROTEIN_RATE, CARBO_RATE, WORKOUT_PROCESS, DIET_PROCESS, RECORD_YMD FROM DIET_MANAGER.DAILY_SURVEY WHERE USER_ID = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?) ORDER BY RECORD_YMD DESC LIMIT 3';
           con.query(checkQuery, req.session.email, function(err, result){
             if(err){
@@ -121,7 +120,7 @@ router.post('/', function(req, res, next) {
               }
             }
 
-            result.unshift({
+            result.unshift({ 
               RECORD_YMD : req.body.recordDate,
               CURRENT_WEIGHT : parseFloat(req.body.currentWeight),
               WORKOUT_PROCESS : parseInt(req.body.workoutProcess),
@@ -162,8 +161,7 @@ router.post('/', function(req, res, next) {
               insertDailySurvey(con, res, insertParams);
             }
           });
-        });
-      }
+       }
     });
   });
 });
@@ -171,12 +169,12 @@ router.post('/', function(req, res, next) {
 function insertDailySurvey(con, res, params){
   var query = 'INSERT INTO `DIET_MANAGER`.`DAILY_SURVEY` (`USER_ID`, `DIET_PROCESS`, `DID_WORKOUT`, `WORKOUT_PROCESS`, `CURRENT_WEIGHT`, `TARGET_WEIGHT`, `MEAL_FREQUENCY`, `PROTEIN_RATE`, `carbo_RATE`, `RECORD_YMD`) VALUES ((SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?), ?, ?, ?, ?, ?, ?, ?, ?, ?);';
   con.query(query, params, function(err, result){
-    con.release();
     if(err){
       con.release();
       next(new Error('ERR006|' + req.countryCode));
       return;
     }
+    con.release();
 
     var resultParams = {
       'isSuccess' : false
@@ -192,12 +190,13 @@ function insertDailySurvey(con, res, params){
 function updateDailySurvey(con, res, params){
   var query = 'UPDATE `DIET_MANAGER`.`DAILY_SURVEY` SET `DIET_PROCESS` = ?, `DID_WORKOUT` = ?, `WORKOUT_PROCESS` = ?, `CURRENT_WEIGHT` = ?,`TARGET_WEIGHT` = ?, `MEAL_FREQUENCY` = ?, `PROTEIN_RATE` = ?, `CARBO_RATE` = ?  WHERE `USER_ID` = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?) AND `RECORD_YMD` = ?;';
   con.query(query, params, function(err, result){
-    con.release();
     if(err){
       con.release();
       next(new Error('ERR006|' + req.countryCode));
       return;
-    }1
+    }
+
+    con.release();
 
     var resultParams = {
       'isSuccess' : false
@@ -463,12 +462,12 @@ router.get('/weightgap', function(req, res, next) {
   sqlManager(function(err, con) {
 		var checkQuery = 'SELECT CURRENT_WEIGHT, RECORD_YMD FROM DIET_MANAGER.DAILY_SURVEY WHERE USER_ID = (SELECT USER_ID FROM USER WHERE EMAIL = ?) ORDER BY RECORD_YMD DESC limit 1;';
 		con.query(checkQuery, req.session.email, function(err, result){
-      con.release();
 			if(err){
 				con.release();
 				next(new Error('ERR006|' + req.countryCode));
 				return;
-			}
+      }
+      con.release();
       
       var resultParams = {
         isSuccess : false,
