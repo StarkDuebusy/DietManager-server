@@ -39,12 +39,14 @@ router.get('/checkEmail', function(req, res, next) {
 	sqlManager(function(err, con) {
 		var IDCheckQuery = 'SELECT COUNT(*) AS isExist, REGIST_TYPE FROM DIET_MANAGER.USER WHERE EMAIL = ?';
 		con.query(IDCheckQuery, req.query.email, function(err, result){
-      con.release();
+      
 			if(err){
 				con.release();
 				next(new Error('ERR006|' + req.countryCode));
 				return;
 			}
+
+			con.release();
 			
 			result = result[0];
 			
@@ -117,12 +119,14 @@ router.post('/', upload.array('profileIMG',1),function(req, res, next) {
 					                   req.body.weight, req.body.height, req.countryCode, 
 					                   req.body.registType];
           con.query(insertUserProfileQuery, queryParams, function(err, result) {
-            con.release();
+            
 						if(err) {
 							con.release();
 							next(new Error('ERR006|' + req.countryCode));
 							return;
-            }
+						}
+						
+						con.release();
             
 						var resultParams = {
               'isSuccess' : false
