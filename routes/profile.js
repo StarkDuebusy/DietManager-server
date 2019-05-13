@@ -25,12 +25,14 @@ router.get('/', function(req, res, next) {
   sqlManager(function(err, con) {
     var queryUser = 'SELECT * FROM USER WHERE EMAIL = ?;';
     con.query(queryUser, req.session.email, function(err, result){
-      con.release();
+      
       if(err){
         con.release();
         next(new Error('ERR006|' + req.countryCode));
         return;
       }
+
+      con.release();
       
       if(result.length != 0){
         params.gender = result[0].GENDER; 
@@ -69,12 +71,14 @@ router.put('/', upload.array('profileIMG',1), function(req, res, next){
                         req.session.email
                       ];
     con.query(loginQuery, queryParams, function(err, result) {
-      con.release();
+      
       if (err) {
         con.release();
         next(new Error('ERR006|' + req.countryCode));
 				return;
       }
+
+      con.release();
 
       var resultParams = {
         'isSuccess' : false
@@ -82,8 +86,6 @@ router.put('/', upload.array('profileIMG',1), function(req, res, next){
 
       if(result.affectedRows == '1'){
         req.session.userName  = req.body.name;
-        
-
 
         if(req.files.length != 0) {
 					var profileIMG = req.files[0].buffer;
