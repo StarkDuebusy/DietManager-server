@@ -24,12 +24,14 @@ router.get('/', function(req, res, next) {
     sqlManager(function(err, con) {
       var checkQuery = 'SELECT CARBO_RATE, PROTEIN_RATE, CURRENT_WEIGHT, TARGET_WEIGHT, MEAL_FREQUENCY, date_format(RECORD_YMD, "%Y-%m-%d") as RECORD_YMD FROM DIET_MANAGER.DAILY_SURVEY WHERE USER_ID = (SELECT USER_ID FROM USER WHERE EMAIL = ?) ORDER BY RECORD_YMD DESC  LIMIT 2;';
       con.query(checkQuery, req.session.email, function(err, result){
-        con.release();
+        
         if(err){
           con.release();
           next(new Error('ERR006|' + req.countryCode));
           return;
         }
+
+        con.release();
         
         if(result.length == 2){
           for(var recordIndex = 0; recordIndex < result.length; recordIndex++){
@@ -98,12 +100,14 @@ router.get('/weight', function(req, res, next) {
       req.query.month
     ];
     con.query(queryUser, params, function(err, result){
-      con.release();
+      
       if(err){
         con.release();
         next(new Error('ERR006|' + req.countryCode));
         return;
       }
+
+      con.release();
       
       var resultParams = {
         isSuccess : true,
@@ -153,12 +157,14 @@ router.get('/bodycomposition', function(req, res, next) {
       req.query.year
     ];
     con.query(queryUser, params, function(err, result){
-      con.release();
+      
       if(err){
         con.release();
         next(new Error('ERR006|' + req.countryCode));
         return;
       }
+
+      con.release();
       
       var resultParams = {
         isSuccess : true,
@@ -225,12 +231,14 @@ router.get('/ffmi', function(req, res, next) {
             req.query.year
           ];
           con.query(queryUser, params, function(err, result){
-            con.release();
+            
             if(err){
               con.release();
               next(new Error('ERR006|' + req.countryCode));
               return;
             }
+
+            con.release();
 
             for(var index = 0; index < result.length; index++){
               var bodyFatPercentage = (result[index].BODY_FAT/result[index].BODY_WEIGHT);
