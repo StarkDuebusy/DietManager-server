@@ -59,12 +59,14 @@ router.put('/login', function(req, res, next){
     
     var query = 'SELECT TARGET_WEIGHT FROM DIET_MANAGER.DIET_SURVEY where USER_ID = ?';
     con.query(query, result.USER_ID, function(err, result) {
-      con.release();
+      
       if (err) {
         con.release();
         next(new Error('ERR006|' + req.countryCode));
         return;
       }
+
+      con.release();
 
       if(result.length == 1){
         resultParams.targetWeight = result[0].TARGET_WEIGHT;
