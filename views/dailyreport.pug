@@ -470,24 +470,3 @@ block script
         showMessage(message, title, type);
       });
     }
-
-    function getUrl(targetURL){
-      var strURL = '';
-      if(window.location.pathname.split('/').length > 1 && window.location.pathname.split('/')[1].length == 2){
-        strURL = '/'+window.location.pathname.split('/')[1]+targetURL; 
-      }else{
-        strURL = '/kr'+targetURL; 
-      }
-      return strURL;
-    }
-
-    function showMessage(message, title, type){
-      toastr[type](message, title, {
-              positionClass: "toast-top-right",
-              closeButton: true,
-              progressBar: true,
-              newestOnTop: true,
-              rtl: false,
-              timeOut: 5000
-              });
-    }
