@@ -30,7 +30,6 @@ router.get('/', function(req, res, next) {
           next(new Error('ERR006|' + req.countryCode));
           return;
         }
-
         con.release();
         
         if(result.length == 2){
@@ -106,7 +105,6 @@ router.get('/weight', function(req, res, next) {
         next(new Error('ERR006|' + req.countryCode));
         return;
       }
-
       con.release();
       
       var resultParams = {
@@ -163,7 +161,6 @@ router.get('/bodycomposition', function(req, res, next) {
         next(new Error('ERR006|' + req.countryCode));
         return;
       }
-
       con.release();
       
       var resultParams = {
@@ -237,7 +234,6 @@ router.get('/ffmi', function(req, res, next) {
               next(new Error('ERR006|' + req.countryCode));
               return;
             }
-
             con.release();
 
             for(var index = 0; index < result.length; index++){

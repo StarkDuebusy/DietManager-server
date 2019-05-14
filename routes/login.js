@@ -65,7 +65,6 @@ router.put('/login', function(req, res, next){
         next(new Error('ERR006|' + req.countryCode));
         return;
       }
-
       con.release();
 
       if(result.length == 1){

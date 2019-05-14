@@ -45,7 +45,6 @@ router.get('/checkEmail', function(req, res, next) {
 				next(new Error('ERR006|' + req.countryCode));
 				return;
 			}
-
 			con.release();
 			
 			result = result[0];
@@ -124,8 +123,7 @@ router.post('/', upload.array('profileIMG',1),function(req, res, next) {
 							con.release();
 							next(new Error('ERR006|' + req.countryCode));
 							return;
-						}
-						
+						}	
 						con.release();
             
 						var resultParams = {

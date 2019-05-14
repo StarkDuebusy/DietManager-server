@@ -195,7 +195,6 @@ function updateDailySurvey(con, res, params){
       next(new Error('ERR006|' + req.countryCode));
       return;
     }
-
     con.release();
 
     var resultParams = {

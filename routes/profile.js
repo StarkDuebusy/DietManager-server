@@ -31,7 +31,6 @@ router.get('/', function(req, res, next) {
         next(new Error('ERR006|' + req.countryCode));
         return;
       }
-
       con.release();
       
       if(result.length != 0){
@@ -77,7 +76,6 @@ router.put('/', upload.array('profileIMG',1), function(req, res, next){
         next(new Error('ERR006|' + req.countryCode));
 				return;
       }
-
       con.release();
 
       var resultParams = {
