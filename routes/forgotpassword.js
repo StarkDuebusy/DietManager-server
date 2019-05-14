@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 
 router.put('/',function(req,res,next){
  sqlManager(function(err, con) {
-    var checkQuery = 'SELECT REGIST_TYPE FROM DIET_MANAGER.USER WHERE EMAIL = ?';
+    var checkQuery = 'SELECT REGIST_TYPE,USER_NM FROM DIET_MANAGER.USER WHERE EMAIL = ?';
     con.query(checkQuery, req.body.email, function(err, result){
       if(err){
           con.release();
@@ -33,6 +33,7 @@ router.put('/',function(req,res,next){
       if(result.length != 0){
           resultParams.registType = result[0].REGIST_TYPE;
           if(resultParams.registType == "e"){
+            var user = result[0].USER_NM;
             // change password
             var password = randomstring.generate(5);
             var updateQuery = 'UPDATE `DIET_MANAGER`.`USER` SET `PASSWORD` = ? WHERE (`EMAIL` = ?);';
@@ -67,7 +68,7 @@ router.put('/',function(req,res,next){
                   return;
                 }
                 html = html.toString();
-                html = html.replace("xxx", req.body.email);
+                html = html.replace("xxx", user);
                 html = html.replace("yyy", password);
 
                 var mailOption = {
