@@ -50,11 +50,12 @@ router.get('/checkEmail', function(req, res, next) {
 			result = result[0];
 			
 			var resultParams = {
-					isDuplicate : false
+					isDuplicate : false,
 			};
+			
 			if(result.isExist != '0'){
+				resultParams.registType = result.REGIST_TYPE;
 				resultParams.isDuplicate = true;
-				resultParams.registedType = result.REGIST_TYPE;
 			}
 			
 			res.send(resultParams);

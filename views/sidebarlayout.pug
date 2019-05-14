@@ -249,6 +249,7 @@ body
 
     var clickedSignIn = false;
     function onSignIn(googleUser) {
+      var profile = googleUser.getBasicProfile();
       if(!clickedSignIn)
         return;
 
@@ -264,13 +265,27 @@ body
         data: params
       }).done(function(resultParams){
         if(resultParams.isDuplicate){
-          var params = {
-            email : profile.getEmail(),
-            token : profile.getId(),
-            registType : 'g'
-          };
+          if(resultParams.registType != 'g'){
+            var type ="warning";
+            var title = "SNS 로그인 오류";
+            var message = "이미 가입된 이메일 주소입니다.";
+            toastr[type](message, title, {
+                positionClass: "toast-top-right",
+                closeButton: true,
+                progressBar: true,
+                newestOnTop: true,
+                rtl: false,
+                timeOut: 5000
+                });
+          }else{
+            var params = {
+              email : profile.getEmail(),
+              token : profile.getId(),
+              registType : 'g'
+            };
 
-          ajaxLogin(params);
+            ajaxLogin(params);
+          }
         }else{
           var params = {
             userName : profile.getName(),
