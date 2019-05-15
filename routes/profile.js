@@ -114,5 +114,37 @@ router.put('/', upload.array('profileIMG',1), function(req, res, next){
   });
 });
 
+router.put('/delete', function(req, res,next){
+  sqlManager(function(err, con) {
+    var deleteQuery = 'DELETE FROM `DIET_MANAGER`.`USER` WHERE `EMAIL` = ?;';
+    con.query(deleteQuery,req.session.email,function(err,result){
+
+      if(err){
+        con.release();
+        next(new Error('ERR006|' + req.countryCode));
+        return;
+      }
+      con.release();
+
+      var resultParams = {
+        isSuccess : false
+      }
+
+      if(result.affectedRows != 0){
+        resultParams.isSuccess =true;
+        req.session.destroy(function(err){
+          if(err){
+            console.log(err);
+            next(new Error('ERR006|' + req.countryCode));
+            return;
+          }
+        });
+      }
+
+      res.send(resultParams); 
+    });
+  });
+});
+
 
 module.exports = router;
