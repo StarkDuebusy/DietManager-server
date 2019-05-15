@@ -91,15 +91,15 @@ block content
                   .form-group
                     label.form-label
                       | 이름
-                    input#editResUserName.form-control.required(name='wizard-userName' type='text' value="#{userName}" disabled)
+                    input#editResUserName.form-control.required(name='wizard-userName' type='text' disabled)
                   .form-group
                     label.form-label
                       | 이메일
-                    input#editResEmail.form-control.required.email(name='wizard-email' type='text' value="stark@stark.one" disabled)
+                    input#editResEmail.form-control.required.email(name='wizard-email' type='text' disabled)
                   .form-group
                     label.form-label
                       | 생년월일
-                    input#editResBirth.form-control.required.email(name='wizard-birth' type='text' value="1990.02.24" disabled)
+                    input#editResBirth.form-control.required.email(name='wizard-birth' type='text' disabled)
                   .form-group
                     label.form-label
                       | 성별
@@ -107,11 +107,30 @@ block content
                   .form-group
                     label.form-label
                       | 몸무게
-                    input#editResWeight.form-control.required.email(name='wizard-weight' type='number' value="71.9" disabled)
+                    input#editResWeight.form-control.required.email(name='wizard-weight' type='number' disabled)
                   .form-group
                     label.form-label
                       | 키
-                    input#editResHeight.form-control.required.email(name='wizard-height' type='number' value="176.7" disabled)
+                    input#editResHeight.form-control.required.email(name='wizard-height' type='number' disabled)
+                  .col-md-12(style="text-align : right")
+                    button.btn.btn-danger(type='button', data-toggle='modal', data-target='#membershipWithdrawal' )
+                      | 회원 탈퇴
+                    #membershipWithdrawal.modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
+                      .modal-dialog.modal-dialog-centered(role='document')
+                        .modal-content
+                          .modal-header
+                            h5.modal-title 회원 탈퇴
+                            button.close(type='button', data-dismiss='modal', aria-label='Close')
+                              span(aria-hidden='true') ×
+                          .modal-body.m-3(style="text-align : left")
+                            p.mb-0
+                              | 회원님의 개인정보,운동기록등 모든 기록이 삭제되면 복구 하실 수 없습니다.
+                            p.mb-0
+                              | 정말로 탈퇴하시겠습니까?
+                          .modal-footer
+                            button.btn.btn-secondary(type='button', data-dismiss='modal') 아니요
+                            button#deleteProfile.btn.btn-danger(type='button') 네
+                  
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
                   // Validation
@@ -205,6 +224,10 @@ block script
             reader.readAsDataURL(input.files[0]);
         }
       });
+
+      $('#deleteProfile').on('click',function( ){
+        $(ajaxDeleteProfile);
+       });
     }
 
     function afterLogin(){
@@ -215,16 +238,6 @@ block script
         return /^(?=.{1,64}@.{3,64}$)(?=.{5,100}$).*/.test(email);
     }
 
-    function getUrl(targetURL){
-      var strURL = '';
-      if(window.location.pathname.split('/').length > 1 && window.location.pathname.split('/')[1].length == 2){
-        strURL = '/'+window.location.pathname.split('/')[1]+targetURL; 
-      }else{
-        strURL = '/kr'+targetURL; 
-      }
-      return strURL;
-    }
-    
     function ajaxUpdateProfile(){
       var formData = new FormData();
       formData.append('profileIMG', $('#editProfileIMG')[0].files[0], $('#editEmail').val()+".jpg");
@@ -236,7 +249,7 @@ block script
 
       var strURL = getUrl('/api/profile');
       $.ajax({ 
-        type: 'PUT', 
+        type: 'GET', 
         url: strURL,
         data: formData,
         dataType : 'json',
@@ -276,4 +289,40 @@ block script
           }
       }); 
     }
+    function ajaxDeleteProfile(){
+             var strURL =getUrl('/api/profile/delete');
+        $.ajax({
+          type: 'PUT', 
+          url: strURL,
+          async: false
+        }).done(function(resultParams){
+          if(resultParams.isSuccess){
+            var type = "success";
+            var title = "회원 탈퇴 성공";
+            var message = "그동안 다이어트 매니저를 이용해주셔서 감사합니다.";
+            toastr[type](message, title, {
+              positionClass: "toast-top-right",
+              closeButton: true,
+              progressBar: true,
+              newestOnTop: true,
+              rtl: false,
+              timeOut: 1000,
+              onHidden : function(){
+                window.location.href = getUrl('/view/dashboard');
+              }
+            });
+            $('#membershipWithdrawal').hide();
+          }else{
+            var type ="warning";
+            var title = "회원 탈퇴 실패";
+            var message = " 회원탈퇴에 실해하셨습니다.";
+            showMessage(message, title, type);
+          }
+          }).fail(function(resultParams){
+            var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+            var title = "서비스점검중";
+            var type = "error";
+            showMessage(message, title, type);
+          });
+     }
 
