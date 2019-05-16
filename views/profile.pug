@@ -128,7 +128,7 @@ block content
                             p.mb-0
                               | 정말로 탈퇴하시겠습니까?
                           .modal-footer
-                            button.btn.btn-secondary(type='button', data-dismiss='modal') 아니요
+                            button#btnModalWithdrawal.btn.btn-secondary(type='button', data-dismiss='modal') 아니요
                             button#deleteProfile.btn.btn-danger(type='button') 네
                   
               script.
@@ -290,39 +290,42 @@ block script
       }); 
     }
     function ajaxDeleteProfile(){
-             var strURL =getUrl('/api/profile/delete');
-        $.ajax({
-          type: 'PUT', 
-          url: strURL,
-          async: false
-        }).done(function(resultParams){
-          if(resultParams.isSuccess){
-            var type = "success";
-            var title = "회원 탈퇴 성공";
-            var message = "그동안 다이어트 매니저를 이용해주셔서 감사합니다.";
-            toastr[type](message, title, {
-              positionClass: "toast-top-right",
-              closeButton: true,
-              progressBar: true,
-              newestOnTop: true,
-              rtl: false,
-              timeOut: 1000,
-              onHidden : function(){
-                window.location.href = getUrl('/view/dashboard');
-              }
-            });
-            $('#membershipWithdrawal').hide();
-          }else{
-            var type ="warning";
-            var title = "회원 탈퇴 실패";
-            var message = " 회원탈퇴에 실해하셨습니다.";
-            showMessage(message, title, type);
-          }
-          }).fail(function(resultParams){
-            var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-            var title = "서비스점검중";
-            var type = "error";
-            showMessage(message, title, type);
+      var strURL =getUrl('/api/profile/delete');
+      $.ajax({
+        type: 'PUT', 
+        url: strURL,
+        async: false
+      }).done(function(resultParams){
+        if(resultParams.isSuccess){
+          var type = "success";
+          var title = "회원 탈퇴 성공";
+          var message = "그동안 다이어트 매니저를 이용해주셔서 감사합니다.";
+          toastr[type](message, title, {
+            positionClass: "toast-top-right",
+            closeButton: true,
+            progressBar: true,
+            newestOnTop: true,
+            rtl: false,
+            timeOut: 500,
+            onHidden : function(){
+              window.location.href = getUrl('/view/dashboard');
+            }
           });
+        }else{
+          var type ="warning";
+          var title = "회원 탈퇴 실패";
+          var message = " 회원탈퇴에 실패 하셨습니다.";
+          showMessage(message, title, type);
+
+          $('#btnModalWithdrawal').trigger('click');
+        }
+        }).fail(function(resultParams){
+          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var title = "서비스점검중";
+          var type = "error";
+          showMessage(message, title, type);
+
+          $('#btnModalWithdrawal').trigger('click');
+        });
      }
 
