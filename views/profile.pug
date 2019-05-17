@@ -47,6 +47,19 @@ block content
                       | 이메일
                       span.text-danger *
                     input#editEmail.form-control.required.email(name='wizard-email' value=email type='text' disabled)
+                  .form-group
+                    label.form-label
+                      | 비밀번호 변경
+                    input#editPassword.form-control.validate-equalTo-blur(name='validation-password' value=password type='password')
+                    small.form-text.text-muted
+                      | 비밀번호 변경을 원하시면 입력해주세요.
+                  .form-group
+                    label.form-label
+                      | 비밀번호 확인
+                    input#confirmPassword.form-control(name='validation-password-confirmation' value=passwordConfirmation type='password' aria-invalid='false')
+                  .col-md-12(style="text-align : right")
+                    button#btnChangePassword.btn.btn-primary(type='button')
+                      | 변경하기
                 #validation-step-2
                   .form-group
                     label.form-label
@@ -328,5 +341,10 @@ block script
 
           $('#btnModalWithdrawal').trigger('click');
         });
+     }
+
+     function ajaxChangePassword(){
+       var strURL = getUrl('/api/profile/changePassword');
+       
      }
 
