@@ -50,15 +50,17 @@ block content
                   .form-group
                     label.form-label
                       | 비밀번호 변경
-                    input#editPassword.form-control.validate-equalTo-blur(name='validation-password' value=password type='password')
+                    input#editPassword.form-control.validate-equalTo-blur(name='validation-password' value=password type='password' oninput='checkPassword()')
                     small.form-text.text-muted
                       | 비밀번호 변경을 원하시면 입력해주세요.
                   .form-group
                     label.form-label
                       | 비밀번호 확인
-                    input#confirmPassword.form-control(name='validation-password-confirmation' value=passwordConfirmation type='password' aria-invalid='false')
+                    input#confirmPassword.form-control(name='validation-password-confirmation' value=passwordConfirmation type='password' oninput='checkPassword()' aria-invalid='false')
+                    label#validation-password-confirmation-error.error.jquery-validation-error.small.form-text.invalid-feedback(for='validation-password-confirmation')
+                      | 비밀번호가 일치하지 않습니다.
                   .col-md-12(style="text-align : right")
-                    button#btnChangePassword.btn.btn-primary(type='button')
+                    button#btnChangePassword.btn.btn-primary(type='button' disabled)
                       | 변경하기
                 #validation-step-2
                   .form-group
@@ -343,8 +345,26 @@ block script
         });
      }
 
-     function ajaxChangePassword(){
-       var strURL = getUrl('/api/profile/changePassword');
-       
-     }
+     function checkPassword(){
+       var inputed = $('#editPassword').val();
+       var reinputed = $('#confirmPassword').val();
 
+       if(reinputed == "" && (inputed != reinputed || inputed == reinputed)) {
+         $('#btnChangePassword').attr('disabled', true);
+         $('#validation-password-confirmation-error').show();
+         $('#confirmPassword').addClass('is-invalid');
+         $('#confirmPassword').attr('area-invalid', true);
+       }else if(inputed == reinputed){
+         //$('#confirmPassword').css("background-color", #B0F6AC);
+         $('#btnChangePassword').attr('disabled', false);
+         $('#validation-password-confirmation-error').hide();
+         $('#confirmPassword').removeClass('is-invalid');
+         $('#confirmPassword').attr('area-invalid', false);
+       }else if(inputed != reinputed){
+         //$('#confirmPassword').css("background-color", #FFCECE);
+         $('#btnChangePassword').attr('disabled', true);
+         $('#validation-password-confirmation-error').show();
+         $('#confirmPassword').addClass('is-invalid');
+         $('#confirmPassword').attr('area-invalid', true);
+       }
+     }
