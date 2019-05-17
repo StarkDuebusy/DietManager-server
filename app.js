@@ -42,7 +42,6 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
           case 'bodycomposition':
           case 'profile':
           case 'forgotpassword':
-          case 'changepassword':
 						next();
 						break;
 					default:
@@ -59,7 +58,6 @@ app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){
         case 'bodycomposition':
         case 'profile':
         case 'forgotpassword':
-        case 'changepassword':
 					next();
 					break;
 				default:
@@ -101,9 +99,6 @@ app.use('/:countryCode/:protocolType/profile', profileRouter);
 
 var forgotpassword = require('./routes/forgotpassword');
 app.use('/:countryCode/:protocolType/forgotpassword', forgotpassword);
-
-var changepassword = require('./routes/changepassword');
-app.use('/:countryCode/:protocolType/changepassword', changepassword);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
