@@ -144,7 +144,7 @@ block content
                               | 정말로 탈퇴하시겠습니까?
                           .modal-footer
                             button#btnModalWithdrawal.btn.btn-secondary(type='button', data-dismiss='modal') 아니요
-                            button#deleteProfile.btn.btn-danger(type='button') 네
+                            button#withdrawalProfile.btn.btn-danger(type='button') 네
                   
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
@@ -241,8 +241,8 @@ block script
         }
       });
 
-      $('#deleteProfile').on('click',function( ){
-        $(ajaxDeleteProfile);
+      $('#withdrawalProfile').on('click',function( ){
+        $(ajaxWithdrawal);
        });
     }
 
@@ -305,10 +305,10 @@ block script
           }
       }); 
     }
-    function ajaxDeleteProfile(){
-      var strURL =getUrl('/api/profile/delete');
+    function ajaxWithdrawal(){
+      var strURL =getUrl('/api/profile/withdrawal');
       $.ajax({
-        type: 'PUT', 
+        type: 'DELETE', 
         url: strURL,
         async: false
       }).done(function(resultParams){

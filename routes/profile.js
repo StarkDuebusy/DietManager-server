@@ -114,7 +114,7 @@ router.put('/', upload.array('profileIMG',1), function(req, res, next){
   });
 });
 
-router.put('/delete', function(req, res,next){
+router.delete('/withdrawal', function(req, res,next){
   sqlManager(function(err, con) {
     var deleteQuery = 'DELETE FROM `DIET_MANAGER`.`USER` WHERE `EMAIL` = ?;';
     con.query(deleteQuery,req.session.email,function(err,result){
