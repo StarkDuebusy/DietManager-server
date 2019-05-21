@@ -146,5 +146,32 @@ router.delete('/withdrawal', function(req, res,next){
   });
 });
 
+router.put('/changepassword', function(req, res, next){
+  sqlManager(function(err, con){
+    var updateQuery = 'UPDATE `DIET_MANAGER`.`USER` SET `PASSWORD` = ? WHERE `EMAIL` = ?;';
+    var queryParams = [
+                        req.body.password,
+                        req.session.email
+                      ];
+    con.query(updateQuery, queryParams, function(err, result){
+      if (err) {
+        con.release();
+        next(new Error('ERR006|' + req.countryCode));
+				return;
+      }
+      con.release();
+
+      var resultParams = {
+        'isSuccess' : false
+      };
+
+      if(result.affectedRows != 0){
+        resultParams.isSuccess = true;
+      }
+
+      res.send(resultParams);
+    });
+  });
+});
 
 module.exports = router;
