@@ -148,7 +148,7 @@ router.delete('/withdrawal', function(req, res,next){
 
 router.put('/changepassword', function(req, res, next){
   sqlManager(function(err, con){
-    var updateQuery = 'UPDATE `DIET_MANAGER`.`USER` SET `PASSWORD` = ? WHERE `EMAIL` = ?;';
+    var updateQuery = 'UPDATE `DIET_MANAGER`.`USER` SET `PASSWORD` = concat("*",sha1(unhex(sha1(?)))) WHERE `EMAIL` = ?;';
     var queryParams = [
                         req.body.password,
                         req.session.email

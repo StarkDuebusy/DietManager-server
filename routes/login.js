@@ -9,9 +9,9 @@ router.put('/login', function(req, res, next){
   if(req.body.registType == 'g'){
     req.body.password = req.body.token;
   }
-  
+
   sqlManager(function(err, con) {
-    var loginQuery = 'SELECT count(*) AS correct, PROFILE_IMG, USER_NM, USER_ID FROM DIET_MANAGER.USER where EMAIL = ? and PASSWORD = ?';
+    var loginQuery = 'SELECT count(*) AS correct, PROFILE_IMG, USER_NM, USER_ID FROM DIET_MANAGER.USER where EMAIL = ? and PASSWORD = concat("*", sha1(unhex(sha1(?))))';
     var queryParams = [
                         req.body.email,
                         req.body.password

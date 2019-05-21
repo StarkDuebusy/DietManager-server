@@ -113,7 +113,7 @@ router.post('/', upload.array('profileIMG',1),function(req, res, next) {
 					// }
 
 					var insertUserProfileQuery = "INSERT INTO DIET_MANAGER.USER (PROFILE_IMG, USER_NM, EMAIL, PASSWORD, BIRTH_YMD, GENDER, WEIGHT, HEIGHT, COUNTRY_CD, REGIST_TYPE, REGIST_YMD)" +
-							" VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE())";
+							" VALUES (?, ?, ?, concat('*', sha1(unhex(sha1(?)))), ?, ?, ?, ?, ?, ?, CURDATE())";
 					var queryParams = [imageFileName, req.body.name, req.body.email, 
 					                   req.body.password, req.body.birthDay, req.body.gender, 
 					                   req.body.weight, req.body.height, req.countryCode, 
