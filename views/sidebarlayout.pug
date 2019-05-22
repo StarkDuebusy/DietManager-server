@@ -164,10 +164,10 @@ body
                 form
                   .form-group
                     label 이메일
-                    input#editLoginEmail.form-control.form-control-lg(type='email' name='email' placeholder='이메일을 입력해주세요.')
+                    input#editLoginEmail.form-control.form-control-lg(type='email' name='email' placeholder='이메일을 입력해주세요.' onkeypress="if(event.keyCode==13) {enterKeyPush(); return false;}")
                   .form-group
                     label 비밀번호
-                    input#editLoginPassword.form-control.form-control-lg(type='password' name='password' placeholder='비밀번호를 입력해주세요.')
+                    input#editLoginPassword.form-control.form-control-lg(type='password' name='password' placeholder='비밀번호를 입력해주세요.' onkeypress="if(event.keyCode==13) {enterKeyPush(); return false;}")
                     .row
                       .col-6
                         small
@@ -244,7 +244,7 @@ body
 
       $('#btnGoogleSignIn').on('click', function(){
         clickedSignIn = true;
-      })
+      })      
     }
 
     var clickedSignIn = false;
@@ -429,6 +429,11 @@ body
               rtl: false,
               timeOut: 5000
               });
+    }
+
+    function enterKeyPush() {
+      console.log("ENTERKEY IS PUSHED!");
+      $('#btnModalLogin').trigger("click");
     }
 
   svg(width='0', height='0', style='position:absolute')
