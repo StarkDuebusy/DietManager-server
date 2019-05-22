@@ -36,7 +36,7 @@ router.put('/',function(req,res,next){
             var user = result[0].USER_NM;
             // change password
             var password = randomstring.generate(5);
-            var updateQuery = 'UPDATE `DIET_MANAGER`.`USER` SET `PASSWORD` = ? WHERE (`EMAIL` = ?);';
+            var updateQuery = 'UPDATE `DIET_MANAGER`.`USER` SET `PASSWORD` = concat("*",sha1(unhex(sha1(?)))) WHERE (`EMAIL` = ?);';
             var queryParams = [
                                 password,
                                 req.body.email
