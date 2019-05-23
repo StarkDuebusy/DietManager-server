@@ -82,7 +82,7 @@ block content
                       input.custom-control-input(name='editRadioDidWorkout' type='radio' value='1' data-txt='운동함' checked)
                       span.custom-control-label 운동함
                     label.custom-control.custom-radio.custom-control-inline
-                      input.custom-control-input(name='editRadioDidWorkout' type='radio' value='2'  data-txt='운동 못함')
+                      input#didNotWorkout.custom-control-input(name='editRadioDidWorkout' type='radio' value='2'  data-txt='운동 못함')
                       span.custom-control-label 운동 못함
                   .form-group.areaWorkoutProcess
                     label.form-label
@@ -278,6 +278,18 @@ block script
           }
         });
       }
+
+      $("input:radio[name=editRadioDietProcess]").click(function() {
+        $('.sw-btn-next').trigger("click");
+      });
+      
+      $("input:radio[name=editRadioWorkoutProcess]").click(function() {
+        $('.sw-btn-next').trigger("click");
+      });
+
+      $("input:radio[id=didNotWorkout]").click(function() {
+        $('.sw-btn-next').trigger("click");
+      });
     }
 
     function afterLogin(){
