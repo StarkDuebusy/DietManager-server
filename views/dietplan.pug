@@ -194,6 +194,14 @@ block script
           this.checked = true;
         }
       });
+
+      $('input:radio[name="editRadioWorkoutFrequency"]').click(function() {
+        $('.sw-btn-next').trigger("click");
+      });
+
+      $('input:radio[name="editRadioMealFrequency"]').click(function() {
+        $('.sw-btn-next').trigger("click");
+      });
     }
     function afterLogin(){
       window.location.href = getUrl('/view/dietplan/');
