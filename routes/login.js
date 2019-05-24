@@ -97,4 +97,52 @@ router.put('/logout', function(req, res,next){
   }
 });
 
+router.put('/checkwritedailyreport', function(req, res, next){
+  sqlManager(function(err, con) {
+    var resultParams = {
+      isSuccess : false,
+      isWrite : false
+    };
+  
+    var date = new Date(); 
+    var year = date.getFullYear(); 
+    var month = new String(date.getMonth()+1); 
+    var day = new String(date.getDate()); 
+  
+    if(month.length == 1){ 
+     month = "0" + month; 
+    } 
+    if(day.length == 1){ 
+      day = "0" + day; 
+    }
+  
+    var currentDate = year + "-" + month + "-" + day;
+  
+    var params = [
+      req.session.email,
+      currentDate
+    ];
+  
+    var query = 'SELECT count(*) AS correct FROM DAILY_SURVEY WHERE DAILY_SURVEY.USER_ID IN (SELECT USER_ID FROM USER WHERE EMAIL=?) and DAILY_SURVEY.RECORD_YMD = ?';
+    con.query(query, params, function(err, result) {
+  
+      if (err) {
+        con.release();
+        next(new Error('ERR006|' + req.countryCode));
+        return;
+      }
+      con.release();
+      result = result[0];
+  
+      if(result.correct == 1) {
+        resultParams.isWrite = true;
+        res.send(resultParams);
+      } else {
+        resultParams.isWrite = false;
+        res.send(resultParams);
+      }
+    });
+  });
+});
+
 module.exports = router;

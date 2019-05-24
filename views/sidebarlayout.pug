@@ -377,11 +377,19 @@ body
 
             $('#btnMenuLogOut').show();
             $('#btnMenuLogIn').hide();
-            
-            $('#btnModalLoginClose').trigger('click');
-            if(typeof(afterLogin) != "undefined"){
-              afterLogin();
+
+            var isWrite = checkWriteDailyReport(params).toString();
+            console.log("IS WRITE???? : " + isWrite);
+            if(isWrite == "goDashboard") {
+              //$('#btnModalLoginClose').trigger('click');
+              //if(typeof(afterLogin) != "undefined"){
+              //  afterLogin();
+              //}
+              window.location.href = getUrl('/view/dashboard');
+            } else {
+                window.location.href = getUrl('/view/dailyreport');
             }
+
           } else {
             var message = "로그인에 실패하였습니다.";
             var title = "로그인";
@@ -432,8 +440,41 @@ body
     }
 
     function enterKeyPush() {
-      console.log("ENTERKEY IS PUSHED!");
       $('#btnModalLogin').trigger("click");
+    }
+
+    function checkWriteDailyReport(params) {
+      var strURL = getUrl('/api/login/checkwritedailyreport');
+      var returnValue;
+      
+      $.ajax({ 
+          type: 'PUT', 
+          url: strURL,
+          async: false, 
+          data: params
+        }).done(function(resultParams){
+          if(resultParams.isWrite) {
+            console.log("SUCCESS!!!! dashboard");
+            returnValue = "goDashboard";
+          } else {
+            console.log("SUCCESS!!!! dailyreport");
+            returnValue = "goDailyReport";
+          }
+        }).fail(function(resultParams){
+          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var title = "서비스점검중";
+          var type = "error";
+          toastr[type](message, title, {
+                positionClass: "toast-top-right",
+                closeButton: true,
+                progressBar: true,
+                newestOnTop: true,
+                rtl: false,
+                timeOut: 5000
+          });
+        });
+        
+        return returnValue;
     }
 
   svg(width='0', height='0', style='position:absolute')
