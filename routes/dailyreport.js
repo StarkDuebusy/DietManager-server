@@ -129,6 +129,13 @@ router.post('/', function(req, res, next) {
 
             
             judgeNutritionRate(result, dietMode, updated, workoutFrequncy, nutritionInfo);
+            
+            if(req.body.editProteinGram != undefined ){
+              nutritionInfo.proteinRate = req.body.editProteinGram * (req.body.proteinContent/100) * mealFrequency / targetWeight
+            }
+            if(req.body.editCarboGram != undefined ){
+              nutritionInfo.carboRate = req.body.editCarboGram * (req.body.carboContent/100) * mealFrequency / targetWeight
+            }
 
             var insertParams = [
               req.session.email,
@@ -210,20 +217,20 @@ function updateDailySurvey(con, res, params){
 
 function judgeNutritionRate(weightRecord, dietMode, updated, workoutFrequncy, nutritionInfo){
   if(weightRecord.length <= 1){
-    initNutritionRate(workoutFrequncy, nutritionInfo);
+    initNutritionRate(workoutFrequncy, nutritionInfo, weightRecord);
     return;
   }else if(weightRecord.length < 3){
     if(!updated){
       nutritionInfo.proteinRate = weightRecord[1].PROTEIN_RATE;
-      nutritionInfo.carboRate = weightRecord[1].CARBO_RATE; 
+      nutritionInfo.carboRate = weightRecord[1].CARBO_RATE;
     }else{
-      initNutritionRate(workoutFrequncy, nutritionInfo)
+      initNutritionRate(workoutFrequncy, nutritionInfo, weightRecord)
     }
     return;
   }
 
   if(updated){
-    initNutritionRate(workoutFrequncy, nutritionInfo)
+    initNutritionRate(workoutFrequncy, nutritionInfo, weightRecord)
   }else{
     nutritionInfo.proteinRate = weightRecord[1].PROTEIN_RATE;
     nutritionInfo.carboRate = weightRecord[1].CARBO_RATE;
@@ -266,7 +273,7 @@ function judgeNutritionRate(weightRecord, dietMode, updated, workoutFrequncy, nu
   }
 }
 
-function initNutritionRate(workoutFrequncy, nutritionInfo){
+function initNutritionRate(workoutFrequncy, nutritionInfo, weightRecord){
   if(workoutFrequncy == 2){
     nutritionInfo.proteinRate = 1.7;
     nutritionInfo.carboRate = 1.9;
@@ -277,6 +284,14 @@ function initNutritionRate(workoutFrequncy, nutritionInfo){
     nutritionInfo.proteinRate = 2;
     nutritionInfo.carboRate = 2.2;
   }
+  
+  if(weightRecord.length > 1){
+    if((nutritionInfo.proteinRate != weightRecord[1].PROTEIN_RATE) || (nutritionInfo.carboRate != weightRecord[1].CARBO_RATE)){
+      nutritionInfo.proteinRate = weightRecord[1].PROTEIN_RATE;
+      nutritionInfo.carboRate = weightRecord[1].CARBO_RATE;
+    }
+  }
+  
 }
 
 router.get('/nutrition', function(req, res, next) {
@@ -426,8 +441,10 @@ router.get('/nutrition', function(req, res, next) {
                     isSuccess : true,
                     proteinGram : nutritionInfoList[0].proteinGram,
                     proteinDiff : (nutritionInfoList.length != 1)?Math.round(((nutritionInfoList[0].proteinGram - nutritionInfoList[1].proteinGram))):0,
+                    proteinContent : infoList[0].protein,
                     carboGram : nutritionInfoList[0].carboGram,
                     carboDiff : (nutritionInfoList.length != 1)?Math.round(((nutritionInfoList[0].carboGram - nutritionInfoList[1].carboGram))):0,
+                    carboContent :  infoList[1].carbo,
                     mealFrequency : nutritionInfoList[0].mealFrequency
                   }
                   res.send(resultParams);
