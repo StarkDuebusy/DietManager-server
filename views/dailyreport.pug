@@ -82,7 +82,7 @@ block content
                       input.custom-control-input(name='editRadioDidWorkout' type='radio' value='1' data-txt='운동함' checked)
                       span.custom-control-label 운동함
                     label.custom-control.custom-radio.custom-control-inline
-                      input#didNotWorkout.custom-control-input(name='editRadioDidWorkout' type='radio' value='2'  data-txt='운동 못함')
+                      input#editRadioDidNotWorkout.custom-control-input(name='editRadioDidWorkout' type='radio' value='2'  data-txt='운동 못함')
                       span.custom-control-label 운동 못함
                   .form-group.areaWorkoutProcess
                     label.form-label
@@ -117,13 +117,16 @@ block content
                         span.text-info.areaTxtMealFrequency 식 기준
                       .form-row
                         .form-group.col-4
-                          select#selProtein.form-control.selNutrition
+                          select#selProtein.form-control.selProteinNutrition
                             each protein in proteinList
                               option= protein
-                        .form-group.col-4
-                          strong#txtProteinGram.areaTxtGram
-                          | 
-                          strong#txtProteinGramDiff
+                        .col-4
+                          #proteinEditbox.input-group.mb-3
+                            input#editProteinGram.form-control.required(type='number')
+                            .input-group-append
+                              span.input-group-text g
+                              strong#txtProteinGramDiff
+                          strong.areaTxtGram
                     .form-group
                       label.form-label
                         | 1식당 권장 탄수화물 섭취량
@@ -132,13 +135,16 @@ block content
                         span.text-info.areaTxtMealFrequency 식 기준
                       .form-row
                         .form-group.col-4
-                          select#selCarbo.form-control.selNutrition
+                          select#selCarbo.form-control.selCarboNutrition
                             each carbo in carboList
                               option= carbo
-                        .form-group.col-4
-                          strong#txtCarboGram.areaTxtGram
-                          | 
-                          strong#txtCarboGramDiff
+                        .col-4
+                          #carboEditbox.input-group.mb-3
+                            input#editCarboGram.form-control.required(type='number')
+                            .input-group-append
+                              span.input-group-text g
+                              strong#txtCarboGramDiff
+                          strong.areaTxtGram
                   .form-group
                     label.form-label
                       | 측정일
@@ -214,12 +220,17 @@ block content
                       $('#editResDidWorkout').val($(':input:radio[name=editRadioDidWorkout]:checked').attr('data-txt'));
                       $('#editResWorkoutProcess').val($(':input:radio[name=editRadioWorkoutProcess]:checked').attr('data-txt'));
                       
-                      ajaxNutritionGuide();
+                      var selNutritionParams = {
+                      selProteinBoolean : true,
+                      selCarboBoolean : true
+                      };
+
+                      ajaxNutritionGuide(selNutritionParams);
                       ajaxWeightGap();
                     }
                     return true;
                   });
-                  
+
                   $validationForm.find('.btn-submit').on('click', function() {
                     if (!$validationForm.valid()) {
                       return;
@@ -243,9 +254,23 @@ block script
   script.
     $(document).ready(init);
 
-    function init(){
-      $('.selNutrition').on('change', function(){
-        ajaxNutritionGuide();
+    function init(){    
+      $('.selProteinNutrition').on('change', function(){
+        var selNutritionParams = {
+          selProteinBoolean : true,
+          selCarboBoolean : false
+        };
+        
+        ajaxNutritionGuide(selNutritionParams);
+      });
+
+      $('.selCarboNutrition').on('change', function(){
+        var selNutritionParams = {
+          selProteinBoolean : false,
+          selCarboBoolean : true
+        };
+
+        ajaxNutritionGuide(selNutritionParams);
       });
 
       $(':input:radio[name=editRadioDidWorkout]').on('change', function(){
@@ -287,16 +312,21 @@ block script
         $('.sw-btn-next').trigger("click");
       });
 
-      $("input:radio[id=didNotWorkout]").click(function() {
+      $("input:radio[id=editRadioDidNotWorkout]").click(function() {
         $('.sw-btn-next').trigger("click");
       });
     }
 
     function afterLogin(){
-      ajaxNutritionGuide();
-    }
+      var selNutritionParams = {
+          selProteinBoolean : true,
+          selCarboBoolean : true
+        };
 
-    function ajaxNutritionGuide(){
+      ajaxNutritionGuide(selNutritionParams);
+    }
+    
+    function ajaxNutritionGuide(selNutritionParams){
       var now = new Date();
       now.setHours(0,0,0,0);
       var newRecDate = new Date($('#editRecordDate').val());
@@ -312,7 +342,8 @@ block script
         carbo : $('#selCarbo').val(),
         recordDate : $('#editRecordDate').val(),
         currentWeight : $('#editCurrnetWeight').val(),
-        dietProcess : $(':input:radio[name=editRadioDietProcess]:checked').val()
+        dietProcess : $(':input:radio[name=editRadioDietProcess]:checked').val(), 
+        workoutProcess : $(':input:radio[name=editRadioWorkoutProcess]:checked').val()
       };
       
       var strURL = getUrl('/api/dailyreport/nutrition');
@@ -332,15 +363,26 @@ block script
 
         if(resultParams.isSuccess){
           $('.areaTxtMealFrequency').show();
-          var proteinGram = Math.round(resultParams.proteinGram);
-          $('#txtProteinGram').text(proteinGram+'g');
 
-          var carboGram = Math.round(resultParams.carboGram);
-          $('#txtCarboGram').text(carboGram+'g');
+          if(selNutritionParams.selProteinBoolean){
+            proteinGram = Math.round(resultParams.proteinGram);
+            $('#editProteinGram').val(proteinGram);
+            proteinContent = resultParams.proteinContent;
+          }
 
+          if(selNutritionParams.selCarboBoolean){
+           carboGram = Math.round(resultParams.carboGram);
+           $('#editCarboGram').val(carboGram);
+           carboContent = resultParams.carboContent;
+          }
+
+          $('#carboEditbox').show();
+          $('#proteinEditbox').show();
+          $('.areaTxtGram').text("원하는 양이 있다면 변경해주세요.");
+          
           $('.txtMealFrequency').text(resultParams.mealFrequency);
           
-          $('.areaTxtMealFrequency').show();
+          $('.areaTxtMealFrequency').show();         
           color4num($('#txtProteinGramDiff'), resultParams.proteinDiff);
           color4num($('#txtCarboGramDiff'), resultParams.carboDiff);
 
@@ -354,9 +396,13 @@ block script
               $(em).show().addClass('text-danger').text(num+'g');
             }
           }
-        }else if(resultParams.needLogin){
+         }else if(resultParams.needLogin){
+          $('#carboEditbox').hide();
+          $('#proteinEditbox').hide();
           $('.areaTxtGram').text("로그인이 필요한 서비스입니다.");
         }else if(resultParams.needDietPlan){
+          $('#carboEditbox').hide();
+          $('#proteinEditbox').hide();
           $('.areaTxtGram').text("먼저 다이어트 목표를 설정해주세요.");
         }else{
           type = "warning";
@@ -370,7 +416,7 @@ block script
         showMessage(message, title, type);
       });
     }
-
+    
     function ajaxRecordDailyReport(){
       var params = {
         recordDate : $('#editRecordDate').val(),
@@ -379,6 +425,16 @@ block script
         didWorkout : $(':input:radio[name=editRadioDidWorkout]:checked').val()
       };
 
+      if($('#editProteinGram').val() != proteinGram ){
+        params.editProteinGram = $('#editProteinGram').val();
+        params.proteinContent = proteinContent;
+      }
+      
+      if($('#editCarboGram').val() != carboGram ){
+        params.editCarboGram = $('#editCarboGram').val();
+        params.carboContent = carboContent;
+      }
+      
       if($(':input:radio[name=editRadioDidWorkout]:checked').val() == 1){
         params.workoutProcess = $(':input:radio[name=editRadioWorkoutProcess]:checked').val();
       }else{
