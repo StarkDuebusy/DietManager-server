@@ -117,13 +117,12 @@ router.put('/checkwritedailyreport', function(req, res, next){
     }
   
     var currentDate = year + "-" + month + "-" + day;
-  
+    
+    var query = 'SELECT count(*) AS correct FROM DAILY_SURVEY WHERE DAILY_SURVEY.USER_ID IN (SELECT USER_ID FROM USER WHERE EMAIL=?) and DAILY_SURVEY.RECORD_YMD = ?';
     var params = [
       req.session.email,
       currentDate
     ];
-  
-    var query = 'SELECT count(*) AS correct FROM DAILY_SURVEY WHERE DAILY_SURVEY.USER_ID IN (SELECT USER_ID FROM USER WHERE EMAIL=?) and DAILY_SURVEY.RECORD_YMD = ?';
     con.query(query, params, function(err, result) {
   
       if (err) {
@@ -132,12 +131,13 @@ router.put('/checkwritedailyreport', function(req, res, next){
         return;
       }
       con.release();
+
       result = result[0];
   
       if(result.correct == 1) {
         resultParams.isWrite = true;
         res.send(resultParams);
-      } else {
+      }else{
         resultParams.isWrite = false;
         res.send(resultParams);
       }

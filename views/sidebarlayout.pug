@@ -379,18 +379,13 @@ body
             $('#btnMenuLogIn').hide();
 
             var isWrite = checkWriteDailyReport(params).toString();
-            console.log("IS WRITE???? : " + isWrite);
             if(isWrite == "goDashboard") {
-              //$('#btnModalLoginClose').trigger('click');
-              //if(typeof(afterLogin) != "undefined"){
-              //  afterLogin();
-              //}
               window.location.href = getUrl('/view/dashboard');
-            } else {
-                window.location.href = getUrl('/view/dailyreport');
+            }else{
+              window.location.href = getUrl('/view/dailyreport');
             }
 
-          } else {
+          }else{
             var message = "로그인에 실패하였습니다.";
             var title = "로그인";
             var type = "warning";
@@ -454,10 +449,8 @@ body
           data: params
         }).done(function(resultParams){
           if(resultParams.isWrite) {
-            console.log("SUCCESS!!!! dashboard");
             returnValue = "goDashboard";
-          } else {
-            console.log("SUCCESS!!!! dailyreport");
+          }else{
             returnValue = "goDailyReport";
           }
         }).fail(function(resultParams){
