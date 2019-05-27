@@ -164,10 +164,10 @@ body
                 form
                   .form-group
                     label 이메일
-                    input#editLoginEmail.form-control.form-control-lg(type='email' name='email' placeholder='이메일을 입력해주세요.' onkeypress="if(event.keyCode==13) {enterKeyPush(); return false;}")
+                    input#editLoginEmail.areaEditLogin.form-control.form-control-lg(type='email' name='email' placeholder='이메일을 입력해주세요.')
                   .form-group
                     label 비밀번호
-                    input#editLoginPassword.form-control.form-control-lg(type='password' name='password' placeholder='비밀번호를 입력해주세요.' onkeypress="if(event.keyCode==13) {enterKeyPush(); return false;}")
+                    input#editLoginPassword.areaEditLogin.form-control.form-control-lg(type='password' name='password' placeholder='비밀번호를 입력해주세요.')
                     .row
                       .col-6
                         small
@@ -244,7 +244,13 @@ body
 
       $('#btnGoogleSignIn').on('click', function(){
         clickedSignIn = true;
-      })      
+      });
+
+      $('.areaEditLogin').keydown(function( event ) {
+        if ( event.which == 13 ) {
+          $('#btnModalLogin').trigger("click");
+        }
+      });
     }
 
     var clickedSignIn = false;
@@ -378,13 +384,19 @@ body
             $('#btnMenuLogOut').show();
             $('#btnMenuLogIn').hide();
 
-            var isWrite = checkWriteDailyReport(params).toString();
-            if(isWrite == "goDashboard") {
-              window.location.href = getUrl('/view/dashboard');
-            }else{
-              window.location.href = getUrl('/view/dailyreport');
+            if(typeof(afterLogin) != "undefined"){
+              afterLogin();
             }
 
+            var path = window.location.pathname;
+            if(path == "/" || path.indexOf("dashboard") != -1){
+              var isWrite = checkWriteDailyReport(params).toString();
+              if(isWrite == "goDashboard") {
+                window.location.href = getUrl('/view/dashboard');
+              }else{
+                window.location.href = getUrl('/view/dailyreport');
+              }
+            }
           }else{
             var message = "로그인에 실패하였습니다.";
             var title = "로그인";
@@ -432,10 +444,6 @@ body
               rtl: false,
               timeOut: 5000
               });
-    }
-
-    function enterKeyPush() {
-      $('#btnModalLogin').trigger("click");
     }
 
     function checkWriteDailyReport(params) {

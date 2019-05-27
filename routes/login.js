@@ -103,27 +103,9 @@ router.put('/checkwritedailyreport', function(req, res, next){
       isSuccess : false,
       isWrite : false
     };
-  
-    var date = new Date(); 
-    var year = date.getFullYear(); 
-    var month = new String(date.getMonth()+1); 
-    var day = new String(date.getDate()); 
-  
-    if(month.length == 1){ 
-     month = "0" + month; 
-    } 
-    if(day.length == 1){ 
-      day = "0" + day; 
-    }
-  
-    var currentDate = year + "-" + month + "-" + day;
     
-    var query = 'SELECT count(*) AS correct FROM DAILY_SURVEY WHERE DAILY_SURVEY.USER_ID IN (SELECT USER_ID FROM USER WHERE EMAIL=?) and DAILY_SURVEY.RECORD_YMD = ?';
-    var params = [
-      req.session.email,
-      currentDate
-    ];
-    con.query(query, params, function(err, result) {
+    var query = 'SELECT count(*) AS correct FROM DAILY_SURVEY WHERE DAILY_SURVEY.USER_ID IN (SELECT USER_ID FROM USER WHERE EMAIL=?) and DAILY_SURVEY.RECORD_YMD = CURDATE()';
+    con.query(query, req.session.email, function(err, result) {
   
       if (err) {
         con.release();
