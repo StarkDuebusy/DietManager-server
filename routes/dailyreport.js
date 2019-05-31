@@ -122,8 +122,7 @@ router.post('/', function(req, res, next) {
             DIET_PROCESS : parseInt(req.body.dietProcess)
           });
 
-          var isPastRecordDate = req.body.isPastRecordDate;
-          
+          var isPastRecordDate = req.body.isPastRecordDate;          
           var nutritionInfo = {
             proteinRate : 0.0,
             carboRate : 0.0
@@ -355,6 +354,7 @@ router.get('/nutrition', function(req, res, next) {
         var mealFrequency = result[0].MEAL_FREQUENCY;
         var dietMode = (result[0].CURRENT_WEIGHT-targetWeight >= 0)? true : false;
         var updated = result[0].updated;
+        var isPastRecordDate = req.query.isPastRecordDate;
 
         var checkQuery = 'SELECT CURRENT_WEIGHT, PROTEIN_RATE, CARBO_RATE, WORKOUT_PROCESS, DIET_PROCESS, MEAL_FREQUENCY,RECORD_YMD FROM DIET_MANAGER.DAILY_SURVEY WHERE USER_ID = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?) ORDER BY RECORD_YMD DESC LIMIT 3';
         con.query(checkQuery, req.session.email, function(err, result){
@@ -363,8 +363,6 @@ router.get('/nutrition', function(req, res, next) {
             next(new Error('ERR006|' + req.countryCode));
             return;
           }
-
-          var isPastRecordDate = req.query.isPastRecordDate;
 
           if(result.length == 0 || result.length == 1){
             if(result.length == 1){
