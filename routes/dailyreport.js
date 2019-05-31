@@ -94,51 +94,65 @@ router.post('/', function(req, res, next) {
         var mealFrequency = result[0].MEAL_FREQUENCY;
         var dietMode = (result[0].CURRENT_WEIGHT-targetWeight >= 0)? true : false;
         var updated = result[0].updated;
+        
+        var checkQuery = 'SELECT CURRENT_WEIGHT, PROTEIN_RATE, CARBO_RATE, WORKOUT_PROCESS, DIET_PROCESS, RECORD_YMD FROM DIET_MANAGER.DAILY_SURVEY WHERE USER_ID = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?) ORDER BY RECORD_YMD DESC LIMIT 3';
+        con.query(checkQuery, req.session.email, function(err, result){
+          if(err){
+            con.release();
+            next(new Error('ERR006|' + req.countryCode));
+            return;
+          }
 
-          var checkQuery = 'SELECT CURRENT_WEIGHT, PROTEIN_RATE, CARBO_RATE, WORKOUT_PROCESS, DIET_PROCESS, RECORD_YMD FROM DIET_MANAGER.DAILY_SURVEY WHERE USER_ID = (SELECT USER_ID FROM DIET_MANAGER.USER WHERE EMAIL = ?) ORDER BY RECORD_YMD DESC LIMIT 3';
-          con.query(checkQuery, req.session.email, function(err, result){
-            if(err){
-              con.release();
-              next(new Error('ERR006|' + req.countryCode));
-              return;
+          if(result.length != 0){
+            var lastRecDate = new Date(result[0].RECORD_YMD);
+            lastRecDate.setHours(0,0,0,0);
+            var newRecDate = new Date(req.body.recordDate);
+            newRecDate.setHours(0,0,0,0);
+            var alreadyAdded = false;
+            if(lastRecDate.getTime() == newRecDate.getTime()){
+              alreadyAdded = true;
+              result.shift();
             }
+          }
 
-            var nutritionInfo = {
-              proteinRate : 0.0,
-              carboRate : 0.0
-            }
+          result.unshift({ 
+            RECORD_YMD : req.body.recordDate,
+            CURRENT_WEIGHT : parseFloat(req.body.currentWeight),
+            WORKOUT_PROCESS : parseInt(req.body.workoutProcess),
+            DIET_PROCESS : parseInt(req.body.dietProcess)
+          });
 
-            if(result.length != 0){
-              var lastRecDate = new Date(result[0].RECORD_YMD);
-              lastRecDate.setHours(0,0,0,0);
-              var newRecDate = new Date(req.body.recordDate);
-              newRecDate.setHours(0,0,0,0);
-              var alreadyAdded = false;
-              if(lastRecDate.getTime() == newRecDate.getTime()){
-                alreadyAdded = true;
-                result.shift();
-              }
-            }
+          var isPastRecordDate = req.body.isPastRecordDate;
+          
+          var nutritionInfo = {
+            proteinRate : 0.0,
+            carboRate : 0.0
+          };
 
-            result.unshift({ 
-              RECORD_YMD : req.body.recordDate,
-              CURRENT_WEIGHT : parseFloat(req.body.currentWeight),
-              WORKOUT_PROCESS : parseInt(req.body.workoutProcess),
-              DIET_PROCESS : parseInt(req.body.dietProcess)
-            });
+          if(req.body.editProteinGram != undefined ){
+            nutritionInfo.proteinRate = req.body.editProteinGram * (req.body.proteinContent/100) * mealFrequency / targetWeight
+          }
+          if(req.body.editCarboGram != undefined ){
+            nutritionInfo.carboRate = req.body.editCarboGram * (req.body.carboContent/100) * mealFrequency / targetWeight
+          }
 
-            
-            judgeNutritionRate(result, dietMode, updated, workoutFrequncy, nutritionInfo);
-            
-            if(req.body.editProteinGram != undefined ){
-              nutritionInfo.proteinRate = req.body.editProteinGram * (req.body.proteinContent/100) * mealFrequency / targetWeight
-            }
-            if(req.body.editCarboGram != undefined ){
-              nutritionInfo.carboRate = req.body.editCarboGram * (req.body.carboContent/100) * mealFrequency / targetWeight
-            }
+          judgeNutritionRate(result, dietMode, updated, workoutFrequncy, isPastRecordDate, nutritionInfo);
 
-            var insertParams = [
-              req.session.email,
+          var insertParams = [
+            req.session.email,
+            req.body.dietProcess,
+            req.body.didWorkout,
+            req.body.workoutProcess,
+            req.body.currentWeight,
+            targetWeight,
+            mealFrequency,
+            nutritionInfo.proteinRate,
+            nutritionInfo.carboRate,
+            req.body.recordDate
+          ];
+          
+          if(alreadyAdded){
+            var updateParams = [
               req.body.dietProcess,
               req.body.didWorkout,
               req.body.workoutProcess,
@@ -147,27 +161,14 @@ router.post('/', function(req, res, next) {
               mealFrequency,
               nutritionInfo.proteinRate,
               nutritionInfo.carboRate,
+              req.session.email,
               req.body.recordDate
             ];
-            
-            if(alreadyAdded){
-              var updateParams = [
-                req.body.dietProcess,
-                req.body.didWorkout,
-                req.body.workoutProcess,
-                req.body.currentWeight,
-                targetWeight,
-                mealFrequency,
-                nutritionInfo.proteinRate,
-                nutritionInfo.carboRate,
-                req.session.email,
-                req.body.recordDate
-              ];
-              updateDailySurvey(con, res, updateParams);
-            }else{
-              insertDailySurvey(con, res, insertParams);
-            }
-          });
+            updateDailySurvey(con, res, updateParams);
+          }else{
+            insertDailySurvey(con, res, insertParams);
+          }
+        });
        }
     });
   });
@@ -215,22 +216,36 @@ function updateDailySurvey(con, res, params){
   });
 }
 
-function judgeNutritionRate(weightRecord, dietMode, updated, workoutFrequncy, nutritionInfo){
+function judgeNutritionRate(weightRecord, dietMode, updated, workoutFrequncy, isPastRecordDate, nutritionInfo){
+  if(nutritionInfo.proteinRate != 0.0 || nutritionInfo.carboRate != 0.0){
+    if(nutritionInfo.proteinRate != 0.0 && nutritionInfo.carboRate != 0.0){
+      return;
+    }else if(weightRecord.length > 1){
+      if(nutritionInfo.proteinRate != 0.0){
+        nutritionInfo.carboRate = weightRecord[1].CARBO_RATE;    
+      }else{
+        nutritionInfo.proteinRate = weightRecord[1].PROTEIN_RATE;    
+      }
+      return;
+    } 
+  }
+
   if(weightRecord.length <= 1){
-    initNutritionRate(workoutFrequncy, nutritionInfo, weightRecord);
+    initNutritionRate(workoutFrequncy, nutritionInfo);
     return;
   }else if(weightRecord.length < 3){
-    if(!updated){
-      nutritionInfo.proteinRate = weightRecord[1].PROTEIN_RATE;
-      nutritionInfo.carboRate = weightRecord[1].CARBO_RATE;
-    }else{
-      initNutritionRate(workoutFrequncy, nutritionInfo, weightRecord)
-    }
+    nutritionInfo.proteinRate = weightRecord[1].PROTEIN_RATE;
+    nutritionInfo.carboRate = weightRecord[1].CARBO_RATE;
+    return;
+  }else if(isPastRecordDate == "true"){
+    nutritionInfo.proteinRate = weightRecord[1].PROTEIN_RATE;
+    nutritionInfo.carboRate = weightRecord[1].CARBO_RATE;
     return;
   }
 
   if(updated){
-    initNutritionRate(workoutFrequncy, nutritionInfo, weightRecord)
+    nutritionInfo.proteinRate = weightRecord[1].PROTEIN_RATE;
+    nutritionInfo.carboRate = weightRecord[1].CARBO_RATE;
   }else{
     nutritionInfo.proteinRate = weightRecord[1].PROTEIN_RATE;
     nutritionInfo.carboRate = weightRecord[1].CARBO_RATE;
@@ -273,25 +288,37 @@ function judgeNutritionRate(weightRecord, dietMode, updated, workoutFrequncy, nu
   }
 }
 
-function initNutritionRate(workoutFrequncy, nutritionInfo, weightRecord){
-  if(workoutFrequncy == 2){
-    nutritionInfo.proteinRate = 1.7;
-    nutritionInfo.carboRate = 1.9;
-  }else if(workoutFrequncy == 1){
-    nutritionInfo.proteinRate = 1.4;
-    nutritionInfo.carboRate = 1.6;
-  }else{
-    nutritionInfo.proteinRate = 2;
-    nutritionInfo.carboRate = 2.2;
-  }
-  
-  if(weightRecord.length > 1){
-    if((nutritionInfo.proteinRate != weightRecord[1].PROTEIN_RATE) || (nutritionInfo.carboRate != weightRecord[1].CARBO_RATE)){
-      nutritionInfo.proteinRate = weightRecord[1].PROTEIN_RATE;
-      nutritionInfo.carboRate = weightRecord[1].CARBO_RATE;
+function initNutritionRate(workoutFrequncy, nutritionInfo){
+  if(nutritionInfo.proteinRate == 0 && nutritionInfo.carboRate == 0){
+    if(workoutFrequncy == 2){
+      nutritionInfo.proteinRate = 1.7;
+      nutritionInfo.carboRate = 1.9;
+    }else if(workoutFrequncy == 1){
+      nutritionInfo.proteinRate = 1.4;
+      nutritionInfo.carboRate = 1.6;
+    }else{      
+      nutritionInfo.proteinRate = 2;
+      nutritionInfo.carboRate = 2.2;
     }
-  }
-  
+  }else if(nutritionInfo.proteinRate !=0 || nutritionInfo.carboRate != 0){
+    if(nutritionInfo.proteinRate != 0){
+      if(workoutFrequncy == 2){
+        nutritionInfo.carboRate = 1.9;
+      }else if(workoutFrequncy == 1){
+        nutritionInfo.carboRate = 1.6;
+      }else{
+        nutritionInfo.carboRate = 2.2;
+      }
+    }else{
+      if(workoutFrequncy == 2){
+        nutritionInfo.proteinRate = 1.7;
+      }else if(workoutFrequncy == 1){
+        nutritionInfo.proteinRate = 1.4;
+      }else{
+        nutritionInfo.proteinRate = 2;
+      }
+    }
+  }  
 }
 
 router.get('/nutrition', function(req, res, next) {
@@ -337,6 +364,8 @@ router.get('/nutrition', function(req, res, next) {
             return;
           }
 
+          var isPastRecordDate = req.query.isPastRecordDate;
+
           if(result.length == 0 || result.length == 1){
             if(result.length == 1){
               var lastRecDate = new Date(result[0].RECORD_YMD);
@@ -353,7 +382,6 @@ router.get('/nutrition', function(req, res, next) {
             }
           }
 
-          
           function singleNutritionCalc(){
             var nutritionInfoNew = [{
               proteinRate : 0.0,
@@ -362,7 +390,7 @@ router.get('/nutrition', function(req, res, next) {
               proteinGram : 0,
               carboGram : 0
             }];
-            judgeNutritionRate(result, dietMode, updated, workoutFrequncy, nutritionInfoNew[0]);
+            judgeNutritionRate(result, dietMode, updated, workoutFrequncy,isPastRecordDate, nutritionInfoNew[0]);
             getNutritionInfo(con, req.query.protein, req.query.carbo, nutritionInfoNew, []);
           }
 
@@ -372,8 +400,8 @@ router.get('/nutrition', function(req, res, next) {
           newRecDate.setHours(0,0,0,0);
           if(lastRecDate.getTime() == newRecDate.getTime()){
             result.shift();
-          } 
-
+          }
+          
           result.unshift({
             RECORD_YMD : req.query.recordDate,
             CURRENT_WEIGHT : parseFloat(req.query.currentWeight),
@@ -395,7 +423,10 @@ router.get('/nutrition', function(req, res, next) {
             proteinGram : 0,
             carboGram : 0
           }];
-          judgeNutritionRate(result, dietMode, updated, workoutFrequncy, nutritionInfoList[0]);
+
+          var isPastRecordDate = req.query.isPastRecordDate;
+
+          judgeNutritionRate(result, dietMode, updated, workoutFrequncy, isPastRecordDate, nutritionInfoList[0]);
           getNutritionInfo(con, req.query.protein, req.query.carbo, nutritionInfoList, []);
 
 

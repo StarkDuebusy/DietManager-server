@@ -331,11 +331,8 @@ block script
       now.setHours(0,0,0,0);
       var newRecDate = new Date($('#editRecordDate').val());
       newRecDate.setHours(0,0,0,0);
-      if(now.getTime() == newRecDate.getTime()){
-        $('.areaNutritionGuide').show();
-      } else{
-        $('.areaNutritionGuide').hide();
-      }
+      
+      $('.areaNutritionGuide').show();
       
       var params = {
         protein : $('#selProtein').val(),
@@ -343,8 +340,15 @@ block script
         recordDate : $('#editRecordDate').val(),
         currentWeight : $('#editCurrnetWeight').val(),
         dietProcess : $(':input:radio[name=editRadioDietProcess]:checked').val(), 
-        workoutProcess : $(':input:radio[name=editRadioWorkoutProcess]:checked').val()
+        workoutProcess : $(':input:radio[name=editRadioWorkoutProcess]:checked').val(),
+        isPastRecordDate : (now.getTime() - newRecDate.getTime() > 0) ? true : false
       };
+
+      if($(':input:radio[name=editRadioDidWorkout]:checked').val() == 1){
+        params.workoutProcess = $(':input:radio[name=editRadioWorkoutProcess]:checked').val();
+      }else{
+        params.workoutProcess = 0;
+      }
       
       var strURL = getUrl('/api/dailyreport/nutrition');
       $.ajax({ 
@@ -418,11 +422,18 @@ block script
     }
     
     function ajaxRecordDailyReport(){
+      var now = new Date();
+      now.setHours(0,0,0,0);
+      var newRecDate = new Date($('#editRecordDate').val());
+      newRecDate.setHours(0,0,0,0);
+
       var params = {
         recordDate : $('#editRecordDate').val(),
         currentWeight : $('#editCurrnetWeight').val(),
         dietProcess : $(':input:radio[name=editRadioDietProcess]:checked').val(),
-        didWorkout : $(':input:radio[name=editRadioDidWorkout]:checked').val()
+        didWorkout : $(':input:radio[name=editRadioDidWorkout]:checked').val(),
+        isPastRecordDate : (now.getTime() - newRecDate.getTime() > 0) ? true : false
+
       };
 
       if($('#editProteinGram').val() != proteinGram ){
