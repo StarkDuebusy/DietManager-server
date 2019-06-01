@@ -176,9 +176,9 @@ body
                         small
                           a(href='/kr/view/regist') 이메일로 회원가입
                   div
-                    .custom-control.custom-checkbox.align-items-center
-                      input.custom-control-input(type='checkbox' value='remember-me' name='remember-me' checked='')
-                      label.custom-control-label.text-small 자동로그인
+                    label.custom-control.custom-checkbox.align-items-center
+                      input#ckAutoLogin.custom-control-input(type='checkbox' value='remember-me' name='remember-me')
+                      span.custom-control-label.text-small 자동로그인
             .modal-footer
               button#btnModalLoginClose.btn.btn-secondary(type='button' data-dismiss='modal') 취소
               button#btnModalLogin.btn.btn-primary(type='button') 로그인
