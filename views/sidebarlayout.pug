@@ -127,6 +127,12 @@ body
                   a.sidebar-item(href='/kr/view/profile')
                     i.align-middle.mr-2.fas.fa-fw.fa-drafting-compass
                     span.align-middle 나의 프로필
+            if userName != null
+              .card
+                .sidebar-content
+                  #btnSendSurvey.sidebar-item
+                    i.align-middle.mr-2.fas.fa-fw.fa-mobile-alt
+                    span.align-middle 설문내용 보내기
             .card
               .sidebar-content
                 if userName == null
@@ -250,6 +256,74 @@ body
         if ( event.which == 13 ) {
           $('#btnModalLogin').trigger("click");
         }
+      });
+
+      if(typeof Dietmeter !== "undefined" && Dietmeter !== null) {
+        $('#btnSendSurvey').show();
+      }else{
+        $('#btnSendSurvey').hide();
+      }
+      $('#btnSendSurvey').on('click', function(){
+        var strURL = getUrl('/api/dietmeter');
+        $.ajax({ 
+          type: 'GET', 
+          url: strURL,
+          async: false, 
+          data: null
+        }).done(function(resultParams){
+          if(resultParams.isSuccess){
+            if(typeof Dietmeter !== "undefined" && Dietmeter !== null) {
+              Dietmeter.setDietSurvey(resultParams.targetWeight, resultParams.proteinRate, resultParams.carboRate, resultParams.mealFreq);
+              var message = "blutooth -> '웹 설문내용 보내기' 버튼을 이용해주세요.";
+                var title = "설문내용 보내기";
+                var type = "success";
+                toastr[type](message, title, {
+                      positionClass: "toast-top-right",
+                      closeButton: true,
+                      progressBar: true,
+                      newestOnTop: true,
+                      rtl: false,
+                      timeOut: 5000
+                      });
+            } else {
+                var message = "본 서비스는 AI식단계량기 전용 앱으로 접속하셔야 이용가능합니다.";
+                var title = "안내사항";
+                var type = "warning";
+                toastr[type](message, title, {
+                      positionClass: "toast-top-right",
+                      closeButton: true,
+                      progressBar: true,
+                      newestOnTop: true,
+                      rtl: false,
+                      timeOut: 5000
+                      });
+            }
+          }else{
+            var message = "다이어트 목표와 일지를 작성해주셔야 설문내용 보내기가 가능합니다.";
+            var title = "설문내용 보내기";
+            var type = "warning";
+            toastr[type](message, title, {
+                  positionClass: "toast-top-right",
+                  closeButton: true,
+                  progressBar: true,
+                  newestOnTop: true,
+                  rtl: false,
+                  timeOut: 5000
+                  });
+          }
+        }).fail(function(resultParams){
+          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var title = "서비스점검중";
+          var type = "error";
+          toastr[type](message, title, {
+                positionClass: "toast-top-right",
+                closeButton: true,
+                progressBar: true,
+                newestOnTop: true,
+                rtl: false,
+                timeOut: 5000
+                });
+        });
       });
     }
 
