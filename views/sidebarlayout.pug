@@ -181,7 +181,7 @@ body
                       .col-6.text-right
                         small
                           a(href='/kr/view/regist') 이메일로 회원가입
-                  div
+                  //div
                     label.custom-control.custom-checkbox.align-items-center
                       input#ckAutoLogin.custom-control-input(type='checkbox' value='remember-me' name='remember-me')
                       span.custom-control-label.text-small 자동로그인
@@ -202,6 +202,8 @@ body
     $(document).ready(init);
 
     function init(){
+      autoLogin();
+
       $('#btnModalLogin').on('click', function(){
         var params = {
           email : $('#editLoginEmail').val(),
@@ -550,6 +552,79 @@ body
         });
         
         return returnValue;
+    }
+
+    function autoLogin() {
+      var strURL = getUrl('/api/login/autoLogin');
+      
+      $.ajax({ 
+          type: 'PUT', 
+          url: strURL,
+          async: false
+        }).done(function(resultParams){
+          if(resultParams.isSuccess){
+            if(resultParams.setSession) {
+              if(resultParams.profileIMG != undefined){
+              $('#imgProfile').attr('src', resultParams.profileIMG);
+            }
+
+            $('#txtUserName').text(resultParams.userName);
+
+            if(resultParams.targetWeight != undefined){
+              $('#btnSetTargetWeight').hide();
+              $('#areaTargetWeight').show();
+              $('#txtTargetWeight').text(resultParams.targetWeight);
+            }else{
+              $('#btnSetTargetWeight').show();
+              $('#areaTargetWeight').hide();
+              $('#txtTargetWeight').text('');
+            }
+
+            $('#btnMenuLogOut').show();
+            $('#btnMenuLogIn').hide();
+
+            //if(typeof(afterLogin) != "undefined"){
+            //  afterLogin();
+            //}
+
+            //var path = window.location.pathname;
+            //if(path == "/" || path.indexOf("dashboard") != -1){
+            //  var isWrite = checkWriteDailyReport(params).toString();
+            //  if(isWrite == "goDashboard") {
+            //    window.location.href = getUrl('/view/dashboard');
+            // }else{
+            //    window.location.href = getUrl('/view/dailyreport');
+            //  }
+            //}
+            }else{
+              //location.reload();
+            }
+          }else{
+            var message = "로그인에 실패하였습니다.";
+            var title = "로그인";
+            var type = "warning";
+            toastr[type](message, title, {
+                  positionClass: "toast-top-right",
+                  closeButton: true,
+                  progressBar: true,
+                  newestOnTop: true,
+                  rtl: false,
+                  timeOut: 5000
+                  });
+          }
+        }).fail(function(resultParams){
+          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var title = "서비스점검중";
+          var type = "error";
+          toastr[type](message, title, {
+                positionClass: "toast-top-right",
+                closeButton: true,
+                progressBar: true,
+                newestOnTop: true,
+                rtl: false,
+                timeOut: 5000
+          });
+        });
     }
 
   svg(width='0', height='0', style='position:absolute')

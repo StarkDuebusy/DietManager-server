@@ -24,7 +24,7 @@ app.use(bodyParser.raw({limit: "100mb"}));
 app.use(bodyParser.text({limit: "18kb"}));
 app.use(bodyParser.urlencoded({ extended: true, limit : "3mb" }));
 
-app.use(cookieParser());
+app.use(cookieParser('!@$FKOWEJ@#$$%'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/:countryCode/:protocolType/:apiName', function(req, res, next){

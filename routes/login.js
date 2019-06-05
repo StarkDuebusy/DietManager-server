@@ -29,6 +29,8 @@ router.put('/login', function(req, res, next){
       };
 
       if(result.correct == '1'){
+        var amount = 60*60*24*365;
+        res.cookie('userEmail', req.body.email, {expires:new Date(Date.now()+amount), signed: true});
         afterLoginSuccess(resultParams, result, con);
       }else{
         resultParams.isSuccess = false;
@@ -91,6 +93,7 @@ router.put('/logout', function(req, res,next){
         res.send(resultParams);
       }
     });
+    res.clearCookie('userEmail');
   }else{
     resultParams.isSuccess =false;
     res.send(resultParams);
@@ -125,6 +128,95 @@ router.put('/checkwritedailyreport', function(req, res, next){
       }
     });
   });
+});
+
+router.put('/autoLogin', function(req, res, next){
+  var resultParams = {
+    isSuccess: false,
+    setSession: false
+  };
+  
+  // 세션과 쿠키 모두 존재할 때
+  if(req.signedCookies.userEmail != null && req.session.email) {
+    console.log("세션이랑 쿠키 다 있으니까 그냥그냥 지나가면 됩니다-");
+    resultParams.isSuccess = true;
+    resultParams.setSession = true;
+    res.send(resultParams);
+  } 
+  // 세션은 존재하지 않지만 쿠키는 존재할 때
+  else if(req.signedCookies.userEmail != null && !req.session.email) {
+    console.log("쿠키에 저장된 email로 디비에서 정보 불러와서 로그인한것처럼 설정해두자!");
+
+    sqlManager(function(err, con) {
+      var loginQuery = 'SELECT PROFILE_IMG, USER_NM, USER_ID FROM DIET_MANAGER.USER where EMAIL = ?';
+      var queryParams = [
+                          req.signedCookies.userEmail
+                        ];
+      con.query(loginQuery, queryParams, function(err, result) {
+        if (err) {
+          con.release();
+          next(new Error('ERR006|' + req.countryCode));
+          return;
+        }
+        result = result[0];
+        
+        var resultParams = {
+          isSuccess : true
+        };
+        
+        afterLoginSuccess(resultParams, result, con);      
+      });
+    });
+
+    function afterLoginSuccess(resultParams, result, con){
+      resultParams.userName = result.USER_NM;
+      req.session.userName  = result.USER_NM;
+      req.session.email = req.signedCookies.userEmail;
+      
+      var currentDate = (new Date()).valueOf().toString();
+      var random = Math.random().toString();
+      var session = crypto.createHash('sha1').update(currentDate + random).digest('hex');
+      resultParams.session = session;
+      req.session.session = session;
+      req.session.profileIMG = null;
+  
+      if(result.PROFILE_IMG != null) {
+        var imgParser = new ImgParser();
+        if(imgParser.convertToBuffer(result.PROFILE_IMG) != undefined){
+          req.session.profileIMG = "data:image/jpeg;base64," + imgParser.convertToBuffer(result.PROFILE_IMG);
+          resultParams.profileIMG = req.session.profileIMG;
+        }
+      }
+      
+      var query = 'SELECT TARGET_WEIGHT FROM DIET_MANAGER.DIET_SURVEY where USER_ID = ?';
+      con.query(query, result.USER_ID, function(err, result) {
+        
+        if (err) {
+          con.release();
+          next(new Error('ERR006|' + req.countryCode));
+          return;
+        }
+        con.release();
+  
+        if(result.length == 1){
+          resultParams.targetWeight = result[0].TARGET_WEIGHT;
+          req.session.targetWeight =  result[0].TARGET_WEIGHT;
+        }
+        
+        resultParams.isSuccess = true;
+        resultParams.setSession = true;
+
+        res.send(resultParams);
+      });
+    }
+  }
+  // 세션과 쿠키 모두 존재하지 않을 때
+  else if(req.signedCookies.userEmail == null && !req.session.email) {
+    console.log("로그인을 하자 로그인을ㅎㅁㅎ");
+    resultParams.isSuccess = true;
+    resultParams.setSession = false;
+    res.send(resultParams);
+  }
 });
 
 module.exports = router;
