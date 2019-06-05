@@ -136,17 +136,11 @@ router.put('/autoLogin', function(req, res, next){
     setSession: false
   };
   
-  // 세션과 쿠키 모두 존재할 때
   if(req.signedCookies.userEmail != null && req.session.email) {
-    console.log("세션이랑 쿠키 다 있으니까 그냥그냥 지나가면 됩니다-");
     resultParams.isSuccess = true;
     resultParams.setSession = true;
     res.send(resultParams);
-  } 
-  // 세션은 존재하지 않지만 쿠키는 존재할 때
-  else if(req.signedCookies.userEmail != null && !req.session.email) {
-    console.log("쿠키에 저장된 email로 디비에서 정보 불러와서 로그인한것처럼 설정해두자!");
-
+  } else if(req.signedCookies.userEmail != null && !req.session.email) {
     sqlManager(function(err, con) {
       var loginQuery = 'SELECT PROFILE_IMG, USER_NM, USER_ID FROM DIET_MANAGER.USER where EMAIL = ?';
       var queryParams = [
@@ -209,10 +203,7 @@ router.put('/autoLogin', function(req, res, next){
         res.send(resultParams);
       });
     }
-  }
-  // 세션과 쿠키 모두 존재하지 않을 때
-  else if(req.signedCookies.userEmail == null && !req.session.email) {
-    console.log("로그인을 하자 로그인을ㅎㅁㅎ");
+  } else if(req.signedCookies.userEmail == null && !req.session.email) {
     resultParams.isSuccess = true;
     resultParams.setSession = false;
     res.send(resultParams);
