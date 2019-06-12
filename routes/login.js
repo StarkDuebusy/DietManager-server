@@ -148,13 +148,29 @@ router.put('/autoLogin', function(req, res, next){
           next(new Error('ERR006|' + req.countryCode));
           return;
         }
-        result = result[0];
+        //result = result[0];
         
         var resultParams = {
           isSuccess : true
         };
 
-        afterLoginSuccess(resultParams, result, con);
+        if(result.length == 1) {
+          result = result[0];
+          afterLoginSuccess(resultParams, result, con);
+        } else {
+          req.session.destroy(function(err){
+            if(err){
+              console.log(err);
+              next(new Error('ERR006|' + req.countryCode));
+              return;
+            }else{
+              res.send(resultParams);
+            }
+          });
+          res.clearCookie('userEmail');
+          resultParams.isSuccess = false;
+        }
+        
       });
     });
   } else if(req.signedCookies.userEmail == null && req.session.email == undefined) {
