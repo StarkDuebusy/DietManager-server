@@ -161,52 +161,55 @@ router.put('/autoLogin', function(req, res, next){
         afterLoginSuccess(resultParams, result, con);      
       });
     });
-
-    function afterLoginSuccess(resultParams, result, con){
-      resultParams.userName = result.USER_NM;
-      req.session.userName  = result.USER_NM;
-      req.session.email = req.signedCookies.userEmail;
-      
-      var currentDate = (new Date()).valueOf().toString();
-      var random = Math.random().toString();
-      var session = crypto.createHash('sha1').update(currentDate + random).digest('hex');
-      resultParams.session = session;
-      req.session.session = session;
-      req.session.profileIMG = null;
-  
-      if(result.PROFILE_IMG != null) {
-        var imgParser = new ImgParser();
-        if(imgParser.convertToBuffer(result.PROFILE_IMG) != undefined){
-          req.session.profileIMG = "data:image/jpeg;base64," + imgParser.convertToBuffer(result.PROFILE_IMG);
-          resultParams.profileIMG = req.session.profileIMG;
-        }
-      }
-      
-      var query = 'SELECT TARGET_WEIGHT FROM DIET_MANAGER.DIET_SURVEY where USER_ID = ?';
-      con.query(query, result.USER_ID, function(err, result) {
-        
-        if (err) {
-          con.release();
-          next(new Error('ERR006|' + req.countryCode));
-          return;
-        }
-        con.release();
-  
-        if(result.length == 1){
-          resultParams.targetWeight = result[0].TARGET_WEIGHT;
-          req.session.targetWeight =  result[0].TARGET_WEIGHT;
-        }
-        
-        resultParams.isSuccess = true;
-        resultParams.setSession = true;
-
-        res.send(resultParams);
-      });
-    }
   } else if(req.signedCookies.userEmail == null && !req.session.email) {
     resultParams.isSuccess = true;
     resultParams.setSession = false;
     res.send(resultParams);
+  }
+
+  function afterLoginSuccess(resultParams, result, con){
+    resultParams.isSuccess = true;
+    resultParams.setSession = true;
+
+    resultParams.userName = result.USER_NM;
+    req.session.userName  = result.USER_NM;
+    req.session.email = req.signedCookies.userEmail;
+    
+    var currentDate = (new Date()).valueOf().toString();
+    var random = Math.random().toString();
+    var session = crypto.createHash('sha1').update(currentDate + random).digest('hex');
+    resultParams.session = session;
+    req.session.session = session;
+    req.session.profileIMG = null;
+
+    if(result.PROFILE_IMG != null) {
+      var imgParser = new ImgParser();
+      if(imgParser.convertToBuffer(result.PROFILE_IMG) != undefined){
+        req.session.profileIMG = "data:image/jpeg;base64," + imgParser.convertToBuffer(result.PROFILE_IMG);
+        resultParams.profileIMG = req.session.profileIMG;
+      }
+    }
+    
+    var query = 'SELECT TARGET_WEIGHT FROM DIET_MANAGER.DIET_SURVEY where USER_ID = ?';
+    con.query(query, result.USER_ID, function(err, result) {
+      
+      if (err) {
+        con.release();
+        next(new Error('ERR006|' + req.countryCode));
+        return;
+      }
+      con.release();
+
+      if(result.length == 1){
+        resultParams.targetWeight = result[0].TARGET_WEIGHT;
+        req.session.targetWeight =  result[0].TARGET_WEIGHT;
+      }
+      
+      resultParams.isSuccess = true;
+      resultParams.setSession = true;
+
+      res.send(resultParams);
+    });
   }
 });
 

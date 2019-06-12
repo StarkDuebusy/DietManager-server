@@ -574,6 +574,9 @@ body
               $('#btnSetTargetWeight').hide();
               $('#areaTargetWeight').show();
               $('#txtTargetWeight').text(resultParams.targetWeight);
+            }else if(resultParams.setSession){
+              $('#btnSetTargetWeight').hide();
+              $('#areaTargetWeight').show();
             }else{
               $('#btnSetTargetWeight').show();
               $('#areaTargetWeight').hide();
@@ -598,6 +601,7 @@ body
                   });
           }
         }).fail(function(resultParams){
+          console.log("ResultParams: " + resultParams.isSuccess);
           var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
           var title = "서비스점검중";
           var type = "error";
