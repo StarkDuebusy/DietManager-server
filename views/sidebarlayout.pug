@@ -575,9 +575,9 @@ body
               $('#areaTargetWeight').show();
               $('#txtTargetWeight').text(resultParams.targetWeight);
             }else if(resultParams.targetWeight == undefined && resultParams.setSession){
-              $('#btnSetTargetWeight').hide();
-              $('#areaTargetWeight').show();
-              $('#txtTargetWeight').text(resultParams.targetWeight);
+              $('#btnSetTargetWeight').show();
+              $('#areaTargetWeight').hide();
+              $('#txtTargetWeight').text('');
             }else{
               $('#btnSetTargetWeight').show();
               $('#areaTargetWeight').hide();

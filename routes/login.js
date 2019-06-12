@@ -136,11 +136,7 @@ router.put('/autoLogin', function(req, res, next){
     setSession: false
   };
   
-  if(req.signedCookies.userEmail != null && req.session.email) {
-    resultParams.isSuccess = true;
-    resultParams.setSession = true;
-    res.send(resultParams);
-  } else if(req.signedCookies.userEmail != null && !req.session.email) {
+  if(req.signedCookies.userEmail != null) {
     sqlManager(function(err, con) {
       var loginQuery = 'SELECT PROFILE_IMG, USER_NM, USER_ID FROM DIET_MANAGER.USER where EMAIL = ?';
       var queryParams = [
@@ -157,11 +153,11 @@ router.put('/autoLogin', function(req, res, next){
         var resultParams = {
           isSuccess : true
         };
-        
-        afterLoginSuccess(resultParams, result, con);      
+
+        afterLoginSuccess(resultParams, result, con);
       });
     });
-  } else if(req.signedCookies.userEmail == null && !req.session.email) {
+  } else if(req.signedCookies.userEmail == null && req.session.email == undefined) {
     resultParams.isSuccess = true;
     resultParams.setSession = false;
     res.send(resultParams);
