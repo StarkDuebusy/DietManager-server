@@ -11,10 +11,12 @@ block content
                 .icon.icon-primary
                   i.align-middle(data-feather='activity')
               .col-12.col-sm-8.align-self-center.text-center.text-sm-right
-                p.text-muted.mb-1 최근 몸무게 변화
+                //- p.text-muted.mb-1 최근 몸무게 변화
+                p.text-muted.mb-1 Recent weight
                 if needDailyReport
                   .btnGotoDailyReport.btn.btn-primary
-                    span.align-middle 1일 다이어트 일지를 작성해주세요.
+                    //- span.align-middle 1일 다이어트 일지를 작성해주세요.
+                    span.align-middle Please input one-day diet diary.
                 else
                   h2
                     if nutritionInfo.weightDiff < 0
@@ -41,9 +43,11 @@ block content
                 .icon.icon-danger
                   i.align-middle(data-feather='award')
               .col-12.col-sm-8.align-self-center.text-center.text-sm-right
-                p.text-muted.mb-1 예상 몸무게 달성일
+                //- p.text-muted.mb-1 목표 몸무게 예상 달성일
+                p.text-muted.mb-1 Target weight attainment date
                 h2 2019.06.19
-                p.text-muted  서비스 준비중
+                //- p.text-muted  서비스 준비중
+                p.text-muted  Preparing for service
       .col-6.col-xl-3.d-flex
         .card.flex-fill
           .card-body.py-3
@@ -52,10 +56,12 @@ block content
                 .icon.icon-success
                   i.align-middle(data-feather='twitter')
               .col-12.col-sm-8.align-self-center.text-center.text-sm-right
-                p.text-muted.mb-1 1식 당 닭가슴살
+                //- p.text-muted.mb-1 1식 당 닭가슴살
+                p.text-muted.mb-1 Chicken breast per meal
                 if needDailyReport
                   .btnGotoDailyReport.btn.btn-primary
-                    span.align-middle 1일 다이어트 일지를 작성해주세요.
+                    //- span.align-middle 1일 다이어트 일지를 작성해주세요.
+                    span.align-middle Please input one-day diet diary.
                 else
                   h2
                     if nutritionInfo.proteinDiff < 0
@@ -82,10 +88,11 @@ block content
                 .icon.icon-warning
                   i.align-middle(data-feather='heart')
               .col-12.col-sm-8.align-self-center.text-center.text-sm-right
-                p.text-muted.mb-1 1식 당 고구마
+                p.text-muted.mb-1 Sweet potato per meal
                 if needDailyReport
                   .btnGotoDailyReport.btn.btn-primary
-                    span.align-middle 1일 다이어트 일지를 작성해주세요.
+                    //- span.align-middle 1일 다이어트 일지를 작성해주세요.
+                    span.align-middle Please input one-day diet diary.
                 else
                   h2
                     if nutritionInfo.carboDiff < 0
@@ -110,14 +117,16 @@ block content
           .card-header
             .row
               .col-md-6
-                h5.card-title.mb-0.mt-2 몸무게 변화
+                //- h5.card-title.mb-0.mt-2 몸무게 변화
+                h5.card-title.mb-0.mt-2 Weight changes
           .card-body
             ul.pagination.pagination-lg.justify-content-center
               li.page-item
                 #btnPrevMonth.page-link
                   i.fas.fa-angle-left
               li.page-item
-                strong#txtMonth.page-link 1월
+                //- strong#txtMonth.page-link 1월
+                strong#txtMonth.page-link Jan
               li.page-item
                 #btnNextMonth.page-link
                   i.fas.fa-angle-right
@@ -129,9 +138,11 @@ block content
             chartWeight = new Chart(document.getElementById("chartWeight"), {
               type: 'line',
               data: {
-                labels: ["1일"],
+                //- labels: ["1일"],
+                labels: ["Day 1"],
                 datasets: [{
-                  label: "몸무게",
+                  //- label: "몸무게",
+                  label: "Body weight",
                   fill: false,
                   backgroundColor: "rgba(65, 212, 146, 0.5)",
                   borderColor: "#41D492",
@@ -199,14 +210,15 @@ block content
           .card-header
             .row
               .col-md-12
-                h5.card-title.mb-0.mt-2 체성분 변화
+                //- h5.card-title.mb-0.mt-2 체성분 변화
+                h5.card-title.mb-0.mt-2 Bodycomposition changes
           .card-body
             ul.pagination.pagination-lg.justify-content-center
               li.page-item
                 .btnPrevYear.page-link
                   i.fas.fa-angle-left
               li.page-item
-                strong.txtYear.page-link(data-type='b') 2019년
+                strong.txtYear.page-link(data-type='b') 2019
               li.page-item
                 .btnNextYear.page-link
                   i.fas.fa-angle-right
@@ -218,21 +230,25 @@ block content
             chartBodycomposition = new Chart(document.getElementById("chartBodycompotision"), {
               type: 'line',
               data: {
-                labels: ["1월", "2월",  "3월",  "4월", "5월",  "6월",  "7월", "8월",  "9월",  "10월",  "11월",  "12월"],
+                //- labels: ["1월", "2월",  "3월",  "4월", "5월",  "6월",  "7월", "8월",  "9월",  "10월",  "11월",  "12월"],
+                labels: ["Jan", "Feb",  "Mar",  "Apr", "May",  "Jun",  "Jul", "Aug",  "Sep",  "Oct",  "Nov",  "Dec"],
                 datasets: [{
-                  label: "몸무게",
+                  //- label: "몸무게",
+                  label: "Body weight",
                   fill: false,
                   backgroundColor: "rgba(65, 212, 146, 0.5)",
                   borderColor: "#41D492",
                   data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 }, {
-                  label: "골격근량",
+                  //- label: "골격근량",
+                  label: "Skeletal muscle mass",
                   fill: false,
                   backgroundColor: "rgba(242, 102, 102, 0.5)",
                   borderColor: "#f26666",
                   data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 }, {
-                  label: "체지방량",
+                  //- label: "체지방량",
+                  label: "Body fat mass",
                   fill: false,
                   backgroundColor: "rgba(168, 119, 181, 0.5)",
                   borderColor: "#a877b5",
@@ -303,14 +319,15 @@ block content
                 h5.card-title.mb-0.mt-2 FFMI(Fat Free Mas Index)
               .col-md-6.text-right
                 |FFMI : 
-                span#txtJudgeFFMI 기록없음
+                //- span#txtJudgeFFMI 기록없음
+                span#txtJudgeFFMI No record
           .card-body
             ul.pagination.pagination-lg.justify-content-center
               li.page-item
                 .btnPrevYear.page-link
                   i.fas.fa-angle-left
               li.page-item
-                strong.txtYear.page-link(data-type='f') 2019년
+                strong.txtYear.page-link(data-type='f') 2019
               li.page-item
                 .btnNextYear.page-link
                   i.fas.fa-angle-right
@@ -322,7 +339,8 @@ block content
             chartFFMI = new Chart(document.getElementById("chartFFMI"), {
               type: 'line',
               data: {
-                labels: ["1월", "2월",  "3월",  "4월", "5월",  "6월",  "7월", "8월",  "9월",  "10월",  "11월",  "12월"],
+                //- labels: ["1월", "2월",  "3월",  "4월", "5월",  "6월",  "7월", "8월",  "9월",  "10월",  "11월",  "12월"],
+                labels: ["Jan", "Feb",  "Mar",  "Apr", "May",  "Jun",  "Jul", "Aug",  "Sep",  "Oct",  "Nov",  "Dec"],
                 datasets: [{
                   label: "FFMI",
                   fill: false,
@@ -392,7 +410,8 @@ block script
     function init(){
       var d = new Date();
       var month = d.getMonth()+1
-      $('#txtMonth').text(month+'월');
+      //- $('#txtMonth').text(month+'월');
+      $('#txtMonth').text(month);
       ajaxGetWeightList(month);
 
       var year = d.getFullYear();
@@ -408,7 +427,8 @@ block script
           month++;
         }
 
-        txtMonth.text(month+'월');
+        //- txtMonth.text(month+'월');
+        txtMonth.text(month);
 
         ajaxGetWeightList(month);
       });
@@ -422,7 +442,8 @@ block script
           month--;
         }
 
-        txtMonth.text(month+'월');
+        //- txtMonth.text(month+'월');
+        txtMonth.text(month);
 
         ajaxGetWeightList(month);
       });
@@ -436,7 +457,8 @@ block script
           year++;
         }
 
-        txtYear.text(year+'년');
+        //- txtYear.text(year+'년');
+        txtYear.text(year);
 
         if(txtYear.attr('data-type') == 'b'){
           ajaxGetBodycompositionList(year);
@@ -454,7 +476,8 @@ block script
           year--;
         }
 
-        txtYear.text(year+'년');
+        //- txtYear.text(year+'년');
+        txtYear.text(year);
         
         if(txtYear.attr('data-type') == 'b'){
           ajaxGetBodycompositionList(year);
@@ -481,7 +504,8 @@ block script
       chartWeight.config.data.labels = [];
       chartWeight.config.data.datasets[0].data = [];
       for(var day = 1; day <= lastDay; day++){
-        chartWeight.config.data.labels.push(day+'일');
+        //- chartWeight.config.data.labels.push(day+'일');
+        chartWeight.config.data.labels.push('Day '+ day);
         if(weightList == undefined){
           chartWeight.config.data.datasets[0].data.push(0);
         }else{
@@ -505,8 +529,10 @@ block script
         async: false, 
         data: params
       }).done(function(resultParams){
-        var message = "몸무게 기록을 정상적으로 가져왔습니다.";
-        var title = "월별 몸무게";
+        //- var message = "몸무게 기록을 정상적으로 가져왔습니다.";
+        //- var title = "월별 몸무게";
+        var message = "Successfully inquired weight records.";
+        var title = "Monthly weight";
         var type = "success";
 
         if(resultParams.isSuccess){
@@ -515,12 +541,15 @@ block script
           renderChartWeight(month);
         }else{
           type = "warning";
-          message = "몸무게 기록을 가져오는데 실패했습니다.";
+          //- message = "몸무게 기록을 가져오는데 실패했습니다.";
+          message = "Failed to check weight records.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
+        //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var message = "The server is busy. Please use it again in a moment.";
+        //- var title = "서비스점검중";
+        var title = "In Service Inspection";
         var type = "error";
         showMessage(message, title, type);
       });
@@ -562,8 +591,10 @@ block script
         async: false, 
         data: params
       }).done(function(resultParams){
-        var message = "체성분 기록을 정상적으로 가져왔습니다.";
-        var title = "체성분";
+        //- var message = "체성분 기록을 정상적으로 가져왔습니다.";
+        //- var title = "체성분";
+        var message = "Successfully inquired bodycomposition records";
+        var title = "Bodycomposition";
         var type = "success";
 
         if(resultParams.isSuccess){
@@ -572,12 +603,15 @@ block script
           renderChartBodycomposition(year);
         }else{
           type = "warning";
-          message = "체성분 기록을 가져오는데 실패했습니다.";
+          //- message = "체성분 기록을 가져오는데 실패했습니다.";
+          message = "Failed to inquired bodycomposition records.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
+        //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var message = "The server is busy. Please use it again in a moment.";
+        //- var title = "서비스점검중";
+        var title = "In Service Inspection";
         var type = "error";
         showMessage(message, title, type);
       });
@@ -611,19 +645,26 @@ block script
       var txtJudgeFFMI = $('#txtJudgeFFMI').removeClass();
 
       if(ffmi == 0){
-        txtJudgeFFMI.text('기록없음');
+        //- txtJudgeFFMI.text('기록없음');
+        txtJudgeFFMI.text('No record');
       }else if(ffmi < 18){
-        txtJudgeFFMI.text('평균이하').addClass('text-warning');
+        //- txtJudgeFFMI.text('평균이하').addClass('text-warning');
+        txtJudgeFFMI.text('Below average').addClass('text-warning');
       }else if(ffmi < 21){
-        txtJudgeFFMI.text('평균').addClass('text-primary ');
+        //- txtJudgeFFMI.text('평균').addClass('text-primary ');
+        txtJudgeFFMI.text('Average').addClass('text-primary ');
       }else if(ffmi < 23){
-        txtJudgeFFMI.text('일반인 기준 매우 좋은 몸').addClass('text-info');
+        //- txtJudgeFFMI.text('일반인 기준 매우 좋은 몸').addClass('text-info');
+        txtJudgeFFMI.text('Excellent').addClass('text-info');
       }else if(ffmi < 26){
-        txtJudgeFFMI.text('네추럴의 한계').addClass('text-success');
+        //- txtJudgeFFMI.text('네추럴의 한계').addClass('text-success');
+        txtJudgeFFMI.text('Superior').addClass('text-success');
       }else if(ffmi < 28){
-        txtJudgeFFMI.text('축복받은 몸이거나 약물사용 가능성 있음').addClass('text-danger');
+        //- txtJudgeFFMI.text('축복받은 몸이거나 약물사용 가능성 있음').addClass('text-danger');
+        txtJudgeFFMI.text('Scores considered suspicious but still attainable naturally').addClass('text-danger');
       }else if(ffmi >= 28){
-        txtJudgeFFMI.text('약물없이 도달할 수 없는 몸').addClass('text-danger');
+        //- txtJudgeFFMI.text('약물없이 도달할 수 없는 몸').addClass('text-danger');
+        txtJudgeFFMI.text('Highly unlikely scores to be obtained naturally without steroid usage').addClass('text-danger');
       }
     }
 
@@ -639,7 +680,8 @@ block script
         async: false, 
         data: params
       }).done(function(resultParams){
-        var message = "FFMI 기록을 정상적으로 가져왔습니다.";
+        //- var message = "FFMI 기록을 정상적으로 가져왔습니다.";
+        var message = "Successfully inquired FFMI records.";
         var title = "FFMI";
         var type = "success";
 
@@ -649,12 +691,15 @@ block script
           renderChartFFMI(year);
         }else{
           type = "warning";
-          message = "FFMI 기록을 가져오는데 실패했습니다.";
+          //- message = "FFMI 기록을 가져오는데 실패했습니다.";
+          message = "Failed to inquired FFMI records.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
+        //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var message = "The server is busy. Please use it again in a moment.";
+        //- var title = "서비스점검중";
+        var title = "In Service Inspection";
         var type = "error";
         showMessage(message, title, type);
       });

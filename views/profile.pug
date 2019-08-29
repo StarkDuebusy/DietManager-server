@@ -8,23 +8,27 @@ block content
           .card-header
             .row
               .col-md-12
-                h5.card-title.mb-0.mt-2 나의 프로필
+                //- h5.card-title.mb-0.mt-2 나의 프로필
+                h5.card-title.mb-0.mt-2 My profile
           .card-body
             form#smartwizard-validation.wizard.wizard-primary(action='javascript:void(0)')
               ul
                 li
                   a(href='#validation-step-1')
-                    | 1단계
+                    //- | 1단계
+                    | Step 1.
                     br
                     small ID/PW
                 li
                   a(href='#validation-step-2')
-                    | 2단계
+                    //- | 2단계
+                    | Step 2.
                     br
                     small 정보
                 li
                   a(href='#validation-step-3')
-                    | 내용확인
+                    //- | 내용확인
+                    | Confirm
               div
                 #validation-step-1
                   .col-12.text-center 
@@ -39,57 +43,71 @@ block content
                         i.far.fa-folder-open
                   .form-group
                     label.form-label
-                      | 이름
+                      //- | 이름
+                      | Name
                       span.text-danger *
                     input#editUserName.form-control.required(name='wizard-userName' value=userName type='text')
                   .form-group
                     label.form-label
-                      | 이메일
+                      //- | 이메일
+                      | Email
                       span.text-danger *
                     input#editEmail.form-control.required.email(name='wizard-email' value=email type='text' disabled)
                   .form-group
                     label.form-label
-                      | 비밀번호 변경
+                      //- | 비밀번호 변경
+                      | New password
                     input#editPassword.form-control.validate-equalTo-blur(name='validation-password' value=password type='password' oninput='checkPassword()')
                     small.form-text.text-muted
-                      | 비밀번호 변경을 원하시면 입력해주세요.
+                      //- | 비밀번호 변경을 원하시면 입력해주세요.
+                      | Enter password if you want to change.
                   .form-group
                     label.form-label
-                      | 비밀번호 확인
+                      //- | 비밀번호 확인
+                      | Confrim new password
                     input#confirmPassword.form-control(name='validation-password-confirmation' value=passwordConfirmation type='password' oninput='checkPassword()' aria-invalid='false')
                     label#validation-password-confirmation-error.error.jquery-validation-error.small.form-text.invalid-feedback(for='validation-password-confirmation')
-                      | 비밀번호가 일치하지 않습니다.
+                      //- | 비밀번호가 일치하지 않습니다.
+                      | Password doesn't match.
                   .col-md-12(style="text-align : right")
                     button#btnChangePassword.btn.btn-primary(type='button' disabled)
-                      | 변경하기
+                      //- | 변경하기
+                      | Change
                 #validation-step-2
                   .form-group
                     label.form-label
-                      | 생년월일
+                      //- | 생년월일
+                      | Birth
                       span.text-danger *
                     input#editBirth.form-control(type='text' name='datesingle' value=birth)
                   .form-group
                     label.form-label
-                      | 성별
+                      //- | 성별
+                      | Sex
                       span.text-danger *
                     .form-group
                       if gender == 'm'
                         label.custom-control.custom-radio.custom-control-inline
-                          input.custom-control-input(name='editRadioGender' type='radio' value='m' data-txt='남자' checked)
-                          span.custom-control-label 남자
+                          input.custom-control-input(name='editRadioGender' type='radio' value='m' data-txt='Male' checked)
+                          //- span.custom-control-label 남자
+                          span.custom-control-label Male
                         label.custom-control.custom-radio.custom-control-inline
-                          input.custom-control-input(name='editRadioGender' type='radio' value='f'  data-txt='여자')
-                          span.custom-control-label 여자
+                          input.custom-control-input(name='editRadioGender' type='radio' value='f'  data-txt='Female')
+                          //- span.custom-control-label 여자
+                          span.custom-control-label Female
                       else
                         label.custom-control.custom-radio.custom-control-inline
-                          input.custom-control-input(name='editRadioGender' type='radio' value='m' data-txt='남자' )
-                          span.custom-control-label 남자
+                          input.custom-control-input(name='editRadioGender' type='radio' value='m' data-txt='Male' )
+                          //- span.custom-control-label 남자
+                          span.custom-control-label Male
                         label.custom-control.custom-radio.custom-control-inline
-                          input.custom-control-input(name='editRadioGender' type='radio' value='f'  data-txt='여자' checked)
-                          span.custom-control-label 여자
+                          input.custom-control-input(name='editRadioGender' type='radio' value='f'  data-txt='Female' checked)
+                          //- span.custom-control-label 여자
+                          span.custom-control-label Female
                   .form-group
                     label.form-label
-                      | 몸무게
+                      //- | 몸무게
+                      | Body weight
                       span.text-danger *
                     input#editWeight.form-control.required(name='wizard-userWeight' type='number' placeholder="ex) 71.9" value=weight)
                   .form-group
@@ -105,46 +123,58 @@ block content
                       img.rounded-circle.rounded.mr-2.mb-2(src='/img/avatar.png' alt='Placeholder' width='140' height='140')
                   .form-group
                     label.form-label
-                      | 이름
+                      //- | 이름
+                      | Name
                     input#editResUserName.form-control.required(name='wizard-userName' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 이메일
+                      //- | 이메일
+                      | Email
                     input#editResEmail.form-control.required.email(name='wizard-email' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 생년월일
+                      //- | 생년월일
+                      | Birth
                     input#editResBirth.form-control.required.email(name='wizard-birth' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 성별
+                      //- | 성별
+                      | Sex
                     input#editResGender.form-control.required.email(name='wizard-birth' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 몸무게
+                      //- | 몸무게
+                      | Body weight
                     input#editResWeight.form-control.required.email(name='wizard-weight' type='number' disabled)
                   .form-group
                     label.form-label
-                      | 키
+                      //- | 키
+                      | Height
                     input#editResHeight.form-control.required.email(name='wizard-height' type='number' disabled)
                   .col-md-12(style="text-align : right")
                     button.btn.btn-danger(type='button', data-toggle='modal', data-target='#membershipWithdrawal' )
-                      | 회원 탈퇴
+                      //- | 회원 탈퇴
+                      | Membership withdrawal
                     #membershipWithdrawal.modal.fade(tabindex='-1', role='dialog', aria-hidden='true')
                       .modal-dialog.modal-dialog-centered(role='document')
                         .modal-content
                           .modal-header
-                            h5.modal-title 회원 탈퇴
+                            //- h5.modal-title 회원 탈퇴
+                            h5.modal-title Membership withdrawal
                             button.close(type='button', data-dismiss='modal', aria-label='Close')
                               span(aria-hidden='true') ×
                           .modal-body.m-3(style="text-align : left")
                             p.mb-0
-                              | 회원님의 개인정보,운동기록등 모든 기록이 삭제되면 복구 하실 수 없습니다.
+                              //- | 회원님의 개인정보,운동기록등 모든 기록이 삭제되면 복구 하실 수 없습니다.
+                              | If all your personal information, exercise records, etc. are deleted, you will not be able to recover them.
                             p.mb-0
-                              | 정말로 탈퇴하시겠습니까?
+                              //- | 정말로 탈퇴하시겠습니까?
+                              | Are you sure you want to withdrawal?
                           .modal-footer
-                            button#btnModalWithdrawal.btn.btn-secondary(type='button', data-dismiss='modal') 아니요
-                            button#withdrawalProfile.btn.btn-danger(type='button') 네
+                            //- button#btnModalWithdrawal.btn.btn-secondary(type='button', data-dismiss='modal') 아니요
+                            //- button#withdrawalProfile.btn.btn-danger(type='button') 네
+                            button#btnModalWithdrawal.btn.btn-secondary(type='button', data-dismiss='modal') No
+                            button#withdrawalProfile.btn.btn-danger(type='button') Yes
                   
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
@@ -175,11 +205,14 @@ block content
                       useURLhash: false,
                       showStepURLhash: false,
                       lang: {  // Language variables
-                          next: '다음', 
-                          previous: '이전'
+                          //- next: '다음', 
+                          //- previous: '이전'
+                          next: 'next', 
+                          previous: 'prev'
                       },
                       toolbarSettings: {
-                      toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">수정하기</button>')]
+                      //- toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">수정하기</button>')]
+                      toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">Submit</button>')]
                       }
                   })
                   .on('leaveStep', function(e, anchorObject, stepNumber, stepDirection) {
@@ -212,7 +245,8 @@ block content
                     return false;
                   }).hide();
 
-                  moment.locale('ko');
+                  //- moment.locale('ko');
+                  moment.locale('us');
                   $('input[name="datesingle"]').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
@@ -276,8 +310,10 @@ block script
         processData : false,
         contentType : false,
         error: function(xhr, status, error){
-          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-          var title = "서비스점검중";
+          //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var message = "The server is busy. Please use it again in a moment.";
+          //- var title = "서비스점검중";
+          var title = "In Service Inspection";
           var type = "error";
           toastr[type](message, title, {
                 positionClass: "toast-top-right",
@@ -289,8 +325,10 @@ block script
                 });
         },
         success : function(resultParams){
-          var message = "회원정보가 수정되었습니다.";
-          var title = "나의 프로필 수정";
+          //- var message = "회원정보가 수정되었습니다.";
+          //- var title = "나의 프로필 수정";
+          var message = "Successfully modified my profile.";
+          var title = "My profile";
           var type = "success";
 
           if(resultParams.isSuccess){
@@ -299,11 +337,12 @@ block script
           }else if(resultParams.needLogin){
             $('#btnMenuLogIn').trigger('click');
             type = "warning";
-            message = "로그인이 필요한 서비스입니다.";
+            //- message = "로그인이 필요한 서비스입니다.";
+            message = "This service requires login.";
             showMessage(message, title, type);
           }else{
               type = "warning";
-              message = "회원정보를 수정하지 못했습니다.";
+              message = "Failed to modify my profile.";
               showMessage(message, title, type);
             }
           }
@@ -318,8 +357,10 @@ block script
       }).done(function(resultParams){
         if(resultParams.isSuccess){
           var type = "success";
-          var title = "회원 탈퇴 성공";
-          var message = "그동안 다이어트 매니저를 이용해주셔서 감사합니다.";
+          //- var title = "회원 탈퇴 성공";
+          //- var message = "그동안 다이어트 매니저를 이용해주셔서 감사합니다.";
+          var title = "Membership withdrawal";
+          var message = "Thank you for using the diet manager.";
           toastr[type](message, title, {
             positionClass: "toast-top-right",
             closeButton: true,
@@ -333,15 +374,19 @@ block script
           });
         }else{
           var type ="warning";
-          var title = "회원 탈퇴 실패";
-          var message = " 회원탈퇴에 실패 하셨습니다.";
+          //- var title = "회원 탈퇴 실패";
+          //- var message = " 회원탈퇴에 실패 하셨습니다.";
+          var title = "Membership withdrawal";
+          var message = "Failed to withdraw your membership.";
           showMessage(message, title, type);
 
           $('#btnModalWithdrawal').trigger('click');
         }
         }).fail(function(resultParams){
-          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-          var title = "서비스점검중";
+          //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var message = "The server is busy. Please use it again in a moment.";
+          //- var title = "서비스점검중";
+          var title = "In Service Inspection";
           var type = "error";
           showMessage(message, title, type);
 
@@ -389,8 +434,10 @@ block script
          data: params
        }).done(function(resultParams) {
          var type = "success";
-         var title = "비밀번호 변경";
-         var message = "비밀번호가 변경되었습니다.";
+        //-  var title = "비밀번호 변경";
+        //-  var message = "비밀번호가 변경되었습니다.";
+         var title = "Change password";
+         var message = "Successfully changed password.";
          
          if(resultParams.isSuccess){
             showMessage(message, title, type);
@@ -398,17 +445,21 @@ block script
           }else if(resultParams.needLogin){
             $('#btnMenuLogIn').trigger('click');
             type = "warning";
-            message = "로그인이 필요한 서비스입니다.";
+            //- message = "로그인이 필요한 서비스입니다.";
+            message = "This service requires login.";
             showMessage(message, title, type);
           }else{
               type = "warning";
-              message = "비밀번호를 변경하지 못했습니다.";
+              //- message = "비밀번호를 변경하지 못했습니다.";
+              message = "Failed to change password.";
               showMessage(message, title, type);
             }
        }).fail(function(resultParams) {
-         var message = "서버가 혼잡하오니 잠시후 다시 이용 부탁드립니다.";
-         var title = "서비스 점검중";
-         var type = "error";
-         showMessage(message, title, type);
+          //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var message = "The server is busy. Please use it again in a moment.";
+          //- var title = "서비스점검중";
+          var title = "In Service Inspection";
+          var type = "error";
+          showMessage(message, title, type);
        });
      }

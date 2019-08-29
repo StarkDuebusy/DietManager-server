@@ -74,7 +74,8 @@ router.put('/',function(req,res,next){
                 var mailOption = {
                   from : config.mailInfo.user ,
                   to: req.body.email,
-                  subject: '[다이어트 매니저]임시비밀번호 발급 ',//String
+                  // subject: '[다이어트 매니저]임시비밀번호 발급 ',//String
+                  subject: '[Diet manager]Issue a temporary password ',//String
                   html: html
 
                 };

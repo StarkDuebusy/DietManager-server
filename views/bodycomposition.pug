@@ -8,17 +8,21 @@ block content
           .card-header
             .row
               .col-md-12
-                strong.card-title.mb-0.mt-2 체성분 기록
+                //- strong.card-title.mb-0.mt-2 체성분 기록
+                strong.card-title.mb-0.mt-2 Bodycomposition record
                 span  
                 if userName == null
-                  #btnFakeNeedLogin.btn.btn-pill.btn-primary 체성분 등록
+                  //- #btnFakeNeedLogin.btn.btn-pill.btn-primary 체성분 등록
+                  #btnFakeNeedLogin.btn.btn-pill.btn-primary Registration
                 else
-                  .btn.btn-pill.btn-primary(data-toggle="modal" data-target="#modalDietGuide") 체성분 등록
+                  //- .btn.btn-pill.btn-primary(data-toggle="modal" data-target="#modalDietGuide") 체성분 등록
+                  .btn.btn-pill.btn-primary(data-toggle="modal" data-target="#modalDietGuide") Registration
                 #modalDietGuide.modal.fade(tabindex='-1' role='dialog' aria-hidden='true')
                   .modal-dialog.modal-dialog-centered(role='document')
                     .modal-content
                       .modal-header
-                        h5.modal-title 체성분 등록
+                        //- h5.modal-title 체성분 등록
+                        h5.modal-title Registration
                         button.close(type='button' data-dismiss='modal' aria-label='Close')
                           span(aria-hidden='true') &times;
                       .modal-body.m-3
@@ -26,53 +30,64 @@ block content
                           ul
                             li
                               a(href='#validation-step-1')
-                                | 1단계
+                                //- | 1단계
+                                | Step 1.
                                 br
-                                small 체성분 기록
+                                //- small 체성분 기록
+                                small Registration
                             li
                               a(href='#validation-step-2')
-                                | 내용확인
+                                //- | 내용확인
+                                | Confirm
                           div
                             #validation-step-1
                               .form-group
                                 label.form-label
-                                  | 측정일
+                                  //- | 측정일
+                                  | Date
                                   span.text-danger *
                                 input#editRecordDate.form-control(type='text' name='datesingle')
                               .form-group
                                 label.form-label
-                                  | 몸무게
+                                  //- | 몸무게
+                                  | Body weight
                                   span.text-danger *
                                 input#editWeight.form-control.required(name='wizard-userWeight' type='number' value=defaultWeight)
                               .form-group
                                 label.form-label
-                                  | 골격근량
+                                  //- | 골격근량
+                                  | Skeletal muscle mass
                                   span.text-danger *
                                 input#editBodyMuscle.form-control.required(name='wizard-userBodyMuscle' type='number' value=defaultMuscle)
                               .form-group
                                 label.form-label
-                                  | 체지방량
+                                  //- | 체지방량
+                                  | Body fat mass
                                   span.text-danger *
                                 input#editBodyFat.form-control.required(name='wizard-userBodyFat' type='number' value=defaultFat)
                             #validation-step-2
                               .form-group
                                 label.form-label
-                                  | 측정일
+                                  //- | 측정일
+                                  | Date
                                   span.text-danger *
                                 input#editResRecordDate.form-control(type='text' name='datesingle' disabled)
                               .form-group
                                 label.form-label
-                                  | 몸무게
+                                  //- | 몸무게
+                                  | Body weight
                                   span.text-danger *
                                 input#editResWeight.form-control.required(name='wizard-userWeight' type='number' disabled)
                               .form-group
                                 label.form-label
-                                  | 골격근량
+                                  //- | 골격근량
+                                  | Skeletal muscle mass
                                   span.text-danger *
                                 input#editResBodyMuscle.form-control.required(name='wizard-userBodyMuscle' type='number'  disabled)
                               .form-group
                                 label.form-label
-                                  | 체지방량
+                                  //- | 체지방량
+                                  | Body fat mass
                                   span.text-danger *
                                 input#editResBodyFat.form-control.required(name='wizard-userBodyFat' type='number' disabled)
                           script.
@@ -104,11 +119,14 @@ block content
                                   useURLhash: false,
                                   showStepURLhash: false,
                                   lang: {  // Language variables
-                                      next: '다음', 
-                                      previous: '이전'
+                                      //- next: '다음', 
+                                      next: 'Next', 
+                                      //- previous: '이전'
+                                      previous: 'Prev'
                                   },
                                   toolbarSettings: {
-                                  toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">등록하기</button>')]
+                                  //- toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">등록하기</button>')]
+                                  toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">Submit</button>')]
                                   }
                               })
                               .on('leaveStep', function(e, anchorObject, stepNumber, stepDirection) {
@@ -138,7 +156,8 @@ block content
                                 return false;
                               }).hide();
 
-                              moment.locale('ko');
+                              //- moment.locale('ko');
+                              moment.locale('us');
                               $('input[name="datesingle"]').daterangepicker({
                                 singleDatePicker: true,
                                 showDropdowns: true,
@@ -151,11 +170,16 @@ block content
             table#datatables-buttons.table.table-striped(style='width:100%')
               thead
                 tr
-                  th 측정일
-                  th 몸무게
-                  th 골격근량
-                  th.d-none.d-xl-table-cell 체지방량
-                  th 체지방률
+                  //- th 측정일
+                  th Date
+                  //- th 몸무게
+                  th Body weight
+                  //- th 골격근량
+                  th Skeletal muscle mass
+                  //- th.d-none.d-xl-table-cell 체지방량
+                  th.d-none.d-xl-table-cell Body fat mass
+                  //- th 체지방률
+                  th Percent body fat
               tbody
                 each record in recordList
                   tr
@@ -165,12 +189,16 @@ block content
                     td.d-none.d-xl-table-cell #{record.BODY_FAT}KG
                     td #{record.BODY_FAT_PERCENTAGE}%
               tfoot
-                tr
-                  th 측정일
-                  th 몸무게
-                  th 골격근량
-                  th.d-none.d-xl-table-cell 체지방량
-                  th 체지방률
+                //- th 측정일
+                th Date
+                //- th 몸무게
+                th Body weight
+                //- th 골격근량
+                th Skeletal muscle mass
+                //- th.d-none.d-xl-table-cell 체지방량
+                th.d-none.d-xl-table-cell Body fat mass
+                //- th 체지방률
+                th Percent body fat
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
                   var datatablesButtons = $('#datatables-buttons').DataTable({
@@ -185,7 +213,8 @@ block content
                       },
                       {
                         extend: 'print',
-                        text: '인쇄',
+                        //- text: '인쇄',
+                        text: 'print',
                         className: 'btn btn-primary btn-print ',
                         exportOptions: {
                             modifier: {
@@ -196,13 +225,17 @@ block content
                         $(win.document.body).find('h1').css('text-align','center');
                       }
                     }],
-                    responsive: true,
+                    responsive: true
+                    ,
                     "language": {
-                      "zeroRecords": "체성분 기록이 없습니다. 체성분을 등록해주세요.",
-                      "info": "총 _PAGES_페이지 중 _PAGE_페이지",
+                      //- "zeroRecords": "체성분 기록이 없습니다. 체성분을 등록해주세요.",
+                      "zeroRecords": "No data. Please register your bodycomposition.",
+                      //- "info": "총 _PAGES_페이지 중 _PAGE_페이지",
                       "paginate":{
-                        "next" : "다음",
-                        "previous" : "이전"
+                        //- "next" : "다음",
+                        "next" : "next",
+                        //- "previous" : "이전"
+                        "previous" : "prev"
                       }
                     }
                   });
@@ -217,8 +250,10 @@ block script
         
         $('#btnMenuLogIn').trigger('click');
 
-        var message = "로그인이 필요한 서비스입니다.";
-        var title = "체성분 등록";
+        //- var message = "로그인이 필요한 서비스입니다.";
+        //- var title = "체성분 등록";
+        var message = "This service requires login.";
+        var title = "Registration";
         var type = "warning";
         showMessage(message, title, type);
       });   
@@ -243,8 +278,10 @@ block script
         async: false, 
         data: params
       }).done(function(resultParams){
-        var message = "체성분 데이터가 정상적으로 등록되었습니다.";
-        var title = "체성분 등록";
+        //- var message = "체성분 데이터가 정상적으로 등록되었습니다.";
+        //- var title = "체성분 등록";
+        var message = "Registration success.";
+        var title = "Registration";
         var type = "success";
 
         if(resultParams.isSuccess){
@@ -253,16 +290,20 @@ block script
         }else if(resultParams.needLogin){
           $('#btnMenuLogIn').trigger('click');
           type = "warning";
-          message = "로그인이 필요한 서비스입니다.";
+          //- message = "로그인이 필요한 서비스입니다.";
+          message = "This service requires login.";
           showMessage(message, title, type);
         }else{
           type = "warning";
-          message = "체성분 데이터를 등록하지 못하였습니다.";
+          //- message = "체성분 데이터를 등록하지 못하였습니다.";
+          message = "Registration fail.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
+        //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var message = "The server is busy. Please use it again in a moment.";
+        //- var title = "서비스점검중";
+        var title = "In Service Inspection";
         var type = "error";
         showMessage(message, title, type);
       });

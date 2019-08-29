@@ -8,23 +8,30 @@ block content
           .card-header
             .row
               .col-md-12
-                strong.card-title.mb-0.mt-2 몸무게/식단 기록 
+                //- strong.card-title.mb-0.mt-2 몸무게/식단 기록 
+                strong.card-title.mb-0.mt-2 Weight/Diet record 
                 span  
-                #btnModalDietGuide.btn.btn-pill.btn-primary(data-toggle="modal" data-target="#modalDietGuide") 대체식단
+                //- #btnModalDietGuide.btn.btn-pill.btn-primary(data-toggle="modal" data-target="#modalDietGuide") 대체식단
+                #btnModalDietGuide.btn.btn-pill.btn-primary(data-toggle="modal" data-target="#modalDietGuide") Alternative diet
                 #modalDietGuide.modal.fade(tabindex='-1' role='dialog' aria-hidden='true')
                   .modal-dialog.modal-dialog-centered(role='document')
                     .modal-content
                       .modal-header
-                        h5.modal-title 대체 식단
+                        //- h5.modal-title 대체 식단
+                        h5.modal-title Alternative diet
                         button.close(type='button' data-dismiss='modal' aria-label='Close')
                           span(aria-hidden='true') &times;
                       .modal-body.m-3
                         .form-group
                           label.form-label
-                            | 1식당 권장 단백질 섭취량
-                            span.text-info.areaTxtMealFrequency  - 1일 
+                            //- | 1식당 권장 단백질 섭취량
+                            | Recommended protein intake per meal
+                            //- span.text-info.areaTxtMealFrequency  - 1일 
+                            //- span.text-info.areaTxtMealFrequency.txtMealFrequency 
+                            //- span.text-info.areaTxtMealFrequency 식 기준
+                            span.text-info.areaTxtMealFrequency  - Based on 
                             span.text-info.areaTxtMealFrequency.txtMealFrequency 
-                            span.text-info.areaTxtMealFrequency 식 기준
+                            span.text-info.areaTxtMealFrequency meals per day
                           .form-row
                             .form-group.col-4
                               select#selProtein.form-control.selNutrition
@@ -34,10 +41,14 @@ block content
                               strong#txtProteinGram.areaTxtGram
                         .form-group
                           label.form-label
-                            | 1식당 권장 탄수화물 섭취량
-                            span.text-info.areaTxtMealFrequency  - 1일 
+                            //- | 1식당 권장 탄수화물 섭취량
+                            //- span.text-info.areaTxtMealFrequency  - 1일 
+                            //- span.text-info.areaTxtMealFrequency.txtMealFrequency 
+                            //- span.text-info.areaTxtMealFrequency 식 기준
+                            | Recommended carbohydrate intake per meal
+                            span.text-info.areaTxtMealFrequency  - Based on 
                             span.text-info.areaTxtMealFrequency.txtMealFrequency 
-                            span.text-info.areaTxtMealFrequency 식 기준
+                            span.text-info.areaTxtMealFrequency meals per day
                           .form-row
                             .form-group.col-4
                               select#selCarbo.form-control.selNutrition
@@ -46,17 +57,24 @@ block content
                             .form-group.col-4
                               strong#txtCarboGram.areaTxtGram
                       .modal-footer
-                        button.btn.btn-primary(type='button'  data-dismiss='modal') 알겠어요.
+                        //- button.btn.btn-primary(type='button'  data-dismiss='modal') 알겠어요.
+                        button.btn.btn-primary(type='button'  data-dismiss='modal') Yes
           .card-body
             table#datatables-buttons.table.table-striped(style='width:100%')
               thead
                 tr
-                  th 기록일
-                  th.d-none.d-xl-table-cell 식사빈도
-                  th.d-none.d-xl-table-cell 목표 몸무게
-                  th 몸무게
-                  th 닭가슴살
-                  th 고구마
+                  //- th 기록일
+                  //- th.d-none.d-xl-table-cell 식사빈도
+                  //- th.d-none.d-xl-table-cell 목표 몸무게
+                  //- th 몸무게
+                  //- th 닭가슴살
+                  //- th 고구마
+                  th Date
+                  th.d-none.d-xl-table-cell Frequency of meals
+                  th.d-none.d-xl-table-cell Target weight
+                  th Body weight
+                  th Chicken breast
+                  th Sweet potato
               tbody
                 each record in recordList
                   tr
@@ -68,12 +86,18 @@ block content
                     td #{record.CARBO}g
               tfoot
                 tr
-                  th 기록일
-                  th.d-none.d-xl-table-cell 식사빈도
-                  th.d-none.d-xl-table-cell 목표 몸무게
-                  th 몸무게
-                  th 닭가슴살
-                  th 고구마
+                  //- th 기록일
+                  //- th.d-none.d-xl-table-cell 식사빈도
+                  //- th.d-none.d-xl-table-cell 목표 몸무게
+                  //- th 몸무게
+                  //- th 닭가슴살
+                  //- th 고구마
+                  th Date
+                  th.d-none.d-xl-table-cell Frequency of meals
+                  th.d-none.d-xl-table-cell Target weight
+                  th Body weight
+                  th Chicken breast
+                  th Sweet potato
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
                   var datatablesButtons = $('#datatables-buttons').DataTable({
@@ -87,7 +111,8 @@ block content
                       },
                       {
                         extend: 'print',
-                        text: '인쇄',
+                        //- text: '인쇄',
+                        text: 'print',
                         className: 'btn btn-primary btn-print ',
                         exportOptions: {
                             modifier: {
@@ -100,11 +125,15 @@ block content
                     }],
                     responsive: true,
                     "language": {
-                      "zeroRecords": "몸무게/식단 기록이 없습니다. [1일 다이어트 일지]를 작성해주세요.",
-                      "info": "총 _PAGES_페이지 중 _PAGE_페이지",
+                      //- "zeroRecords": "몸무게/식단 기록이 없습니다. [1일 다이어트 일지]를 작성해주세요.",
+                      //- "info": "총 _PAGES_페이지 중 _PAGE_페이지",
+                      //- "paginate":{
+                      //-   "next" : "다음",
+                      //-   "previous" : "이전"
+                      "zeroRecords": "There is no weight/ diet record. Please record to [One-day diet diary].",
                       "paginate":{
-                        "next" : "다음",
-                        "previous" : "이전"
+                        "next" : "next",
+                        "previous" : "prev"
                       }
                     }
                   });
@@ -142,7 +171,8 @@ block script
         data: params
       }).done(function(resultParams){
         var message = "";
-        var title = "1일 권장 섭취량";
+        //- var title = "1일 권장 섭취량";
+        var title = "recommended daily intake";
         var type = "";
 
         if(resultParams.isSuccess){
@@ -157,18 +187,23 @@ block script
           $('.areaTxtMealFrequency').show();
         }else if(resultParams.needLogin){
           $('.areaTxtMealFrequency').hide();
-          $('.areaTxtGram').text("로그인이 필요한 서비스입니다.");
+          //- $('.areaTxtGram').text("로그인이 필요한 서비스입니다.");
+          $('.areaTxtGram').text("This service requires login.");
         }else if(resultParams.needDietPlan){
           $('.areaTxtMealFrequency').hide();
-          $('.areaTxtGram').text("먼저 다이어트 목표를 설정해주세요.");
+          //- $('.areaTxtGram').text("먼저 다이어트 목표를 설정해주세요.");
+          $('.areaTxtGram').text("Please set your diet goal first.");
         }else{
           type = "warning";
-          message = "1일 권장 섭취량을 가져오는데 실패했습니다.";
+          //- message = "1일 권장 섭취량을 가져오는데 실패했습니다.";
+          message = "Failed to get recommended daily intake.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
+        //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var message = "The server is busy. Please use it again in a moment.";
+        //- var title = "서비스점검중";
+        var title = "In Service Inspection";
         var type = "error";
         showMessage(message, title, type);
       });

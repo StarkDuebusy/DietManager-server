@@ -8,101 +8,130 @@ block content
           .card-header
             .row
               .col-md-12
-                h5.card-title.mb-0.mt-2 다이어트 목표 설정
+                //- h5.card-title.mb-0.mt-2 운동 목표 설정
+                h5.card-title.mb-0.mt-2 Setting up a diet plan
           .card-body
             form#smartwizard-validation.wizard.wizard-primary(action='javascript:void(0)')
               ul
                 li
                   a(href='#validation-step-1')
-                    | 1단계
+                    //- | 1단계
+                    | Step 1.
                     br
-                    small 몸무게
+                    //- small 몸무게
+                    small Body weight
                 li
                   a(href='#validation-step-2')
-                    | 2단계
+                    //- | 2단계
+                    | Step 2.
                     br
-                    small 운동빈도
+                    //- small 운동빈도
+                    small Frequency of workout
                 li
                   a(href='#validation-step-3')
-                    | 3단계
+                    //- | 3단계
+                    | Step 3.
                     br
-                    small 식사빈도
+                    //- small 식사빈도
+                    small Frequency of meal
                 li
                   a(href='#validation-step-4')
-                    | 내용확인
+                    | Confirm
               div
                 #validation-step-1
                   .form-group
                     label.form-label
-                      | 현재 몸무게
+                      //- | 현재 몸무게
+                      | Today's weight
                       span.text-danger *
                     input#editCurrnetWeight.form-control.required(name='wizard-currentWeight' type='number' placeholder="ex) 77.15" value=planCurrentWeight)
                   .form-group
                     label.form-label
-                      | 목표 몸무게
+                      //- | 목표 몸무게
+                      | Target weight
                       span.text-danger *
                     input#editTargetWeight.form-control.required(name='wizard-targetWeight' type='number' placeholder="ex) 70.0" value=planTargetWeight)
                   .col-12.text-right 
                     span.text-danger *
-                    span 현재/목표 몸무게의 격차는 
-                    strong.text-danger 20kg 
-                    span 이내를 권장하고 있습니다.
+                    //- span 현재/목표 몸무게의 격차는 
+                    //- strong.text-danger 20kg 
+                    //- span 이내를 권장하고 있습니다.
+                    span We recommend that the current and target weight gap is less than
+                    strong.text-danger 20kg.
                 #validation-step-2
                   .form-group
                     label.form-label
-                      | 주당 운동일수
+                      //- | 주당 운동일수
+                      | Workout days per week
                       span.text-danger *
                     .form-group
+                      //- label.custom-control.custom-radio.custom-control-inline
+                      //-   input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='1' data-txt='3일 이내' checked)
+                      //-   span.custom-control-label 3일 이내
+                      //- label.custom-control.custom-radio.custom-control-inline
+                      //-   input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='2'  data-txt='3~4일')
+                      //-   span.custom-control-label 3~4일
+                      //- label.custom-control.custom-radio.custom-control-inline
+                      //-   input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='3'  data-txt='5일 이상')
+                      //-   span.custom-control-label 5일 이상
                       label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='1' data-txt='3일 이내' checked)
-                        span.custom-control-label 3일 이내
+                        input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='1' data-txt='Within 3days' checked)
+                        span.custom-control-label Within 3days
                       label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='2'  data-txt='3~4일')
-                        span.custom-control-label 3~4일
+                        input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='2'  data-txt='3~4days')
+                        span.custom-control-label 3~4days
                       label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='3'  data-txt='5일 이상')
-                        span.custom-control-label 5일 이상
+                        input.custom-control-input(name='editRadioWorkoutFrequency' type='radio' value='3'  data-txt='More than 5days')
+                        span.custom-control-label More than 5days
                 #validation-step-3
                   .form-group
                     label.form-label
-                      | 1일 식사빈도
+                      //- | 1일 식사빈도
+                      | Meal frequency per day
                       span.text-danger *
                     .form-group
                       label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='3' data-txt='1일 3식')
-                        span.custom-control-label 3식
+                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='3' data-txt='3meals')
+                        span.custom-control-label 3meals
                       label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='4'  data-txt='1일 4식')
-                        span.custom-control-label 4식
+                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='4'  data-txt='4meals')
+                        span.custom-control-label 4meals
                       label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='5'  data-txt='1일 5식' checked)
-                        span.custom-control-label 5식
+                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='5'  data-txt='5meals' checked)
+                        span.custom-control-label 5meals
                       label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='6'  data-txt='1일 6식')
-                        span.custom-control-label 6식
+                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='6'  data-txt='6meals')
+                        span.custom-control-label 6meals
                       label.custom-control.custom-radio.custom-control-inline
-                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='7'  data-txt='1일 7식')
-                        span.custom-control-label 7식
+                        input.custom-control-input(name='editRadioMealFrequency' type='radio' value='7'  data-txt='7meals')
+                        span.custom-control-label 7meals
                       .col-12.text-right 
                         span.text-danger *
-                        strong.text-danger 1일 4식 
-                        span 이상을 권장합니다.
+                        //- strong.text-danger 1일 4식 
+                        //- span 이상을 권장합니다.
+                        span We recommend at least 
+                        strong.text-danger 4meals 
+                        spen per day.
                 #validation-step-4
                   .form-group
                     label.form-label
-                      | 현재 몸무게
+                      //- | 현재 몸무게
+                      | Today's weight
                     input#editResCurrnetWeight.form-control(name='wizard-currentWeight' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 목표 몸무게
+                      //- | 목표 몸무게
+                      | Target weight
                     input#editResTargetWeight.form-control(name='wizard-targetWeight' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 주당 운동일
+                      //- | 주당 운동일
+                      | Workout days per week
                     input#editResWorkoutFrequency.form-control(name='wizard-workoutFrequency' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 식사 빈도
+                      //- | 식사 빈도
+                      | Meal frequency per day
                     input#editResMealFrequency.form-control(name='wizard-mealFrequency' type='text' disabled)
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
@@ -133,11 +162,14 @@ block content
                       useURLhash: false,
                       showStepURLhash: false,
                       lang: {  // Language variables
-                          next: '다음', 
-                          previous: '이전'
+                          //- next: '다음', 
+                          //- previous: '이전'
+                          next: 'next', 
+                          previous: 'prev'
                       },
                       toolbarSettings: {
-                      toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">등록하기</button>')]
+                      //- toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">등록하기</button>')]
+                      toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">Submit</button>')]
                       }
                   })
                   .on('leaveStep', function(e, anchorObject, stepNumber, stepDirection) {
@@ -167,7 +199,8 @@ block content
                     return false;
                   }).hide();
 
-                  moment.locale('ko');
+                  //- moment.locale('ko');
+                  moment.locale('us');
                   $('input[name="datesingle"]').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
@@ -222,8 +255,10 @@ block script
         async: false, 
         data: params
       }).done(function(resultParams){
-        var message = "운동 목표가 정상적으로 등록되었습니다.";
-        var title = "운동 목표 설정";
+        //- var message = "운동 목표가 정상적으로 등록되었습니다.";
+        //- var title = "운동 목표 설정";
+        var message = "Diet plan has been registered successful.";
+        var title = "Setting up a diet plan";
         var type = "success";
 
         if(resultParams.isSuccess){
@@ -232,16 +267,20 @@ block script
         }else if(resultParams.needLogin){
           $('#btnMenuLogIn').trigger('click');
           type = "warning";
-          message = "로그인이 필요한 서비스입니다.";
+          //- message = "로그인이 필요한 서비스입니다.";
+          message = "This service requires login.";
           showMessage(message, title, type);
         }else{
           type = "warning";
-          message = "운동 목표 등록을 실패했습니다.";
+          //- message = "운동 목표 등록을 실패했습니다.";
+          message = "Failed to register diet plan.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
+        //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var message = "The server is busy. Please use it again in a moment.";
+        //- var title = "서비스점검중";
+        var title = "In Service Inspection";
         var type = "error";
         showMessage(message, title, type);
       });

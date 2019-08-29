@@ -7,7 +7,7 @@ head
   meta(name='author', content='Bootlab')
   meta(name='google-signin-client_id' content='157199777865-ub07uli53lf5d1u0tism30qk7u536cni.apps.googleusercontent.com')
   link(rel='icon', href='/img/favicon.ico')
-  title 다이어트 매니저
+  title Diet manager
   link(href='/css/app.css', rel='stylesheet')
   script(src='https://apis.google.com/js/platform.js' async='' defer='')
   style.
@@ -71,7 +71,7 @@ body
   nav.navbar.navbar-expand.navbar-dark.bg-dark
     .container
       a.navbar-brand(href='/', style="line-height: 4rem;")
-        |         다이어트 매니저 
+        |         Diet manager
         small.d-none.d-sm-inline  v.BETA
   .header
     .container
@@ -82,17 +82,22 @@ body
           img#imgProfile.avatar.img-fluid.rounded-circle.mr-3(src=profileIMG , alt='Linda Miller')
         .media-body
           if userName == null
-            h3#txtUserName.mb-1.text-white.font-weight-normal 손님
+            //- h3#txtUserName.mb-1.text-white.font-weight-normal 손님
+            h3#txtUserName.mb-1.text-white.font-weight-normal Guest
           else
             h3.mb-1.text-white.font-weight-normal #{userName}
           if targetWeight == null
-            a#btnSetTargetWeight.btn.btn-primary(href='/kr/view/dietplan') 다이어트 목표를 설정해주세요.
-            span#areaTargetWeight.font-weight-normal(style="display:none;") 목표 몸무게 : 
+            //- a#btnSetTargetWeight.btn.btn-primary(href='/kr/view/dietplan') 다이어트 목표를 설정해주세요.
+            //- span#areaTargetWeight.font-weight-normal(style="display:none;") 목표 몸무게 : 
+            a#btnSetTargetWeight.btn.btn-primary(href='/kr/view/dietplan') Please set your diet plan.
+            span#areaTargetWeight.font-weight-normal(style="display:none;") Target weight : 
               strong#txtTargetWeight.text-danger #{targetWeight}
               span.text-danger  KG
           else
-            a#btnSetTargetWeight.btn.btn-primary(href='/kr/view/dietplan' style="display:none;") 다이어트 목표를 설정해주세요.
-            span.font-weight-normal 목표 몸무게 : 
+            //- a#btnSetTargetWeight.btn.btn-primary(href='/kr/view/dietplan' style="display:none;") 다이어트 목표를 설정해주세요.
+            //- span.font-weight-normal 목표 몸무게 : 
+            a#btnSetTargetWeight.btn.btn-primary(href='/kr/view/dietplan' style="display:none;") Please set your diet plan.
+            span.font-weight-normal Target weight : 
                 strong.text-danger #{targetWeight}
                 span.text-danger  KG
 
@@ -102,53 +107,65 @@ body
         .col-12.col-md-4.col-lg-3.col-xl-2
           a.card.d-block.d-md-none.mt-4(data-toggle='collapse', data-target='#sidebar')
             .card-header
-              h5.card-title.mb-0 메뉴
+              //- h5.card-title.mb-0 메뉴
+              h5.card-title.mb-0 Menu
           nav#sidebar.collapse.collapse-disabled-md.sidebar.sidebar-sticky
             .card
               .sidebar-content
                 a.sidebar-item(href='/kr/view/dashboard')
                   i.align-middle.mr-1.fas.fa-fw.fa-home
-                  span.align-middle 대시보드
+                  //- span.align-middle 대시보드
+                  span.align-middle Dashboard
                 a.sidebar-item(href='/kr/view/bodyrecord')
                    i.align-middle.mr-2.fas.fa-fw.fa-book-open
-                   span.align-middle 몸무게/식단 기록
+                   //-  span.align-middle 몸무게/식단 기록 
+                   span.align-middle Weight/Diet
                 a.sidebar-item(href='/kr/view/bodycomposition')
                   i.align-middle.mr-1.fas.fa-fw.fa-chart-pie
-                  span.align-middle 체성분 기록
+                  //- span.align-middle 체성분 기록
+                  span.align-middle Bodycomposition
             .card
               .sidebar-content
                 a.sidebar-item(href='/kr/view/dietplan')
                   i.align-middle.mr-2.fas.fa-fw.fa-medal
-                  span.align-middle 다이어트 목표 설정
+                  //- span.align-middle 다이어트 목표 설정
+                  span.align-middle Deit plan
                 a.sidebar-item(href='/kr/view/dailyreport')
                  i.align-middle.mr-2.fas.fa-fw.fa-file-signature
-                 span.align-middle 1일 다이어트 일지
+                 //-  span.align-middle 1일 다이어트 일지
+                 span.align-middle One-day diet diary
                 if userName != null
                   a.sidebar-item(href='/kr/view/profile')
                     i.align-middle.mr-2.fas.fa-fw.fa-drafting-compass
-                    span.align-middle 나의 프로필
+                    //- span.align-middle 나의 프로필
+                    span.align-middle My profile
             if userName != null
               .card
                 .sidebar-content
                   #btnSendSurvey.sidebar-item
                     i.align-middle.mr-2.fas.fa-fw.fa-mobile-alt
-                    span.align-middle 설문내용 보내기
+                    //- span.align-middle 설문내용 보내기
+                    span.align-middle Send survey
             .card
               .sidebar-content
                 if userName == null
                   button#btnMenuLogIn.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess')
                     i.align-middle(data-feather='log-in' style="margin-right: 8px;")
-                    span.align-middle 로그인
+                    //- span.align-middle 로그인
+                    span.align-middle Log in
                   button#btnMenuLogOut.sidebar-item(type='button' data-toggle='modal' style="display:none;")
                     i.align-middle(data-feather='log-out' style="margin-right: 8px;")
-                    span.align-middle 로그아웃
+                    //- span.align-middle 로그아웃
+                    span.align-middle Log out
                 else
                   button#btnMenuLogIn.sidebar-item(type='button' data-toggle='modal' data-target='#centeredModalSuccess' style="display:none;")
                     i.align-middle(data-feather='log-in' style="margin-right: 8px;")
-                    span.align-middle 로그인
+                    //- span.align-middle 로그인
+                    span.align-middle Log in
                   button#btnMenuLogOut.sidebar-item(type='button' data-toggle='modal')
                     i.align-middle(data-feather='log-out' style="margin-right: 8px;")
-                    span.align-middle 로그아웃
+                    //- span.align-middle 로그아웃
+                    span.align-middle Log out
         block content
       #centeredModalSuccess.modal.fade(tabindex='-1' role='dialog' aria-hidden='true')
         .modal-dialog.modal-dialog-centered(role='document')
@@ -169,32 +186,40 @@ body
               .m-sm-4
                 form
                   .form-group
-                    label 이메일
-                    input#editLoginEmail.areaEditLogin.form-control.form-control-lg(type='email' name='email' placeholder='이메일을 입력해주세요.')
+                    //- label 이메일
+                    label Email
+                    //- input#editLoginEmail.areaEditLogin.form-control.form-control-lg(type='email' name='email' placeholder='이메일을 입력해주세요.')
+                    input#editLoginEmail.areaEditLogin.form-control.form-control-lg(type='email' name='email' placeholder='Input your email.')
                   .form-group
-                    label 비밀번호
-                    input#editLoginPassword.areaEditLogin.form-control.form-control-lg(type='password' name='password' placeholder='비밀번호를 입력해주세요.')
+                    //- label 비밀번호
+                    label Password
+                    //- input#editLoginPassword.areaEditLogin.form-control.form-control-lg(type='password' name='password' placeholder='비밀번호를 입력해주세요.')
+                    input#editLoginPassword.areaEditLogin.form-control.form-control-lg(type='password' name='password' placeholder='Input your password.')
                     .row
                       .col-6
                         small
-                          a.text-danger(href='/kr/view/forgotpassword') 비밀번호 찾기
+                          //- a.text-danger(href='/kr/view/forgotpassword') 비밀번호 찾기
+                          a.text-danger(href='/kr/view/forgotpassword') Forgot password
                       .col-6.text-right
                         small
-                          a(href='/kr/view/regist') 이메일로 회원가입
+                          //- a(href='/kr/view/regist') 이메일로 회원가입
+                          a(href='/kr/view/regist') Sign up with email
                   //div
                     label.custom-control.custom-checkbox.align-items-center
                       input#ckAutoLogin.custom-control-input(type='checkbox' value='remember-me' name='remember-me')
                       span.custom-control-label.text-small 자동로그인
             .modal-footer
-              button#btnModalLoginClose.btn.btn-secondary(type='button' data-dismiss='modal') 취소
-              button#btnModalLogin.btn.btn-primary(type='button') 로그인
+              //- button#btnModalLoginClose.btn.btn-secondary(type='button' data-dismiss='modal') 취소
+              //- button#btnModalLogin.btn.btn-primary(type='button') 로그인
+              button#btnModalLoginClose.btn.btn-secondary(type='button' data-dismiss='modal') Cancel
+              button#btnModalLogin.btn.btn-primary(type='button') Log in
   footer.footer
     .container
       hr
       .text-muted.text-center
         p
           | &copy; 2019 - 
-          a.text-muted(href='index.html') 중현의 헬스클럽
+          a.text-muted(href='index.html') Yoon jung hyun
   script(src='/js/app.js')
   block lib
   block script
@@ -223,8 +248,10 @@ body
           if(resultParams.isSuccess){
             location.reload();
           }else{
-            var message = "로그아웃에 실패하였습니다.";
-            var title = "로그아웃";
+            //- var message = "로그아웃에 실패하였습니다.";
+            //- var title = "로그아웃";
+            var message = "Logout failed.";
+            var title = "Log out";
             var type = "warning";
             toastr[type](message, title, {
                   positionClass: "toast-top-right",
@@ -236,8 +263,10 @@ body
                   });
           }
         }).fail(function(resultParams){
-          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-          var title = "서비스점검중";
+          //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var message = "The server is busy. Please use it again in a moment.";
+          //- var title = "서비스점검중";
+          var title = "In Service Inspection";
           var type = "error";
           toastr[type](message, title, {
                 positionClass: "toast-top-right",
@@ -276,8 +305,10 @@ body
           if(resultParams.isSuccess){
             if(typeof Dietmeter !== "undefined" && Dietmeter !== null) {
               Dietmeter.setDietSurvey(resultParams.targetWeight, resultParams.proteinRate, resultParams.carboRate, resultParams.mealFreq);
-              var message = "blutooth -> '웹 설문내용 보내기' 버튼을 이용해주세요.";
-                var title = "설문내용 보내기";
+              //- var message = "blutooth -> '웹 설문내용 보내기' 버튼을 이용해주세요.";
+              //-   var title = "설문내용 보내기";
+              var message = "Please use like this. blutooth -> 'Send Web-survey'";
+                var title = "Send survey";
                 var type = "success";
                 toastr[type](message, title, {
                       positionClass: "toast-top-right",
@@ -288,8 +319,10 @@ body
                       timeOut: 5000
                       });
             } else {
-                var message = "본 서비스는 AI식단계량기 전용 앱으로 접속하셔야 이용가능합니다.";
-                var title = "안내사항";
+                //- var message = "본 서비스는 AI식단계량기 전용 앱으로 접속하셔야 이용가능합니다.";
+                //- var title = "안내사항";
+                var message = "You need to access this service through the 'AI diet calculator' app.";
+                var title = "Notification";
                 var type = "warning";
                 toastr[type](message, title, {
                       positionClass: "toast-top-right",
@@ -301,8 +334,10 @@ body
                       });
             }
           }else{
-            var message = "다이어트 목표와 일지를 작성해주셔야 설문내용 보내기가 가능합니다.";
-            var title = "설문내용 보내기";
+            //- var message = "다이어트 목표와 일지를 작성해주셔야 설문내용 보내기가 가능합니다.";
+            //- var title = "설문내용 보내기";
+            var message = "You need to complete 'Diet plan' and 'One-day diet diary' to send the survey.";
+            var title = "Send survey";
             var type = "warning";
             toastr[type](message, title, {
                   positionClass: "toast-top-right",
@@ -314,8 +349,10 @@ body
                   });
           }
         }).fail(function(resultParams){
-          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-          var title = "서비스점검중";
+          //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var message = "The server is busy. Please use it again in a moment.";
+          //- var title = "서비스점검중";
+          var title = "In Service Inspection";
           var type = "error";
           toastr[type](message, title, {
                 positionClass: "toast-top-right",
@@ -349,8 +386,10 @@ body
         if(resultParams.isDuplicate){
           if(resultParams.registType != 'g'){
             var type ="warning";
-            var title = "SNS 로그인 오류";
-            var message = "이미 가입된 이메일 주소입니다.";
+            //- var title = "SNS 로그인 오류";
+            //- var message = "이미 가입된 이메일 주소입니다.";
+            var title = "SNS login error";
+            var message = "This email already signed up.";
             toastr[type](message, title, {
                 positionClass: "toast-top-right",
                 closeButton: true,
@@ -379,8 +418,10 @@ body
           ajaxGotoRegist(params)
         }
       }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
+        //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var message = "The server is busy. Please use it again in a moment.";
+        //- var title = "서비스점검중";
+        var title = "In Service Inspection";
         var type = "error";
         toastr[type](message, title, {
               positionClass: "toast-top-right",
@@ -404,8 +445,10 @@ body
         if(resultParams.isSuccess){
           window.location.href = getUrl('/view/regist');
         }else{
-          var message = "회원가입 화면으로 이동하지 못했습니다.";
-          var title = "회원가입";
+          //- var message = "회원가입 화면으로 이동하지 못했습니다.";
+          //- var title = "회원가입";
+          var message = "Failed to go to sign-up screen.";
+          var title = "Sign up";
           var type = "warning";
           toastr[type](message, title, {
                 positionClass: "toast-top-right",
@@ -417,8 +460,10 @@ body
                 });
         }
       }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
+        //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var message = "The server is busy. Please use it again in a moment.";
+        //- var title = "서비스점검중";
+        var title = "In Service Inspection";
         var type = "error";
         toastr[type](message, title, {
               positionClass: "toast-top-right",
@@ -474,8 +519,10 @@ body
               }
             }
           }else{
-            var message = "로그인에 실패하였습니다.";
-            var title = "로그인";
+            //- var message = "로그인에 실패하였습니다.";
+            //- var title = "로그인";
+            var message = "Failed to log in.";
+            var title = "Log in";
             var type = "warning";
             toastr[type](message, title, {
                   positionClass: "toast-top-right",
@@ -487,8 +534,10 @@ body
                   });
           }
         }).fail(function(resultParams){
-          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-          var title = "서비스점검중";
+          //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var message = "The server is busy. Please use it again in a moment.";
+          //- var title = "서비스점검중";
+          var title = "In Service Inspection";
           var type = "error";
           toastr[type](message, title, {
                 positionClass: "toast-top-right",
@@ -538,8 +587,10 @@ body
             returnValue = "goDailyReport";
           }
         }).fail(function(resultParams){
-          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-          var title = "서비스점검중";
+          //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var message = "The server is busy. Please use it again in a moment.";
+          //- var title = "서비스점검중";
+          var title = "In Service Inspection";
           var type = "error";
           toastr[type](message, title, {
                 positionClass: "toast-top-right",
@@ -589,8 +640,10 @@ body
             }else{
             }
           }else{
-            var message = "로그인에 실패하였습니다.";
-            var title = "로그인";
+            //- var message = "로그인에 실패하였습니다.";
+            //- var title = "로그인";
+            var message = "Failed to log in.";
+            var title = "Log in";
             var type = "warning";
             toastr[type](message, title, {
                   positionClass: "toast-top-right",
@@ -603,8 +656,10 @@ body
           }
         }).fail(function(resultParams){
           console.log("ResultParams: " + resultParams.isSuccess);
-          var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-          var title = "서비스점검중";
+          //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+          var message = "The server is busy. Please use it again in a moment.";
+          //- var title = "서비스점검중";
+          var title = "In Service Inspection";
           var type = "error";
           toastr[type](message, title, {
                 positionClass: "toast-top-right",

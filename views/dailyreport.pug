@@ -8,113 +8,166 @@ block content
           .card-header
             .row
               .col-md-12
-                h5.card-title.mb-0.mt-2 1일 다이어트 일지
+                //- h5.card-title.mb-0.mt-2 1일 다이어트 일지
+                h5.card-title.mb-0.mt-2 One-day diet diary
           .card-body
             form#smartwizard-validation.wizard.wizard-primary(action='javascript:void(0)')
               ul
                 li
                   a(href='#validation-step-1')
-                    | 1단계
+                    //- | 1단계
+                    | Step 1.
                     br
-                    small 오늘의 몸무게
+                    //- small 오늘의 몸무게
+                    small Today's weight
                 li
                   a(href='#validation-step-2')
-                    | 2단계
+                    //- | 2단계
+                    | Step 2.
                     br
-                    small 식단 수행도
+                    //- small 식단 수행도
+                    small Diet performance status
                 li
                   a(href='#validation-step-3')
-                    | 3단계
+                    //- | 3단계
+                    | Step 3.
                     br
-                    small 운동 수행도 
+                    //- small 운동 수행도 
+                    small Workout performance status
                 li
                   a(href='#validation-step-4')
-                    | 내용확인
+                    //- | 내용확인
+                    | Confirm
                     br
-                    small 오늘의 식사량
+                    //- small 오늘의 식사량
+                    small Today's diet
               div
                 #validation-step-1
                   .form-group
                     label.form-label
-                      | 측정일
+                      //- | 측정일
+                      | Date
                       span.text-danger *
                     input#editRecordDate.form-control(type='text' name='datesingle')
                   .form-group
                     label.form-label
-                      | 오늘의 몸무게
+                      //- | 오늘의 몸무게
+                      | Today's weight
                       span.text-danger *
                   .form-group
                     input#editCurrnetWeight.form-control.required(name='wizard-currentWeight' type='number' placeholder="ex) 71.9" value=currentWeight)
                   .col-12.text-right 
                     span.text-danger *
-                    span 기상 직후 대소변을 보고 속옷만 입은 상태에서 몸무게를 측정해서 입력해주세요.
+                    //- span 기상 직후 대소변을 보고 속옷만 입은 상태에서 몸무게를 측정해서 입력해주세요.
+                    span Go to the bathroom right after you wake up. Then, measure your weight with only your underwear on.
                 #validation-step-2
                   .form-group
                     label.form-label
-                      | 식단 수행 정도
+                      //- | 식단 수행 정도
+                      | Diet performance status
                       span.text-danger *
                   .form-group
+                    //- label.custom-control.custom-radio.custom-control-inline
+                    //-   input.custom-control-input(name='editRadioDietProcess' type='radio' value='1' data-txt='못함')
+                    //-   span.custom-control-label 못함
+                    //- label.custom-control.custom-radio.custom-control-inline
+                    //-   input.custom-control-input(name='editRadioDietProcess' type='radio' value='2'  data-txt='거의 못함')
+                    //-   span.custom-control-label 거의 못함
+                    //- label.custom-control.custom-radio.custom-control-inline
+                    //-   input.custom-control-input(name='editRadioDietProcess' type='radio' value='3'  data-txt='반절 성공')
+                    //-   span.custom-control-label 반절 성공
+                    //- label.custom-control.custom-radio.custom-control-inline
+                    //-   input.custom-control-input(name='editRadioDietProcess' type='radio' value='4'  data-txt='거의 성공')
+                    //-   span.custom-control-label 거의 성공
+                    //- label.custom-control.custom-radio.custom-control-inline
+                    //-   input.custom-control-input(name='editRadioDietProcess' type='radio' value='5'  data-txt='성공' checked)
+                    //-   span.custom-control-label 성공
                     label.custom-control.custom-radio.custom-control-inline
-                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='1' data-txt='못함')
-                      span.custom-control-label 못함
+                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='1' data-txt='Very bad')
+                      span.custom-control-label Very bad
                     label.custom-control.custom-radio.custom-control-inline
-                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='2'  data-txt='거의 못함')
-                      span.custom-control-label 거의 못함
+                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='2'  data-txt='Poor')
+                      span.custom-control-label Poor
                     label.custom-control.custom-radio.custom-control-inline
-                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='3'  data-txt='반절 성공')
-                      span.custom-control-label 반절 성공
+                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='3'  data-txt='Ok')
+                      span.custom-control-label Ok
                     label.custom-control.custom-radio.custom-control-inline
-                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='4'  data-txt='거의 성공')
-                      span.custom-control-label 거의 성공
+                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='4'  data-txt='Good')
+                      span.custom-control-label Good
                     label.custom-control.custom-radio.custom-control-inline
-                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='5'  data-txt='성공' checked)
-                      span.custom-control-label 성공
+                      input.custom-control-input(name='editRadioDietProcess' type='radio' value='5'  data-txt='Excellent' checked)
+                      span.custom-control-label Excellent
                   .col-12.text-right 
                     span.text-danger *
-                    span 전날 식단 수행정도를 알려주세요.
+                    //- span 전날 식단 수행정도를 알려주세요.
+                    span Please let me know the degree of performance of the previous day's diet.
                 #validation-step-3
                   .form-group
                     label.form-label
-                      | 전날 운동 진행 여부
+                      //- | 전날 운동 진행 여부
+                      | Did you exercise yesterday?
                       span.text-danger *
                   .form-group
                     label.custom-control.custom-radio.custom-control-inline
                       input.custom-control-input(name='editRadioDidWorkout' type='radio' value='1' data-txt='운동함' checked)
-                      span.custom-control-label 운동함
+                      //- span.custom-control-label 운동함
+                      span.custom-control-label Yes
                     label.custom-control.custom-radio.custom-control-inline
                       input#editRadioDidNotWorkout.custom-control-input(name='editRadioDidWorkout' type='radio' value='2'  data-txt='운동 못함')
-                      span.custom-control-label 운동 못함
+                      //- span.custom-control-label 운동 못함
+                      span.custom-control-label No
                   .form-group.areaWorkoutProcess
                     label.form-label
-                      | 전날 운동강도
+                      //- | 전날 운동강도
+                      | Exercise intensity yesterday.
                       span.text-danger *
                   .form-group.areaWorkoutProcess
+                    //- label.custom-control.custom-radio.custom-control-inline
+                    //-   input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='1' data-txt='몸 푸는 강도')
+                    //-   span.custom-control-label 몸 푸는 강도
+                    //- label.custom-control.custom-radio.custom-control-inline
+                    //-   input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='2'  data-txt='가벼운 강도')
+                    //-   span.custom-control-label 가벼운 강도
+                    //- label.custom-control.custom-radio.custom-control-inline
+                    //-   input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='3'  data-txt='적당한 강도')
+                    //-   span.custom-control-label 적당한 강도
+                    //- label.custom-control.custom-radio.custom-control-inline
+                    //-   input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='4'  data-txt='강한 강도')
+                    //-   span.custom-control-label 강한 강도
+                    //- label.custom-control.custom-radio.custom-control-inline
+                    //-   input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='5'  data-txt='최고 강도' checked)
+                    //-   span.custom-control-label 최고 강도
                     label.custom-control.custom-radio.custom-control-inline
-                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='1' data-txt='몸 푸는 강도')
-                      span.custom-control-label 몸 푸는 강도
+                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='1' data-txt='Minimum')
+                      span.custom-control-label Minimum
                     label.custom-control.custom-radio.custom-control-inline
-                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='2'  data-txt='가벼운 강도')
-                      span.custom-control-label 가벼운 강도
+                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='2'  data-txt='Light')
+                      span.custom-control-label Light
                     label.custom-control.custom-radio.custom-control-inline
-                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='3'  data-txt='적당한 강도')
-                      span.custom-control-label 적당한 강도
+                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='3'  data-txt='Normal')
+                      span.custom-control-label Normal
                     label.custom-control.custom-radio.custom-control-inline
-                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='4'  data-txt='강한 강도')
-                      span.custom-control-label 강한 강도
+                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='4'  data-txt='Hard')
+                      span.custom-control-label Hard
                     label.custom-control.custom-radio.custom-control-inline
-                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='5'  data-txt='최고 강도' checked)
-                      span.custom-control-label 최고 강도
+                      input.custom-control-input(name='editRadioWorkoutProcess' type='radio' value='5'  data-txt='Maximum' checked)
+                      span.custom-control-label Maximum
                   .col-12.text-right 
                     span.text-danger *
-                    span 본 데이터는 운동량을 늘릴 수 있는지 알기 위한 척도로 사용됩니다.
+                    //- span 본 데이터는 운동량을 늘릴 수 있는지 알기 위한 척도로 사용됩니다.
+                    span This data is used as a measure to see if you can increase your workout.
                 #validation-step-4
                   .areaNutritionGuide
                     .form-group
                       label.form-label
-                        | 1식당 권장 단백질 섭취량
-                        span.text-info.areaTxtMealFrequency  - 1일 
+                        //- | 1식당 권장 단백질 섭취량
+                        | Recommended protein intake per meal
+                        //- span.text-info.areaTxtMealFrequency  - 1일 
+                        //- span.text-info.areaTxtMealFrequency.txtMealFrequency 
+                        //- span.text-info.areaTxtMealFrequency 식 기준
+                        span.text-info.areaTxtMealFrequency  - Based on 
                         span.text-info.areaTxtMealFrequency.txtMealFrequency 
-                        span.text-info.areaTxtMealFrequency 식 기준
+                        span.text-info.areaTxtMealFrequency meals per day
                       .form-row
                         .form-group.col-4
                           select#selProtein.form-control.selProteinNutrition
@@ -129,10 +182,14 @@ block content
                           strong.areaTxtGram
                     .form-group
                       label.form-label
-                        | 1식당 권장 탄수화물 섭취량
-                        span.text-info.areaTxtMealFrequency  - 1일 
+                        //- | 1식당 권장 탄수화물 섭취량
+                        //- span.text-info.areaTxtMealFrequency  - 1일 
+                        //- span.text-info.areaTxtMealFrequency.txtMealFrequency 
+                        //- span.text-info.areaTxtMealFrequency 식 기준
+                        | Recommended carbohydrate intake per meal
+                        span.text-info.areaTxtMealFrequency  - Based on 
                         span.text-info.areaTxtMealFrequency.txtMealFrequency 
-                        span.text-info.areaTxtMealFrequency 식 기준
+                        span.text-info.areaTxtMealFrequency meals per day
                       .form-row
                         .form-group.col-4
                           select#selCarbo.form-control.selCarboNutrition
@@ -147,11 +204,13 @@ block content
                           strong.areaTxtGram
                   .form-group
                     label.form-label
-                      | 측정일
+                      //- | 측정일
+                      | Date
                     input#editResRecordDate.form-control(name='wizard-recorddate' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 오늘의 몸무게 
+                      //- | 오늘의 몸무게 
+                      | Today's weight 
                       strong#txtWeightGap.areaWeightGap.areaWeightGapNum 
                       strong.areaWeightGap.areaWeightGapNum  KG
                       span.areaWeightGap  (
@@ -160,15 +219,18 @@ block content
                     input#editResCurrnetWeight.form-control(name='wizard-currentWeight' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 식단 수행 정도
+                      //- | 식단 수행 정도
+                      | Diet performance status
                     input#editResDietProcess.form-control(name='wizard-dietProcess' type='text' disabled)
                   .form-group
                     label.form-label
-                      | 전날 운동 진행 여부
+                      //- | 전날 운동 진행 여부
+                      | Did you exercise yesterday?
                     input#editResDidWorkout.form-control(name='wizard-didWorkout' type='text' disabled)
                   .form-group.areaWorkoutProcess
                     label.form-label
-                      | 전날 운동강도
+                      //- | 전날 운동강도
+                      | Exercise intensity yesterday.
                     input#editResWorkoutProcess.form-control(name='wizard-workoutProcess' type='text' disabled)
               script.
                 document.addEventListener("DOMContentLoaded", function(event) {
@@ -198,11 +260,14 @@ block content
                       useURLhash: false,
                       showStepURLhash: false,
                       lang: {
-                          next: '다음', 
-                          previous: '이전'
+                          //- next: '다음', 
+                          //- previous: '이전'
+                          next: 'next', 
+                          previous: 'prev'
                       },
                       toolbarSettings: {
-                      toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">등록하기</button>')]
+                      //- toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">등록하기</button>')]
+                      toolbarExtraButtons: [$('<button class="btn btn-submit btn-primary" type="button">Submit</button>')]
                       }
                   })
                   .on('leaveStep', function(e, anchorObject, stepNumber, stepDirection) {
@@ -241,7 +306,8 @@ block content
                     return false;
                   }).hide();
 
-                  moment.locale('ko');
+                  //- moment.locale('ko');
+                  moment.locale('us');
                   $('input[name="datesingle"]').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
@@ -358,7 +424,8 @@ block script
         data: params
       }).done(function(resultParams){
         var message = "";
-        var title = "1일 권장 섭취량";
+        //- var title = "1일 권장 섭취량";
+        var title = "recommended daily intake";
         var type = "";
 
         $('#txtCarboGramDiff').hide();
@@ -382,7 +449,8 @@ block script
 
           $('#carboEditbox').show();
           $('#proteinEditbox').show();
-          $('.areaTxtGram').text("원하는 양이 있다면 변경해주세요.");
+          //- $('.areaTxtGram').text("원하는 양이 있다면 변경해주세요.");
+          $('.areaTxtGram').text("If you already have your amount of food, please change it.");
           
           $('.txtMealFrequency').text(resultParams.mealFrequency);
           
@@ -403,19 +471,24 @@ block script
          }else if(resultParams.needLogin){
           $('#carboEditbox').hide();
           $('#proteinEditbox').hide();
-          $('.areaTxtGram').text("로그인이 필요한 서비스입니다.");
+          //- $('.areaTxtGram').text("로그인이 필요한 서비스입니다.");
+          $('.areaTxtGram').text("This service requires login.");
         }else if(resultParams.needDietPlan){
           $('#carboEditbox').hide();
           $('#proteinEditbox').hide();
-          $('.areaTxtGram').text("먼저 다이어트 목표를 설정해주세요.");
+          //- $('.areaTxtGram').text("먼저 다이어트 목표를 설정해주세요.");
+          $('.areaTxtGram').text("Please set your diet goal first.");
         }else{
           type = "warning";
-          message = "1일 권장 섭취량을 가져오는데 실패했습니다.";
+          //- message = "1일 권장 섭취량을 가져오는데 실패했습니다.";
+          message = "Failed to get recommended daily intake.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
+        //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var message = "The server is busy. Please use it again in a moment.";
+        //- var title = "서비스점검중";
+        var title = "In Service Inspection";
         var type = "error";
         showMessage(message, title, type);
       });
@@ -459,8 +532,10 @@ block script
         async: false, 
         data: params
       }).done(function(resultParams){
-        var message = "1일 다이어트일지가 정상적으로 등록되었습니다.";
-        var title = "1일 다이어트 일지";
+        //- var message = "1일 다이어트일지가 정상적으로 등록되었습니다.";
+        //- var title = "1일 다이어트 일지";
+        var message = "One-day diet diary has been registered successful.";
+        var title = "One-day diet diary";
         var type = "success";
 
         if(resultParams.isSuccess){
@@ -469,11 +544,13 @@ block script
         }else if(resultParams.needLogin){
           $('#btnMenuLogIn').trigger('click');
           type = "warning";
-          message = "로그인이 필요한 서비스입니다.";
+          //- message = "로그인이 필요한 서비스입니다.";
+          message = "This service requires login.";
           showMessage(message, title, type);
         }else if(resultParams.needDietPlan){
           type = "warning";
-          message = "먼저 다이어트 목표를 설정해주세요.";
+          //- message = "먼저 다이어트 목표를 설정해주세요.";
+          message = "Please set your diet goal first.";
           toastr[type](message, title, {
               positionClass: "toast-top-right",
               closeButton: true,
@@ -488,12 +565,15 @@ block script
           
         }else{
           type = "warning";
-          message = "1일 다이어트일지 등록을 실패했습니다.";
+          //- message = "1일 다이어트일지 등록을 실패했습니다.";
+          message = "Failed to register one-day diet diary.";
           showMessage(message, title, type);
         }
       }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
+        //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var message = "The server is busy. Please use it again in a moment.";
+        //- var title = "서비스점검중";
+        var title = "In Service Inspection";
         var type = "error";
         showMessage(message, title, type);
       });
@@ -512,7 +592,8 @@ block script
         data: params
       }).done(function(resultParams){
         var message = "";
-        var title = "오늘의 몸무게";
+        //- var title = "오늘의 몸무게";
+        var title = "Today's weight";
         var type = "";
 
         if(resultParams.isSuccess){
@@ -533,7 +614,8 @@ block script
           var curr_date = date.getDate();
           var curr_month = date.getMonth() + 1;
           var curr_year = date.getFullYear();
-          $('#txtBasicRecordDate').text("기준일 : "+curr_year + "-" + curr_month + "-" + curr_date);
+          //- $('#txtBasicRecordDate').text("기준일 : "+curr_year + "-" + curr_month + "-" + curr_date);
+          $('#txtBasicRecordDate').text("Base date : "+curr_year + "-" + curr_month + "-" + curr_date);
 
         }else if(resultParams.needLogin){
           $('.areaWeightGap').hide();
@@ -543,8 +625,10 @@ block script
           $('.areaWeightGap').hide();
         }
       }).fail(function(resultParams){
-        var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
-        var title = "서비스점검중";
+        //- var message = "서버가 혼잡하오니 잠시 다시 이용 부탁드립니다.";
+        var message = "The server is busy. Please use it again in a moment.";
+        //- var title = "서비스점검중";
+        var title = "In Service Inspection";
         var type = "error";
         showMessage(message, title, type);
       });
